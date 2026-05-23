@@ -1,21 +1,27 @@
 <script lang="ts">
-	// Placeholder for loaded product data
-	let activeImage = 0;
-	let images = [
-		'https://images.unsplash.com/photo-1596455607563-ad6193f76b17?q=80&w=1200&auto=format&fit=crop',
-		'https://images.unsplash.com/photo-1627589255869-42b78b8f2d5e?q=80&w=1200&auto=format&fit=crop',
-		'https://images.unsplash.com/photo-1589156280159-27698a70f29e?q=80&w=1200&auto=format&fit=crop',
-		'https://images.unsplash.com/photo-1627589255655-b40b8a3f8737?q=80&w=1200&auto=format&fit=crop'
-	];
+	import { cart } from '$lib/client/cart.svelte';
+	let { data } = $props();
+	let product = $derived(data.product);
+
+	let activeImage = $state(0);
+	let images = $derived(product.images?.map(i => i.url) || []);
 	
-	let selectedColor = 'Midnight Black';
-	let selectedSize = 'M (54)';
-	let quantity = 1;
-	let activeTab = 'details'; // details, shipping, reviews
+	let selectedColor = $state('');
+	let selectedSize = $state('');
+	
+	$effect(() => {
+		if (product.variants && product.variants.length > 0) {
+			if (!selectedColor) selectedColor = product.variants[0].color || '';
+			if (!selectedSize) selectedSize = product.variants[0].size || '';
+		}
+	});
+
+	let quantity = $state(1);
+	let activeTab = $state('details'); // details, shipping, reviews
 </script>
 
 <svelte:head>
-	<title>Signature Nida Abaya | Abayiza</title>
+	<title>{product.name} | Abayiza</title>
 </svelte:head>
 
 <!-- Breadcrumbs -->
@@ -28,7 +34,7 @@
 			<span class="mx-2">/</span>
 			<a href="/collections/everyday" class="hover:text-black transition-colors">Everyday</a>
 			<span class="mx-2">/</span>
-			<span class="text-black">Signature Nida Abaya</span>
+			<span class="text-black">{product.name}</span>
 		</nav>
 	</div>
 </div>
@@ -62,9 +68,12 @@
 		<!-- Product Info -->
 		<div class="w-full lg:w-1/2 flex flex-col">
 			<div class="mb-8">
-				<h1 class="text-3xl md:text-4xl font-serif tracking-wide text-black mb-2">Signature Nida Abaya</h1>
+				<h1 class="text-3xl md:text-4xl font-serif tracking-wide text-black mb-2">{product.name}</h1>
 				<div class="flex items-center space-x-4 mb-4">
-					<p class="text-2xl font-light text-black">$145.00</p>
+					<p class="text-2xl font-light text-black">${product.salePrice || product.price}</p>
+					{#if product.salePrice}
+					<p class="text-xl font-light text-gray-400 line-through">${product.price}</p>
+					{/if}
 					<div class="flex items-center space-x-1 border-l border-gray-300 pl-4">
 						{#each [1, 2, 3, 4, 5] as star}
 						<svg class="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -72,8 +81,8 @@
 						<span class="text-xs text-gray-500 ml-2 underline cursor-pointer">42 Reviews</span>
 					</div>
 				</div>
-				<p class="text-gray-600 font-light text-sm leading-relaxed">
-					Elevate your everyday wardrobe with our Signature Nida Abaya. Crafted from the finest Korean Nida fabric, this piece offers a luxurious weight and an impeccable, fluid drape. Designed with a minimalist ethos, it features a clean silhouette, hidden front buttons, and discreet side pockets for modern functionality.
+				<p class="text-gray-600 font-light text-sm leading-relaxed whitespace-pre-wrap">
+					{product.description}
 				</p>
 			</div>
 
@@ -124,7 +133,22 @@
 				</div>
 				
 				<!-- Add to Cart Btn -->
-				<button class="flex-grow bg-black text-white h-14 text-sm tracking-widest uppercase hover:bg-gold transition-colors flex items-center justify-center space-x-2">
+				<button 
+					class="flex-grow bg-black text-white h-14 text-sm tracking-widest uppercase hover:bg-gold transition-colors flex items-center justify-center space-x-2"
+					onclick={() => {
+						const matchingVariant = product.variants.find(v => v.color === selectedColor && v.size === selectedSize) || product.variants[0];
+						cart.addItem({
+							id: matchingVariant ? matchingVariant.id : product.id,
+							productId: product.id,
+							name: product.name,
+							price: Number(product.salePrice || product.price),
+							quantity: quantity,
+							image: images[0] || '',
+							color: selectedColor,
+							size: selectedSize
+						});
+					}}
+				>
 					<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
 					<span>Add to Bag</span>
 				</button>

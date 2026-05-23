@@ -1,5 +1,6 @@
 <script lang="ts">
 	import './layout.css';
+	import { cart } from '$lib/client/cart.svelte';
 
 	let { children } = $props();
 </script>
@@ -46,7 +47,9 @@
 						<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
 						</svg>
-						<span class="absolute -top-2 -right-2 bg-gold text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+						{#if cart.totalItems > 0}
+						<span class="absolute -top-2 -right-2 bg-gold text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">{cart.totalItems}</span>
+						{/if}
 					</a>
 				</div>
 			</div>

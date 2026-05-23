@@ -1,5 +1,6 @@
 <script lang="ts">
-	let selectedDateRange = 'Last 7 days';
+	let { data } = $props();
+	let selectedDateRange = $state('Last 7 days');
 </script>
 
 <div class="max-w-7xl mx-auto">
@@ -30,7 +31,7 @@
 						<dl>
 							<dt class="text-sm font-medium text-gray-500 truncate">Total Sales</dt>
 							<dd class="flex items-baseline">
-								<div class="text-2xl font-bold text-gray-900">$12,450.00</div>
+								<div class="text-2xl font-bold text-gray-900">${data.stats.totalSales.toFixed(2)}</div>
 								<div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
 									<svg class="self-center flex-shrink-0 h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
 									<span class="sr-only">Increased by</span>
@@ -54,7 +55,7 @@
 						<dl>
 							<dt class="text-sm font-medium text-gray-500 truncate">Total Orders</dt>
 							<dd class="flex items-baseline">
-								<div class="text-2xl font-bold text-gray-900">84</div>
+								<div class="text-2xl font-bold text-gray-900">{data.stats.totalOrders}</div>
 								<div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
 									<svg class="self-center flex-shrink-0 h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
 									<span class="sr-only">Increased by</span>
@@ -78,7 +79,7 @@
 						<dl>
 							<dt class="text-sm font-medium text-gray-500 truncate">Store Conversion Rate</dt>
 							<dd class="flex items-baseline">
-								<div class="text-2xl font-bold text-gray-900">3.2%</div>
+								<div class="text-2xl font-bold text-gray-900">{data.stats.conversionRate}%</div>
 								<div class="ml-2 flex items-baseline text-sm font-semibold text-red-600">
 									<svg class="self-center flex-shrink-0 h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
 									<span class="sr-only">Decreased by</span>
@@ -102,7 +103,7 @@
 						<dl>
 							<dt class="text-sm font-medium text-gray-500 truncate">Average Order Value</dt>
 							<dd class="flex items-baseline">
-								<div class="text-2xl font-bold text-gray-900">$148.20</div>
+								<div class="text-2xl font-bold text-gray-900">${data.stats.averageOrderValue.toFixed(2)}</div>
 								<div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
 									<svg class="self-center flex-shrink-0 h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
 									<span class="sr-only">Increased by</span>
@@ -141,19 +142,19 @@
 			</div>
 			<div class="p-0">
 				<ul class="divide-y divide-gray-200">
-					{#each [1, 2, 3, 4] as item}
+					{#each data.topProducts as product}
 					<li class="p-4 hover:bg-gray-50">
 						<div class="flex items-center space-x-4">
 							<div class="flex-shrink-0 h-12 w-10 bg-gray-100 rounded overflow-hidden">
-								<img src="https://images.unsplash.com/photo-1596455607563-ad6193f76b17?q=80&w=100&auto=format&fit=crop&sig={item}" alt="Product" class="h-full w-full object-cover">
+								<img src={product.image} alt={product.name} class="h-full w-full object-cover">
 							</div>
 							<div class="flex-1 min-w-0">
-								<p class="text-sm font-medium text-gray-900 truncate">Signature Nida Abaya</p>
-								<p class="text-sm text-gray-500 truncate">{34 - item * 2} sold</p>
+								<p class="text-sm font-medium text-gray-900 truncate">{product.name}</p>
+								<p class="text-sm text-gray-500 truncate">{product.sales} sold</p>
 							</div>
 							<div>
 								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-									$4,930
+									${product.revenue.toFixed(2)}
 								</span>
 							</div>
 						</div>
@@ -183,20 +184,27 @@
 						</tr>
 					</thead>
 					<tbody class="bg-white divide-y divide-gray-200">
-						{#each [1, 2, 3, 4, 5] as i}
+						{#each data.recentOrders as order}
 						<tr class="hover:bg-gray-50">
 							<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-								<a href="/admin/orders/100{i}">#100{i}</a>
+								<a href="/admin/orders/{order.id}">#{order.shortId}</a>
 							</td>
-							<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Fatima Z.</td>
+							<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customerName}</td>
 							<td class="px-6 py-4 whitespace-nowrap">
-								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {i === 1 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
-									{i === 1 ? 'Processing' : 'Shipped'}
+								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
+									{order.status}
 								</span>
 							</td>
-							<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-medium">${120 + i*15}.00</td>
+							<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-medium">${order.total.toFixed(2)}</td>
 						</tr>
 						{/each}
+						{#if data.recentOrders.length === 0}
+						<tr>
+							<td colspan="4" class="px-6 py-8 text-center text-sm text-gray-500">
+								No orders yet
+							</td>
+						</tr>
+						{/if}
 					</tbody>
 				</table>
 			</div>
@@ -209,25 +217,30 @@
 			</div>
 			<div class="p-0">
 				<ul class="divide-y divide-gray-200">
-					{#each [1, 2, 3] as item}
+					{#each data.lowStockVariants as variant}
 					<li class="p-4 hover:bg-gray-50 flex items-center justify-between">
 						<div class="flex items-center">
 							<div class="flex-shrink-0 h-10 w-8 bg-gray-100 rounded overflow-hidden">
-								<img src="https://images.unsplash.com/photo-1627589255655-b40b8a3f8737?q=80&w=100&auto=format&fit=crop&sig={item}" alt="Product" class="h-full w-full object-cover">
+								<img src={variant.image} alt={variant.productName} class="h-full w-full object-cover">
 							</div>
 							<div class="ml-4">
-								<p class="text-sm font-medium text-gray-900">Embellished Emerald Abaya</p>
-								<p class="text-xs text-gray-500">SKU: EMB-EM-S • Size S (52)</p>
+								<p class="text-sm font-medium text-gray-900">{variant.productName}</p>
+								<p class="text-xs text-gray-500">SKU: {variant.sku} • Size: {variant.size}</p>
 							</div>
 						</div>
 						<div class="text-right">
 							<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-								Only {item} left
+								Only {variant.stockCount} left
 							</span>
 							<p class="text-xs text-blue-600 mt-1 cursor-pointer">Update stock</p>
 						</div>
 					</li>
 					{/each}
+					{#if data.lowStockVariants.length === 0}
+					<li class="p-4 text-center text-sm text-gray-500">
+						Inventory levels are healthy
+					</li>
+					{/if}
 				</ul>
 			</div>
 		</div>

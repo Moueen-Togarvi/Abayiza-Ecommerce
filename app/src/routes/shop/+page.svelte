@@ -1,8 +1,9 @@
 <script lang="ts">
-	// Placeholder for loaded product data
-	let products = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-	let isGridView = true;
-	let showFilters = false;
+	import { cart } from '$lib/client/cart.svelte';
+	let { data } = $props();
+	let products = $derived(data.products || []);
+	let isGridView = $state(true);
+	let showFilters = $state(false);
 </script>
 
 <svelte:head>
@@ -131,14 +132,26 @@
 				<div class="group cursor-pointer {isGridView ? '' : 'flex flex-col sm:flex-row gap-8'}">
 					<!-- Image -->
 					<div class="relative overflow-hidden mb-4 bg-gray-100 {isGridView ? 'aspect-[3/4]' : 'w-full sm:w-1/3 aspect-[3/4] flex-shrink-0'}">
-						{#if item === 1}
-							<div class="absolute top-4 left-4 z-10 bg-black text-white text-xs px-2 py-1 uppercase tracking-wider">New</div>
+						{#if item.salePrice}
+							<div class="absolute top-4 left-4 z-10 bg-black text-white text-xs px-2 py-1 uppercase tracking-wider">Sale</div>
 						{/if}
-						<img src="https://images.unsplash.com/photo-1596455607563-ad6193f76b17?q=80&w=600&auto=format&fit=crop&sig={item}" alt="Abaya {item}" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+						<img src={item.images && item.images.length > 0 ? item.images[0].url : ''} alt={item.name} class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
 						
 						<!-- Hover Actions -->
 						<div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex space-x-2">
-							<button class="flex-1 bg-black text-white py-3 text-sm tracking-widest uppercase hover:bg-gold transition-colors">Add</button>
+							<button class="flex-1 bg-black text-white py-3 text-sm tracking-widest uppercase hover:bg-gold transition-colors" onclick={(e) => {
+								e.preventDefault();
+								cart.addItem({
+									id: item.variants && item.variants.length > 0 ? item.variants[0].id : item.id,
+									productId: item.id,
+									name: item.name,
+									price: Number(item.salePrice || item.price),
+									quantity: 1,
+									image: item.images && item.images.length > 0 ? item.images[0].url : '',
+									color: item.variants && item.variants.length > 0 ? item.variants[0].color : undefined,
+									size: item.variants && item.variants.length > 0 ? item.variants[0].size : undefined,
+								});
+							}}>Add</button>
 							<button class="w-12 bg-white text-black py-3 flex items-center justify-center hover:bg-gray-100 transition-colors" title="Add to Wishlist">
 								<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
 							</button>
@@ -148,17 +161,22 @@
 					<!-- Info -->
 					<div class="flex flex-col justify-center {isGridView ? '' : 'flex-grow py-4'}">
 						<div class="flex justify-between items-start mb-1">
-							<h3 class="text-lg font-serif group-hover:text-gold transition-colors">Signature Nida Abaya {item}</h3>
-							<p class="text-md font-medium whitespace-nowrap ml-4">${100 + (item * 10)}.00</p>
+							<h3 class="text-lg font-serif group-hover:text-gold transition-colors">{item.name}</h3>
+							<div class="flex flex-col items-end">
+								<p class="text-md font-medium whitespace-nowrap ml-4">${item.salePrice || item.price}</p>
+								{#if item.salePrice}
+								<p class="text-sm font-light text-gray-400 line-through">${item.price}</p>
+								{/if}
+							</div>
 						</div>
 						
-						<p class="text-sm text-gray-500 font-light mb-3">Midnight Black</p>
+						<p class="text-sm text-gray-500 font-light mb-3">{item.variants && item.variants.length > 0 ? item.variants[0].color : ''}</p>
 						
 						{#if !isGridView}
 							<p class="text-gray-600 font-light text-sm mb-6 max-w-xl">
-								Experience unmatched elegance with our Signature Nida Abaya. Handcrafted from premium lightweight fabric, it features a fluid drape and subtle detailing perfect for any occasion.
+								{item.description}
 							</p>
-							<a href="/shop/{item}" class="inline-block border-b border-black pb-1 text-sm tracking-widest uppercase hover:text-gold hover:border-gold transition-colors self-start">
+							<a href="/shop/{item.slug}" class="inline-block border-b border-black pb-1 text-sm tracking-widest uppercase hover:text-gold hover:border-gold transition-colors self-start">
 								View Details
 							</a>
 						{/if}

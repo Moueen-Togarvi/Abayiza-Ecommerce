@@ -1,5 +1,6 @@
 <script lang="ts">
-	// Placeholder
+	let { data } = $props();
+	let products = $derived(data.products || []);
 </script>
 
 <div class="max-w-7xl mx-auto">
@@ -53,31 +54,31 @@
 				</tr>
 			</thead>
 			<tbody class="bg-white divide-y divide-gray-200">
-				{#each [1, 2, 3, 4, 5, 6, 7] as i}
-				<tr class="hover:bg-gray-50 group cursor-pointer">
+				{#each products as product}
+				<tr class="hover:bg-gray-50 group cursor-pointer" onclick={() => window.location.href = `/admin/products/${product.id}`}>
 					<td class="px-6 py-4 whitespace-nowrap">
 						<input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
 						<div class="flex items-center">
 							<div class="h-10 w-8 flex-shrink-0 bg-gray-100 rounded overflow-hidden border border-gray-200">
-								<img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1596455607563-ad6193f76b17?q=80&w=100&auto=format&fit=crop&sig={i}" alt="">
+								<img class="h-full w-full object-cover" src={product.images && product.images.length > 0 ? product.images[0].url : ''} alt={product.name}>
 							</div>
 							<div class="ml-4">
-								<div class="text-sm font-medium text-blue-600 group-hover:underline">Signature Nida Abaya {i}</div>
+								<div class="text-sm font-medium text-blue-600 group-hover:underline">{product.name}</div>
 							</div>
 						</div>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {i === 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
-							{i === 3 ? 'Draft' : 'Active'}
+						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {product.status === 'Draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
+							{product.status}
 						</span>
 					</td>
-					<td class="px-6 py-4 whitespace-nowrap text-sm {i === 2 ? 'text-red-500' : 'text-gray-500'}">
-						{i === 2 ? '0 in stock' : (34 + i) + ' in stock for 4 variants'}
+					<td class="px-6 py-4 whitespace-nowrap text-sm {product.totalInventory === 0 ? 'text-red-500' : 'text-gray-500'}">
+						{product.totalInventory} in stock for {product.variants.length} variants
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-						Abaya<br><span class="text-xs text-gray-400">Everyday Collection</span>
+						Abaya<br><span class="text-xs text-gray-400">{product.collections.map(c => c.name).join(', ')}</span>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
 						Abayiza
@@ -92,25 +93,19 @@
 			<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
 				<div>
 					<p class="text-sm text-gray-700">
-						Showing <span class="font-medium">1</span> to <span class="font-medium">7</span> of <span class="font-medium">45</span> results
+						Showing <span class="font-medium">1</span> to <span class="font-medium">{products.length}</span> of <span class="font-medium">{products.length}</span> results
 					</p>
 				</div>
 				<div>
 					<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-						<a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-							<span class="sr-only">Previous</span>
-							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-						</a>
-						<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-50 text-sm font-medium text-gray-900">1</a>
-						<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">2</a>
-						<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">3</a>
-						<span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">...</span>
-						<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">8</a>
-						<a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-							<span class="sr-only">Next</span>
-							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
-						</a>
-					</nav>
+					<button type="button" aria-label="Previous" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+						<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+					</button>
+					<button type="button" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-50 text-sm font-medium text-gray-900">1</button>
+					<button type="button" aria-label="Next" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+						<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+					</button>
+				</nav>
 				</div>
 			</div>
 		</div>

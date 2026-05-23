@@ -1,5 +1,6 @@
 <script lang="ts">
-	// Placeholder
+	let { data } = $props();
+	let orders = $derived(data.orders || []);
 </script>
 
 <div class="max-w-7xl mx-auto">
@@ -55,40 +56,47 @@
 				</tr>
 			</thead>
 			<tbody class="bg-white divide-y divide-gray-200">
-				{#each [1, 2, 3, 4, 5, 6, 7, 8] as i}
-				<tr class="hover:bg-gray-50 group cursor-pointer">
+				{#each orders as order}
+				<tr class="hover:bg-gray-50 group cursor-pointer" onclick={() => window.location.href = `/admin/orders/${order.id}`}>
 					<td class="px-6 py-4 whitespace-nowrap">
 						<input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-						#102{i}
+						#{order.id.slice(-6)}
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-						Today at 10:{i}4 AM
+						{new Date(order.createdAt).toLocaleDateString()}
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<div class="text-sm font-medium text-blue-600 hover:underline">Fatima Zahra</div>
+						<div class="text-sm font-medium text-blue-600 hover:underline">{order.user?.firstName} {order.user?.lastName}</div>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-						${145 + (i * 25)}.00
+						${order.total.toFixed(2)}
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {i === 2 ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
-							<span class="w-1.5 h-1.5 rounded-full mr-1.5 {i === 2 ? 'bg-yellow-500' : 'bg-gray-500'}"></span>
-							{i === 2 ? 'Pending (COD)' : 'Paid'}
+						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {!order.isPaid ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
+							<span class="w-1.5 h-1.5 rounded-full mr-1.5 {!order.isPaid ? 'bg-yellow-500' : 'bg-gray-500'}"></span>
+							{order.isPaid ? 'Paid' : 'Unpaid'}
 						</span>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {i < 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
-							<span class="w-1.5 h-1.5 rounded-full mr-1.5 {i < 3 ? 'bg-yellow-500' : 'bg-gray-500'}"></span>
-							{i < 3 ? 'Unfulfilled' : 'Fulfilled'}
+						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
+							<span class="w-1.5 h-1.5 rounded-full mr-1.5 {order.status === 'PENDING' ? 'bg-yellow-500' : 'bg-gray-500'}"></span>
+							{order.status}
 						</span>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-						{1 + (i % 3)} item{i % 3 !== 0 ? 's' : ''}
+						{order.items.length} item{order.items.length !== 1 ? 's' : ''}
 					</td>
 				</tr>
 				{/each}
+				{#if orders.length === 0}
+				<tr>
+					<td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">
+						No orders found
+					</td>
+				</tr>
+				{/if}
 			</tbody>
 		</table>
 		
@@ -97,22 +105,18 @@
 			<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
 				<div>
 					<p class="text-sm text-gray-700">
-						Showing <span class="font-medium">1</span> to <span class="font-medium">8</span> of <span class="font-medium">97</span> results
+						Showing <span class="font-medium">1</span> to <span class="font-medium">{orders.length}</span> of <span class="font-medium">{orders.length}</span> results
 					</p>
 				</div>
 				<div>
 					<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-						<a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-							<span class="sr-only">Previous</span>
+						<button type="button" aria-label="Previous" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
 							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-						</a>
-						<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-50 text-sm font-medium text-gray-900">1</a>
-						<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">2</a>
-						<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">3</a>
-						<a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-							<span class="sr-only">Next</span>
+						</button>
+						<button type="button" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-50 text-sm font-medium text-gray-900">1</button>
+						<button type="button" aria-label="Next" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
 							<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
-						</a>
+						</button>
 					</nav>
 				</div>
 			</div>

@@ -1,5 +1,6 @@
 <script lang="ts">
-	// Placeholder
+	let { data } = $props();
+	let customers = $derived(data.customers || []);
 </script>
 
 <div class="max-w-7xl mx-auto">
@@ -45,22 +46,23 @@
 				</tr>
 			</thead>
 			<tbody class="bg-white divide-y divide-gray-200">
-				{#each [1, 2, 3, 4, 5, 6, 7] as i}
-				<tr class="hover:bg-gray-50 group cursor-pointer">
+				{#each customers as customer}
+				<tr class="hover:bg-gray-50 group cursor-pointer" onclick={() => window.location.href = `/admin/customers/${customer.id}`}>
 					<td class="px-6 py-4 whitespace-nowrap">
 						<input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<div class="text-sm font-medium text-blue-600 hover:underline">Fatima Zahra {i}</div>
+						<div class="text-sm font-medium text-blue-600 hover:underline">{customer.firstName} {customer.lastName}</div>
+						<div class="text-xs text-gray-500">{customer.email}</div>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-						Dubai, United Arab Emirates
+						-
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-						{i} orders
+						{customer.orderCount} orders
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium text-right">
-						${(i * 145).toFixed(2)}
+						${customer.totalSpent.toFixed(2)}
 					</td>
 				</tr>
 				{/each}

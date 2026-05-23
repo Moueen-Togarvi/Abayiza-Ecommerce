@@ -1,29 +1,9 @@
 <script lang="ts">
-	let cartItems = [
-		{
-			id: 1,
-			name: 'Signature Nida Abaya',
-			color: 'Midnight Black',
-			size: 'M (54)',
-			price: 145.00,
-			quantity: 1,
-			image: 'https://images.unsplash.com/photo-1596455607563-ad6193f76b17?q=80&w=300&auto=format&fit=crop'
-		},
-		{
-			id: 2,
-			name: 'Premium Chiffon Hijab',
-			color: 'Sand',
-			size: 'Standard',
-			price: 25.00,
-			quantity: 2,
-			image: 'https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=300&auto=format&fit=crop'
-		}
-	];
+	import { cart } from '$lib/client/cart.svelte';
 
-	let subtotal = $derived(cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0));
 	let shipping = 15.00; // Flat rate or calculated later
-	let isGift = false;
-	let giftMessage = '';
+	let isGift = $state(false);
+	let giftMessage = $state('');
 </script>
 
 <svelte:head>
@@ -36,7 +16,7 @@
 		<div class="w-12 h-[1px] bg-gold mx-auto"></div>
 	</div>
 
-	{#if cartItems.length === 0}
+	{#if cart.items.length === 0}
 		<div class="text-center py-20">
 			<p class="text-gray-500 font-light mb-8 text-lg">Your bag is currently empty.</p>
 			<a href="/shop" class="inline-block bg-black text-white px-10 py-4 text-sm tracking-widest uppercase hover:bg-gold transition-colors">Continue Shopping</a>
@@ -53,28 +33,28 @@
 				</div>
 
 				<div class="space-y-8">
-					{#each cartItems as item}
+					{#each cart.items as item}
 					<div class="flex flex-col md:flex-row items-start md:items-center py-4 border-b border-gray-100">
 						<!-- Product Image & Info -->
 						<div class="flex w-full md:w-1/2 mb-4 md:mb-0">
-							<a href="/shop/{item.id}" class="w-24 h-32 flex-shrink-0 bg-gray-100 block">
+							<a href="/shop/{item.productId}" class="w-24 h-32 flex-shrink-0 bg-gray-100 block">
 								<img src={item.image} alt={item.name} class="w-full h-full object-cover object-top" />
 							</a>
 							<div class="ml-6 flex flex-col justify-center">
-								<a href="/shop/{item.id}" class="text-sm md:text-base font-serif hover:text-gold transition-colors mb-1">{item.name}</a>
+								<a href="/shop/{item.productId}" class="text-sm md:text-base font-serif hover:text-gold transition-colors mb-1">{item.name}</a>
 								<p class="text-xs text-gray-500 font-light mb-1">Color: {item.color}</p>
 								<p class="text-xs text-gray-500 font-light mb-2">Size: {item.size}</p>
 								<p class="text-sm font-medium block md:hidden">${item.price.toFixed(2)}</p>
-								<button class="text-xs text-gray-400 underline hover:text-black self-start mt-2 uppercase tracking-wider">Remove</button>
+								<button class="text-xs text-gray-400 underline hover:text-black self-start mt-2 uppercase tracking-wider" onclick={() => cart.removeItem(item.id)}>Remove</button>
 							</div>
 						</div>
 
 						<!-- Quantity -->
 						<div class="w-full md:w-1/6 flex justify-start md:justify-center mb-4 md:mb-0">
 							<div class="flex border border-gray-300 w-24 h-10">
-								<button class="w-8 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-50 transition-colors">-</button>
-								<input type="number" class="w-full bg-transparent border-none text-center focus:ring-0 text-sm font-medium p-0" bind:value={item.quantity} min="1">
-								<button class="w-8 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-50 transition-colors">+</button>
+								<button class="w-8 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-50 transition-colors" onclick={() => cart.updateQuantity(item.id, item.quantity - 1)}>-</button>
+								<input type="number" class="w-full bg-transparent border-none text-center focus:ring-0 text-sm font-medium p-0" bind:value={item.quantity} onchange={() => cart.updateQuantity(item.id, item.quantity)} min="1">
+								<button class="w-8 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-50 transition-colors" onclick={() => cart.updateQuantity(item.id, item.quantity + 1)}>+</button>
 							</div>
 						</div>
 
@@ -113,7 +93,7 @@
 					<div class="space-y-4 mb-6 text-sm font-light">
 						<div class="flex justify-between">
 							<span class="text-gray-600">Subtotal</span>
-							<span>${subtotal.toFixed(2)}</span>
+							<span>${cart.subtotal.toFixed(2)}</span>
 						</div>
 						{#if isGift}
 						<div class="flex justify-between">
@@ -123,14 +103,14 @@
 						{/if}
 						<div class="flex justify-between">
 							<span class="text-gray-600">Estimated Shipping</span>
-							<span>{subtotal > 250 ? 'Free' : '$' + shipping.toFixed(2)}</span>
+							<span>{cart.subtotal > 250 ? 'Free' : '$' + shipping.toFixed(2)}</span>
 						</div>
 					</div>
 
 					<div class="border-t border-gray-200 pt-6 mb-8">
 						<div class="flex justify-between items-end">
 							<span class="text-base font-medium uppercase tracking-widest">Total</span>
-							<span class="text-xl font-serif text-black">${(subtotal + (isGift ? 10 : 0) + (subtotal > 250 ? 0 : shipping)).toFixed(2)}</span>
+							<span class="text-xl font-serif text-black">${(cart.subtotal + (isGift ? 10 : 0) + (cart.subtotal > 250 ? 0 : shipping)).toFixed(2)}</span>
 						</div>
 						<p class="text-xs text-gray-500 mt-2 text-right">Taxes calculated at checkout</p>
 					</div>
