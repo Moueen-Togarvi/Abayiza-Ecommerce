@@ -7,29 +7,80 @@
 		{
 			href: '/collections/everyday',
 			label: 'Daily Wear',
-			title: 'Everyday Abayas',
-			description: 'Clean Nida drapes made for workdays, errands, and slow weekends.',
-			image:
-				'https://images.pexels.com/photos/35324601/pexels-photo-35324601.jpeg?auto=compress&cs=tinysrgb&w=900',
-			alt: 'Woman wearing a neutral abaya indoors'
+			title: 'Sage Nida Abaya',
+			description: 'Clean drape with a soft cloud-sage finish for polished everyday wear.',
+			price: '$135',
+			tags: ['Nida', 'Relaxed fit', 'Daily'],
+			image: '/ChatGPT%20Image%20May%2024,%202026,%2002_01_35%20AM.png',
+			alt: 'Sage modest abaya above clouds'
 		},
 		{
 			href: '/collections/wedding',
 			label: 'Occasion',
-			title: 'Occasion Layers',
-			description: 'Soft structure and refined sleeves for gatherings and evening plans.',
-			image:
-				'https://images.pexels.com/photos/35263626/pexels-photo-35263626.jpeg?auto=compress&cs=tinysrgb&w=900',
-			alt: 'Woman wearing a gray abaya in an architectural interior'
+			title: 'Emerald Layered Abaya',
+			description: 'Fluid chiffon movement with a graceful silhouette for evening styling.',
+			price: '$155',
+			tags: ['Chiffon', 'Layered', 'Occasion'],
+			image: '/abaya22.png',
+			alt: 'Emerald layered abaya in a warm archway'
 		},
 		{
 			href: '/collections/summer',
 			label: 'Signature',
-			title: 'Black Edit',
-			description: 'Timeless black abayas with quiet detailing and graceful movement.',
+			title: 'Midnight Veil Abaya',
+			description: 'A darker signature layer with quiet contrast and airy movement.',
+			price: '$165',
+			tags: ['Signature', 'Light veil', 'Premium'],
+			image: '/abaya11.png',
+			alt: 'Midnight layered abaya in a warm archway'
+		}
+	];
+
+	const newArrivals = [
+		{
+			href: '/shop',
+			label: 'New',
+			title: 'Ayla Nida Abaya',
+			color: 'Cloud Sage',
+			description: 'Soft everyday drape with a composed modest silhouette.',
+			price: '$120',
+			image: '/ChatGPT%20Image%20May%2024,%202026,%2002_01_35%20AM.png',
+			alt: 'Cloud sage nida abaya',
+			specs: ['Nida', '52 in', 'S-XL']
+		},
+		{
+			href: '/shop',
+			label: 'Limited',
+			title: 'Zahra Wrap Abaya',
+			color: 'Emerald',
+			description: 'A layered wrap style with fluid chiffon movement.',
+			price: '$145',
+			image: '/abaya22.png',
+			alt: 'Emerald layered abaya',
+			specs: ['Chiffon', '54 in', 'XS-L']
+		},
+		{
+			href: '/shop',
+			label: 'Fresh',
+			title: 'Lina Silk Blend',
+			color: 'Midnight',
+			description: 'Light veil finish with refined contrast and soft volume.',
+			price: '$165',
+			image: '/abaya11.png',
+			alt: 'Midnight veil abaya',
+			specs: ['Silk mix', '53 in', 'S-XL']
+		},
+		{
+			href: '/shop',
+			label: 'Edit',
+			title: 'Nour Embellished',
+			color: 'Soft Black',
+			description: 'Polished occasion abaya with quiet detailing.',
+			price: '$180',
 			image:
-				'https://images.pexels.com/photos/35150034/pexels-photo-35150034.jpeg?auto=compress&cs=tinysrgb&w=900',
-			alt: 'Woman wearing an embroidered black abaya'
+				'https://images.pexels.com/photos/35150034/pexels-photo-35150034.jpeg?auto=compress&cs=tinysrgb&w=700',
+			alt: 'Black embellished abaya',
+			specs: ['Premium', '52 in', 'M-XL']
 		}
 	];
 
@@ -176,9 +227,9 @@
 </section>
 
 <!-- Featured Collections -->
-<section class="border-t border-[#14352d]/8 bg-[#fbfdfc] px-4 py-20 sm:px-6 lg:px-8">
-	<div class="mx-auto max-w-7xl">
-		<div class="mb-12 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+<section class="border-t border-[#14352d]/8 bg-[#fbf9f2] px-4 py-16 sm:px-6 lg:px-8">
+	<div class="mx-auto max-w-6xl">
+		<div class="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
 			<div>
 				<p class="mb-3 text-xs font-bold tracking-[0.18em] text-[#7b6a3d] uppercase">
 					Curated Edits
@@ -193,43 +244,44 @@
 			</p>
 		</div>
 
-		<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 			{#each curatedEdits as edit}
 				<a
 					href={edit.href}
-					class="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+					class="group mx-auto flex h-full w-full max-w-[21rem] flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_48px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.14)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 				>
-					<span
-						class="block aspect-[3/4] overflow-hidden rounded-sm border border-[#14352d]/10 bg-[#e4eee9]"
-					>
+					<span class="block aspect-[16/10] overflow-hidden bg-[#e4eee9]">
 						<img
 							src={edit.image}
 							alt={edit.alt}
 							class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]"
 						/>
 					</span>
-					<span class="block pt-5">
-						<span class="text-[0.68rem] font-bold tracking-[0.18em] text-[#7b6a3d] uppercase">
+					<span class="flex flex-1 flex-col px-5 pt-5 pb-6">
+						<span class="text-[0.68rem] font-bold tracking-[0.18em] text-[#8a7444] uppercase">
 							{edit.label}
 						</span>
-						<span class="mt-2 block font-serif text-2xl leading-tight text-[#14352d]">
+						<span class="mt-2 block font-serif text-xl leading-tight text-[#14352d]">
 							{edit.title}
 						</span>
-						<span class="mt-2 block text-sm leading-6 font-medium text-[#596c62]">
+						<span class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-[#596c62]">
+							{#each edit.tags as tag}
+								<span>{tag}</span>
+							{/each}
+						</span>
+						<span class="mt-4 block text-sm leading-6 font-medium text-[#596c62]">
 							{edit.description}
 						</span>
-						<span
-							class="mt-4 inline-flex items-center gap-2 border-b border-[#14352d]/24 pb-1 text-xs font-bold tracking-[0.14em] text-[#14352d] uppercase transition-colors group-hover:border-[#c5a880] group-hover:text-[#7b6a3d]"
-						>
-							View Edit
-							<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2.2"
-									d="M7 17L17 7M9 7h8v8"
-								/>
-							</svg>
+						<span class="mt-auto flex items-end justify-between gap-3 pt-6">
+							<span>
+								<span class="block text-xl font-black text-[#c0983f]">{edit.price}</span>
+								<span class="mt-1 block text-xs font-semibold text-[#596c62]">Free delivery</span>
+							</span>
+							<span
+								class="inline-flex min-h-10 min-w-[7.5rem] items-center justify-center rounded-full bg-[#e4b43d] px-4 text-xs font-black text-[#14352d] shadow-[0_10px_22px_rgba(196,152,63,0.24)] transition-colors group-hover:bg-[#14352d] group-hover:text-white"
+							>
+								View Edit
+							</span>
 						</span>
 					</span>
 				</a>
@@ -239,29 +291,44 @@
 </section>
 
 <!-- Brand Story Strip -->
-<section class="bg-[#111111] px-4 py-24 text-white sm:px-6 lg:px-8">
-	<div class="mx-auto flex max-w-7xl flex-col items-center gap-12 md:flex-row md:gap-20">
-		<div class="relative h-[600px] w-full md:w-1/2">
+<section class="border-y border-[#14352d]/8 bg-[#fbfdfc] px-4 py-14 sm:px-6 lg:px-8">
+	<div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-[0.88fr_1.12fr] md:items-center">
+		<div class="aspect-[4/3] overflow-hidden rounded-md bg-[#e4eee9] md:max-h-[360px]">
 			<img
-				src="https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?q=80&w=800&auto=format&fit=crop"
-				alt="Craftsmanship"
-				class="absolute inset-0 h-full w-full object-cover"
+				src="/abaya11.png"
+				alt="Midnight layered abaya in a warm archway"
+				class="h-full w-full object-cover object-center"
 			/>
-			<div class="absolute -right-6 -bottom-6 hidden h-48 w-48 border-2 border-gold md:block"></div>
 		</div>
-		<div class="flex w-full flex-col items-start md:w-1/2">
-			<h2 class="mb-4 text-sm tracking-widest text-gold uppercase">Our Ethos</h2>
-			<h3 class="mb-8 font-serif text-4xl leading-tight">
-				Modesty is not just how we dress, it's how we carry ourselves.
-			</h3>
-			<p class="mb-10 text-lg font-light text-gray-400">
-				At Abayiza, we believe in the art of refinement. Every piece is meticulously handstitched
-				using premium Nida fabric, blending traditional silhouettes with contemporary minimalism.
-				Our designs are crafted to empower you with quiet confidence.
+
+		<div class="max-w-2xl md:pl-6">
+			<p class="mb-3 text-xs font-bold tracking-[0.18em] text-[#8a7444] uppercase">Our Ethos</p>
+			<h2 class="font-serif text-3xl leading-tight text-[#14352d] uppercase sm:text-4xl">
+				Designed for Quiet Presence
+			</h2>
+			<p class="mt-5 max-w-xl text-base leading-7 font-medium text-[#596c62]">
+				Every Abayiza piece is shaped around fluid movement, refined finishing, and modest
+				silhouettes that feel composed from morning plans to evening gatherings.
 			</p>
+
+			<div class="mt-8 grid grid-cols-3 gap-3 border-y border-[#14352d]/10 py-5">
+				<div>
+					<p class="text-sm font-black text-[#14352d]">Nida</p>
+					<p class="mt-1 text-xs font-semibold text-[#596c62]">Soft drape</p>
+				</div>
+				<div>
+					<p class="text-sm font-black text-[#14352d]">Finish</p>
+					<p class="mt-1 text-xs font-semibold text-[#596c62]">Clean seams</p>
+				</div>
+				<div>
+					<p class="text-sm font-black text-[#14352d]">Fit</p>
+					<p class="mt-1 text-xs font-semibold text-[#596c62]">Easy layers</p>
+				</div>
+			</div>
+
 			<a
 				href="/about"
-				class="border-b border-white pb-1 text-sm tracking-widest uppercase transition-colors hover:border-gold hover:text-gold"
+				class="mt-7 inline-flex min-h-11 items-center justify-center rounded-full bg-[#14352d] px-6 text-sm font-bold text-white shadow-[0_14px_30px_rgba(20,53,45,0.18)] transition-colors hover:bg-[#c5a880] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 			>
 				Read Our Story
 			</a>
@@ -270,117 +337,114 @@
 </section>
 
 <!-- New Arrivals (Horizontal Scroll / Grid) -->
-<section class="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-	<div class="mb-12 flex items-end justify-between">
-		<div>
-			<h2 class="mb-2 font-serif text-3xl tracking-widest text-black uppercase">New Arrivals</h2>
-			<p class="font-light text-gray-500">The latest additions to our collection</p>
+<section class="bg-[#e4eee9] px-4 py-16 sm:px-6 lg:px-8">
+	<div class="mx-auto max-w-6xl">
+		<div class="mb-10 flex items-end justify-between">
+			<div>
+				<h2 class="mb-2 font-serif text-3xl tracking-widest text-black uppercase">New Arrivals</h2>
+				<p class="font-light text-gray-500">The latest additions to our collection</p>
+			</div>
+			<a
+				href="/collections/new"
+				class="hidden border-b border-black pb-1 text-sm tracking-widest uppercase transition-colors hover:border-gold hover:text-gold md:inline-block"
+			>
+				View All
+			</a>
 		</div>
-		<a
-			href="/collections/new"
-			class="hidden border-b border-black pb-1 text-sm tracking-widest uppercase transition-colors hover:border-gold hover:text-gold md:inline-block"
-		>
-			View All
-		</a>
-	</div>
 
-	<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-		<!-- Product Card 1 -->
-		<div class="group cursor-pointer">
-			<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
-				<img
-					src="https://images.unsplash.com/photo-1596455607563-ad6193f76b17?q=80&w=600&auto=format&fit=crop"
-					alt="Ayla Nida Abaya"
-					class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-				/>
-				<div
-					class="absolute right-0 bottom-0 left-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0"
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{#each newArrivals as item}
+				<a
+					href={item.href}
+					class="group overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_44px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.15)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 				>
-					<button
-						class="w-full bg-black py-3 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold"
-						>Quick Add</button
-					>
-				</div>
-			</div>
-			<h3 class="mb-1 font-serif text-lg transition-colors group-hover:text-gold">
-				Ayla Nida Abaya
-			</h3>
-			<p class="mb-2 text-sm font-light text-gray-500">Dusty Rose</p>
-			<p class="text-md font-medium">$120.00</p>
-		</div>
-		<!-- Product Card 2 -->
-		<div class="group cursor-pointer">
-			<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
-				<div
-					class="absolute top-4 left-4 z-10 bg-black px-2 py-1 text-xs tracking-wider text-white uppercase"
-				>
-					New
-				</div>
-				<img
-					src="https://images.unsplash.com/photo-1627589255869-42b78b8f2d5e?q=80&w=600&auto=format&fit=crop"
-					alt="Zahra Wrap Abaya"
-					class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-				/>
-				<div
-					class="absolute right-0 bottom-0 left-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0"
-				>
-					<button
-						class="w-full bg-black py-3 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold"
-						>Quick Add</button
-					>
-				</div>
-			</div>
-			<h3 class="mb-1 font-serif text-lg transition-colors group-hover:text-gold">
-				Zahra Wrap Abaya
-			</h3>
-			<p class="mb-2 text-sm font-light text-gray-500">Midnight Black</p>
-			<p class="text-md font-medium">$145.00</p>
-		</div>
-		<!-- Product Card 3 -->
-		<div class="group cursor-pointer">
-			<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
-				<img
-					src="https://images.unsplash.com/photo-1589156280159-27698a70f29e?q=80&w=600&auto=format&fit=crop"
-					alt="Lina Silk Blend"
-					class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-				/>
-				<div
-					class="absolute right-0 bottom-0 left-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0"
-				>
-					<button
-						class="w-full bg-black py-3 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold"
-						>Quick Add</button
-					>
-				</div>
-			</div>
-			<h3 class="mb-1 font-serif text-lg transition-colors group-hover:text-gold">
-				Lina Silk Blend
-			</h3>
-			<p class="mb-2 text-sm font-light text-gray-500">Sand</p>
-			<p class="text-md font-medium">$165.00</p>
-		</div>
-		<!-- Product Card 4 -->
-		<div class="group hidden cursor-pointer lg:block">
-			<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
-				<img
-					src="https://images.unsplash.com/photo-1627589255655-b40b8a3f8737?q=80&w=600&auto=format&fit=crop"
-					alt="Nour Embellished"
-					class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-				/>
-				<div
-					class="absolute right-0 bottom-0 left-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0"
-				>
-					<button
-						class="w-full bg-black py-3 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold"
-						>Quick Add</button
-					>
-				</div>
-			</div>
-			<h3 class="mb-1 font-serif text-lg transition-colors group-hover:text-gold">
-				Nour Embellished
-			</h3>
-			<p class="mb-2 text-sm font-light text-gray-500">Emerald</p>
-			<p class="text-md font-medium">$180.00</p>
+					<span class="relative block aspect-[1.05/1] overflow-hidden bg-[#f0c44a]">
+						<img
+							src={item.image}
+							alt={item.alt}
+							class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+						/>
+						<span
+							class="absolute top-3 left-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/82 text-[#14352d] shadow-[0_10px_20px_rgba(20,53,45,0.12)] backdrop-blur-md"
+						>
+							<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M15 19l-7-7 7-7"
+								/>
+							</svg>
+						</span>
+						<span
+							class="absolute top-0 right-0 inline-flex h-14 w-14 items-center justify-center rounded-bl-md bg-white text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.12)]"
+						>
+							<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="1.9"
+									d="M6 7h15l-1.5 8.25H8.25L6 4.5H3"
+								/>
+								<circle cx="9" cy="19" r="1.2" fill="currentColor"></circle>
+								<circle cx="18" cy="19" r="1.2" fill="currentColor"></circle>
+							</svg>
+						</span>
+						<span
+							class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/72 px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.1em] text-[#14352d] uppercase backdrop-blur-md"
+						>
+							{item.label}
+						</span>
+					</span>
+
+					<span class="block px-4 pt-4 pb-5">
+						<span class="flex items-start justify-between gap-3">
+							<span>
+								<span class="block font-serif text-lg leading-tight text-[#14352d]">
+									{item.title}
+								</span>
+								<span
+									class="mt-1 block text-[0.68rem] font-bold tracking-[0.12em] text-[#8a7444] uppercase"
+								>
+									{item.color}
+								</span>
+							</span>
+							<span
+								class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#e4b43d] text-white shadow-[0_10px_22px_rgba(196,152,63,0.24)]"
+							>
+								<svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+									<path
+										d="M12 21.25l-1.45-1.32C5.4 15.24 2 12.16 2 8.38 2 5.3 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08A5.96 5.96 0 0116.5 3C19.58 3 22 5.3 22 8.38c0 3.78-3.4 6.86-8.55 11.55L12 21.25z"
+									/>
+								</svg>
+							</span>
+						</span>
+
+						<span class="mt-3 block min-h-10 text-sm leading-5 font-medium text-[#596c62]">
+							{item.description}
+						</span>
+
+						<span class="mt-3 flex flex-wrap gap-2">
+							{#each item.specs as spec}
+								<span
+									class="inline-flex min-h-7 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-3 text-center text-[0.7rem] font-bold text-[#14352d]"
+								>
+									{spec}
+								</span>
+							{/each}
+						</span>
+
+						<span class="mt-5 flex items-end justify-between gap-3">
+							<span class="text-xl font-black text-[#14352d]">{item.price}</span>
+							<span
+								class="inline-flex min-h-10 min-w-[7rem] items-center justify-center rounded-full bg-[#e4b43d] px-4 text-xs font-black text-[#14352d] transition-colors group-hover:bg-[#14352d] group-hover:text-white"
+							>
+								Add to Cart
+							</span>
+						</span>
+					</span>
+				</a>
+			{/each}
 		</div>
 	</div>
 </section>
