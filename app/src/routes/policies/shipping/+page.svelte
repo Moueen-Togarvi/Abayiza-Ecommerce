@@ -23,9 +23,9 @@
 					</thead>
 					<tbody>
 						{#each [
-							{ method: 'Standard Shipping', time: '5–7 Business Days', cost: '$15 (Free over $250)' },
-							{ method: 'DHL Express', time: '2–3 Business Days', cost: '$25' },
-							{ method: 'Overnight (Domestic)', time: '1 Business Day', cost: '$40' },
+							{ method: 'Standard Shipping', time: '5-7 Business Days', cost: 'Rs. 300 (Free over Rs. 15,000)' },
+							{ method: 'DHL Express', time: '2-3 Business Days', cost: 'Rs. 1,200' },
+							{ method: 'Overnight (Domestic)', time: '1 Business Day', cost: 'Confirmed on WhatsApp' },
 							{ method: 'International Standard', time: '10–15 Business Days', cost: 'Calculated at checkout' },
 							{ method: 'International Express', time: '5–7 Business Days', cost: 'Calculated at checkout' },
 						] as row, i}
@@ -43,7 +43,7 @@
 
 		<section class="border-t border-gray-100 pt-8">
 			<h2 class="text-lg font-serif tracking-widest uppercase text-black mb-4">Free Shipping</h2>
-			<p>Enjoy complimentary standard shipping on all orders over <strong class="font-medium text-black">$250 USD</strong>. This offer applies automatically at checkout — no code required. Free shipping is valid on domestic orders only.</p>
+			<p>Enjoy complimentary standard shipping on all orders over <strong class="font-medium text-black">Rs. 15,000 PKR</strong>. This offer applies automatically at checkout. Free shipping is valid on domestic orders only.</p>
 		</section>
 
 		<section class="border-t border-gray-100 pt-8">

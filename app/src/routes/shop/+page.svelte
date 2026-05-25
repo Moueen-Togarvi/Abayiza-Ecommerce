@@ -26,7 +26,11 @@
 	}
 
 	function primaryVariant(item: any) {
-		return item.variants && item.variants.length > 0 ? item.variants[0] : undefined;
+		return item.variants?.find((variant: any) => Number(variant.stockCount || 0) > 0) || item.variants?.[0];
+	}
+
+	function isOutOfStock(item: any) {
+		return !item.variants?.some((variant: any) => Number(variant.stockCount || 0) > 0);
 	}
 
 	function productPrice(item: any) {
@@ -34,11 +38,13 @@
 	}
 
 	function addProductToCart(item: any) {
+		if (isOutOfStock(item)) return;
 		const variant = primaryVariant(item);
 
 		cart.addItem({
 			id: variant ? variant.id : item.id,
 			productId: item.id,
+			variantId: variant?.id,
 			name: item.name,
 			price: productPrice(item),
 			quantity: 1,
@@ -218,6 +224,13 @@
 										Sale
 									</span>
 								{/if}
+								{#if isOutOfStock(item)}
+									<span
+										class="absolute top-3 right-3 z-10 rounded-full bg-red-600 px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-white uppercase"
+									>
+										Out of Stock
+									</span>
+								{/if}
 								<img
 									src={productImage(item)}
 									alt={item.name}
@@ -227,7 +240,7 @@
 
 							<div class="flex flex-1 flex-col p-4">
 								<div class="mb-3 flex items-start justify-between gap-3">
-									<div class="min-h-[4.5rem] min-w-0">
+									<div class="min-h-[3.25rem] min-w-0">
 										<a
 											href={`/shop/${item.slug}`}
 											class="block font-serif text-lg leading-tight text-[#14352d] transition-colors hover:text-[#b58b2b]"
@@ -239,11 +252,11 @@
 										</p>
 									</div>
 									<div class="shrink-0 text-right">
-										<p class="text-base font-black text-[#14352d]">
+										<p class="whitespace-nowrap text-base font-black text-[#14352d]">
 											{formatMoney(item.salePrice || item.price)}
 										</p>
 										{#if item.salePrice}
-											<p class="text-xs font-bold text-[#596c62]/60 line-through">
+											<p class="whitespace-nowrap text-xs font-bold text-red-600 line-through">
 												{formatMoney(item.price)}
 											</p>
 										{/if}
@@ -259,10 +272,11 @@
 								<div class="mt-auto flex items-center gap-2">
 									<button
 										type="button"
-										class="inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+										disabled={isOutOfStock(item)}
+										class="inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
 										onclick={() => addProductToCart(item)}
 									>
-										Add to Cart
+										{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
 									</button>
 									<button
 										type="button"

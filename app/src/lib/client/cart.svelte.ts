@@ -1,6 +1,7 @@
 export type CartItem = {
 	id: string; // Can be a combination of productId and variantId
 	productId: string;
+	variantId?: string;
 	name: string;
 	price: number;
 	quantity: number;

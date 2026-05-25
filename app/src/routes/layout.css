@@ -3,7 +3,7 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-	--color-cream: #e0e9e6;
+	--color-cream: #fbf9f2;
 	--color-white: #fbfdfc;
 	--color-black: #354238;
 	--color-dusty-rose: #d1b8b4;
@@ -39,15 +39,6 @@
 	body {
 		@apply font-sans text-black antialiased;
 		background-color: var(--color-cream);
-		background-image:
-			radial-gradient(
-				circle at top center,
-				rgba(255, 255, 255, 0.98),
-				rgba(255, 255, 255, 0.74) 24%,
-				transparent 50%
-			),
-			radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.72), transparent 26%),
-			linear-gradient(180deg, #ffffff 0%, #f6fbf9 18%, #e8f0ed 46%, #dde7e4 100%);
 	}
 
 	h1,
@@ -78,6 +69,12 @@
 
 	.hero-reveal {
 		will-change: transform, opacity;
+	}
+}
+
+@media (max-width: 640px) {
+	.hero-cinematic {
+		min-height: min(520px, calc(100svh - 1rem));
 	}
 }
 

@@ -9,8 +9,11 @@ export const load: PageServerLoad = async () => {
 		orderBy: { createdAt: 'desc' }
 	});
 
-	const serializedCustomers = customers.map(c => {
-		const totalSpent = c.orders.reduce((acc, order) => acc + Number(order.totalAmount), 0);
+	const serializedCustomers = customers.map((c: any) => {
+		const totalSpent = c.orders.reduce(
+			(acc: number, order: any) => acc + Number(order.totalAmount),
+			0
+		);
 		return {
 			id: c.id,
 			firstName: c.firstName,

@@ -1,42 +1,63 @@
 <script lang="ts">
+	import { formatMoney } from '$lib/shared/money';
+
 	let { data } = $props();
 	let orders = $derived(data.orders || []);
+	let filters = $derived(data.filters || {});
+
+	const statusLabel = (status: string) =>
+		({
+			PENDING: 'Pending',
+			PROCESSING: 'In Progress',
+			SHIPPED: 'Shipped',
+			DELIVERED: 'Completed',
+			CANCELLED: 'Cancelled'
+		})[status] || status;
+
+	const statusClass = (status: string) =>
+		({
+			PENDING: 'bg-yellow-100 text-yellow-800',
+			PROCESSING: 'bg-blue-100 text-blue-800',
+			SHIPPED: 'bg-purple-100 text-purple-800',
+			DELIVERED: 'bg-green-100 text-green-800',
+			CANCELLED: 'bg-red-100 text-red-800'
+		})[status] || 'bg-gray-100 text-gray-800';
 </script>
 
 <div class="max-w-7xl mx-auto">
 	<div class="flex justify-between items-center mb-6">
-		<h1 class="text-2xl font-bold text-gray-900">Orders</h1>
+		<div>
+			<h1 class="text-2xl font-bold text-gray-900">Active Orders</h1>
+			<p class="mt-1 text-sm text-gray-500">Completed orders move to their own page automatically.</p>
+		</div>
 		<div class="flex space-x-3">
-			<button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 shadow-sm">
-				Export
-			</button>
-			<button class="bg-[#000] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 shadow-sm">
-				Create order
-			</button>
+			<a href="/admin/orders/completed" class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+				Completed Orders
+			</a>
+			<a href="/admin/orders/cancelled" class="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 shadow-sm hover:bg-red-100">
+				Cancelled Orders
+			</a>
 		</div>
 	</div>
 
 	<!-- Filters & Search -->
-	<div class="bg-white p-4 rounded-t-lg border-x border-t border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 shadow-sm">
-		<div class="flex space-x-4 overflow-x-auto w-full sm:w-auto">
-			<button class="text-sm font-medium border-b-2 border-[#000] text-[#000] pb-1 whitespace-nowrap">All</button>
-			<button class="text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 pb-1 whitespace-nowrap">Unfulfilled</button>
-			<button class="text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 pb-1 whitespace-nowrap">Unpaid</button>
-			<button class="text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 pb-1 whitespace-nowrap">Open</button>
-			<button class="text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 pb-1 whitespace-nowrap">Closed</button>
-		</div>
-		<div class="flex items-center space-x-2 w-full sm:w-auto">
-			<div class="relative flex-1 sm:w-64">
-				<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-					<svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-				</div>
-				<input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#000] focus:border-[#000] sm:text-sm" placeholder="Filter orders">
+	<form method="GET" class="rounded-t-lg border-x border-t border-gray-200 bg-white p-4 shadow-sm">
+		<div class="grid grid-cols-1 gap-3 md:grid-cols-6">
+			<input name="date" type="date" value={filters.date || ''} class="rounded-md border-gray-300 text-sm focus:border-[#000] focus:ring-[#000]" />
+			<input name="email" type="search" value={filters.email || ''} placeholder="Email" class="rounded-md border-gray-300 text-sm focus:border-[#000] focus:ring-[#000]" />
+			<input name="phone" type="search" value={filters.phone || ''} placeholder="Phone" class="rounded-md border-gray-300 text-sm focus:border-[#000] focus:ring-[#000]" />
+			<input name="name" type="search" value={filters.name || ''} placeholder="Name" class="rounded-md border-gray-300 text-sm focus:border-[#000] focus:ring-[#000]" />
+			<input name="city" type="search" value={filters.city || ''} placeholder="City" class="rounded-md border-gray-300 text-sm focus:border-[#000] focus:ring-[#000]" />
+			<div class="flex gap-2">
+				<button type="submit" class="flex-1 rounded-md bg-[#000] px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+					Filter
+				</button>
+				<a href="/admin/orders" class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
+					Clear
+				</a>
 			</div>
-			<button class="p-2 border border-gray-300 rounded-md text-gray-500 hover:bg-gray-50 bg-white">
-				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
-			</button>
 		</div>
-	</div>
+	</form>
 
 	<!-- Orders Table -->
 	<div class="bg-white shadow-sm border border-gray-200 rounded-b-lg overflow-x-auto">
@@ -50,8 +71,8 @@
 					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
 					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
 					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Status</th>
-					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fulfillment Status</th>
+					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone / City</th>
+					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
 					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
 				</tr>
 			</thead>
@@ -62,27 +83,25 @@
 						<input type="checkbox" class="rounded border-gray-300 text-[#000] focus:ring-[#000]">
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-						#{order.id.slice(-6)}
+						{order.orderNumber}
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
 						{new Date(order.createdAt).toLocaleDateString()}
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<div class="text-sm font-medium text-blue-600 hover:underline">{order.user?.firstName} {order.user?.lastName}</div>
+						<div class="text-sm font-medium text-blue-600 hover:underline">{order.customerName}</div>
+						<div class="text-xs text-gray-500">{order.customerEmail}</div>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-						${order.total.toFixed(2)}
+						{formatMoney(order.total)}
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {!order.isPaid ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
-							<span class="w-1.5 h-1.5 rounded-full mr-1.5 {!order.isPaid ? 'bg-yellow-500' : 'bg-gray-500'}"></span>
-							{order.isPaid ? 'Paid' : 'Unpaid'}
-						</span>
+						<div class="text-sm text-gray-700">{order.customerPhone || '-'}</div>
+						<div class="text-xs text-gray-500">{order.customerCity || '-'}</div>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}">
-							<span class="w-1.5 h-1.5 rounded-full mr-1.5 {order.status === 'PENDING' ? 'bg-yellow-500' : 'bg-gray-500'}"></span>
-							{order.status}
+						<span class={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusClass(order.status)}`}>
+							{statusLabel(order.status)}
 						</span>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

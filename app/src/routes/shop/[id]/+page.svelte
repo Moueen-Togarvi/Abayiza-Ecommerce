@@ -12,7 +12,13 @@
 
 	let images = $derived(product.images?.map((image: any) => image.url) || []);
 	let colors = $derived(
-		Array.from(new Set((product.variants || []).map((variant: any) => variant.color))).filter(Boolean)
+		Array.from(
+			new Set<string>(
+				(product.variants || [])
+					.map((variant: any) => String(variant.color || ''))
+					.filter(Boolean)
+			)
+		)
 	);
 	let selectedColor = $state('');
 	let selectedSize = $state('');
@@ -26,6 +32,12 @@
 		(product.variants || []).find(
 			(variant: any) => variant.color === selectedColor && variant.size === selectedSize
 		) || product.variants?.[0]
+	);
+	let productOutOfStock = $derived(
+		!product.variants?.some((variant: any) => Number(variant.stockCount || 0) > 0)
+	);
+	let selectedVariantOutOfStock = $derived(
+		productOutOfStock || !selectedVariant || Number(selectedVariant.stockCount || 0) < quantity
 	);
 
 	const colorHex: Record<string, string> = {
@@ -52,10 +64,19 @@
 		}
 	});
 
+	$effect(() => {
+		const stock = Number(selectedVariant?.stockCount || 0);
+		if (stock > 0 && quantity > stock) quantity = stock;
+		if (quantity < 1) quantity = 1;
+	});
+
 	function addToCart() {
+		if (selectedVariantOutOfStock) return;
+
 		cart.addItem({
 			id: selectedVariant?.id || product.id,
 			productId: product.id,
+			variantId: selectedVariant?.id,
 			name: product.name,
 			price: Number(product.salePrice || product.price),
 			quantity,
@@ -118,6 +139,13 @@
 						Sale
 					</div>
 				{/if}
+				{#if productOutOfStock}
+					<div
+						class="absolute top-4 right-4 z-10 bg-red-600 px-3 py-1.5 text-xs font-bold tracking-widest text-white uppercase"
+					>
+						Out of Stock
+					</div>
+				{/if}
 				<img
 					src={images[activeImage] || productImage(product)}
 					alt={product.name}
@@ -135,7 +163,7 @@
 				<div class="mb-4 flex items-center space-x-4">
 					<p class="text-2xl font-light text-black">{formatMoney(product.salePrice || product.price)}</p>
 					{#if product.salePrice}
-						<p class="text-xl font-light text-gray-400 line-through">{formatMoney(product.price)}</p>
+						<p class="text-xl font-light text-red-600 line-through">{formatMoney(product.price)}</p>
 					{/if}
 				</div>
 				<p class="text-sm leading-relaxed font-light whitespace-pre-wrap text-gray-600">
@@ -194,8 +222,10 @@
 						{/each}
 					</div>
 					{#if selectedVariant}
-						<p class="mt-2 text-xs font-light text-gray-500">
-							{selectedVariant.stockCount} available in this option
+						<p class="mt-2 text-xs font-light {Number(selectedVariant.stockCount || 0) > 0 ? 'text-gray-500' : 'text-red-600'}">
+							{Number(selectedVariant.stockCount || 0) > 0
+								? `${selectedVariant.stockCount} available in this option`
+								: 'Out of stock in this option'}
 						</p>
 					{/if}
 				</div>
@@ -205,7 +235,8 @@
 				<div class="flex h-14 w-full border border-gray-300 sm:w-32">
 					<button
 						type="button"
-						class="flex w-10 items-center justify-center text-gray-500 transition-colors hover:bg-gray-50 hover:text-black"
+						disabled={productOutOfStock}
+						class="flex w-10 items-center justify-center text-gray-500 transition-colors hover:bg-gray-50 hover:text-black disabled:cursor-not-allowed disabled:text-gray-300"
 						onclick={() => (quantity = quantity > 1 ? quantity - 1 : 1)}
 					>
 						-
@@ -218,7 +249,8 @@
 					/>
 					<button
 						type="button"
-						class="flex w-10 items-center justify-center text-gray-500 transition-colors hover:bg-gray-50 hover:text-black"
+						disabled={productOutOfStock || (selectedVariant && quantity >= Number(selectedVariant.stockCount || 0))}
+						class="flex w-10 items-center justify-center text-gray-500 transition-colors hover:bg-gray-50 hover:text-black disabled:cursor-not-allowed disabled:text-gray-300"
 						onclick={() => quantity++}
 					>
 						+
@@ -227,10 +259,11 @@
 
 				<button
 					type="button"
-					class="flex h-14 flex-grow items-center justify-center space-x-2 bg-black text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold"
+					disabled={selectedVariantOutOfStock}
+					class="flex h-14 flex-grow items-center justify-center space-x-2 bg-black text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
 					onclick={addToCart}
 				>
-					<span>Add to Bag</span>
+					<span>{selectedVariantOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
 				</button>
 			</div>
 

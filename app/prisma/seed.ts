@@ -3,44 +3,29 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const image = (path: string) => path.replaceAll(' ', '%20');
+const toSlug = (value: string) =>
+	value
+		.trim()
+		.toLowerCase()
+		.replace(/&/g, 'and')
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
 
 const categories = [
-	{
-		name: 'Daily Wear',
-		slug: 'daily-wear',
-		description: 'Clean everyday abayas for modest daily styling.',
-		imageUrl: image('/ChatGPT Image May 24, 2026, 02_01_35 AM.png'),
-		displayOrder: 1
-	},
-	{
-		name: 'Nida Essentials',
-		slug: 'nida-essentials',
-		description: 'Soft Nida fabric pieces with easy drape and breathable comfort.',
-		imageUrl: image('/ChatGPT Image May 25, 2026, 06_25_42 PM.png'),
-		displayOrder: 2
-	},
-	{
-		name: 'Occasion Wear',
-		slug: 'occasion-wear',
-		description: 'Elegant abayas for events, Eid visits, and formal gatherings.',
-		imageUrl: '/abaya22.png',
-		displayOrder: 3
-	},
-	{
-		name: 'Embroidered Edit',
-		slug: 'embroidered-edit',
-		description: 'Statement abayas finished with embroidery, trims, and refined detail.',
-		imageUrl: image('/ChatGPT Image May 25, 2026, 06_25_25 PM.png'),
-		displayOrder: 4
-	},
-	{
-		name: 'Hijabs & Veils',
-		slug: 'hijabs-veils',
-		description: 'Hijabs, khimars, and veil sets to complete modest outfits.',
-		imageUrl: '/abaya11.png',
-		displayOrder: 5
-	}
-];
+	'Daily Wear',
+	'Nida Essentials',
+	'Occasion',
+	'Signature',
+	'Premium',
+	'Layered',
+	'Soft Black',
+	'Limited'
+].map((name) => ({
+	name,
+	slug: toSlug(name),
+	description: null,
+	imageUrl: null
+}));
 
 const products = [
 	{
@@ -60,31 +45,31 @@ const products = [
 		]
 	},
 	{
-		name: 'Noor Black Nida Abaya',
-		slug: 'noor-black-nida-abaya',
+		name: 'Safa Essential Abaya',
+		slug: 'safa-essential-abaya',
 		description:
-			'Classic black Nida abaya designed for daily wear with a clean front, soft sleeves, and a graceful drape.',
-		fabricDetails: 'Premium black Nida, lightweight, non-transparent, soft touch.',
-		price: 7800,
-		salePrice: 6990,
-		images: [image('/ChatGPT Image May 25, 2026, 06_25_42 PM.png')],
+			'Clean everyday abaya with soft movement, relaxed sleeves, and a polished modest shape.',
+		fabricDetails: 'Soft Nida fabric, relaxed fit, daily modest silhouette.',
+		price: 8200,
+		salePrice: 7380,
+		images: [image('/ChatGPT Image May 24, 2026, 02_01_35 AM.png')],
 		collections: ['daily-wear', 'nida-essentials'],
 		variants: [
-			{ color: 'Black', size: 'S (52)', sku: 'ABY-NOOR-BLK-S', stockCount: 9 },
-			{ color: 'Black', size: 'M (54)', sku: 'ABY-NOOR-BLK-M', stockCount: 12 },
-			{ color: 'Black', size: 'L (56)', sku: 'ABY-NOOR-BLK-L', stockCount: 8 }
+			{ color: 'Sage', size: 'S (52)', sku: 'ABY-SAFA-SAGE-S', stockCount: 8 },
+			{ color: 'Sage', size: 'M (54)', sku: 'ABY-SAFA-SAGE-M', stockCount: 9 },
+			{ color: 'Sage', size: 'L (56)', sku: 'ABY-SAFA-SAGE-L', stockCount: 6 }
 		]
 	},
 	{
-		name: 'Zahra Emerald Layered Abaya',
-		slug: 'zahra-emerald-layered-abaya',
+		name: 'Zahra Wrap Abaya',
+		slug: 'zahra-wrap-abaya',
 		description:
-			'Layered emerald abaya with airy movement and a composed silhouette for dinners, Eid, and evening styling.',
-		fabricDetails: 'Chiffon overlay with soft inner lining and fluid layered panels.',
-		price: 10500,
-		salePrice: 9450,
+			'Layered wrap-style abaya with fluid movement and a graceful evening-ready fall.',
+		fabricDetails: 'Chiffon layer over soft lining with wrap-inspired front movement.',
+		price: 10400,
+		salePrice: 9360,
 		images: ['/abaya22.png'],
-		collections: ['occasion-wear'],
+		collections: ['occasion', 'layered'],
 		variants: [
 			{ color: 'Emerald', size: 'S (52)', sku: 'ABY-ZAHRA-EMR-S', stockCount: 6 },
 			{ color: 'Emerald', size: 'M (54)', sku: 'ABY-ZAHRA-EMR-M', stockCount: 8 },
@@ -92,35 +77,35 @@ const products = [
 		]
 	},
 	{
-		name: 'Mira Midnight Veil Abaya',
-		slug: 'mira-midnight-veil-abaya',
+		name: 'Lina Silk Blend Abaya',
+		slug: 'lina-silk-blend-abaya',
 		description:
-			'Midnight veil abaya with a refined contrast layer and soft volume for premium modest dressing.',
-		fabricDetails: 'Light veil overlay, lined body, polished finishing.',
-		price: 11500,
-		salePrice: 10350,
+			'Silk-blend abaya with refined contrast, soft volume, and a premium occasion finish.',
+		fabricDetails: 'Silk blend finish with light veil-inspired overlay.',
+		price: 11600,
+		salePrice: 10440,
 		images: ['/abaya11.png'],
-		collections: ['occasion-wear', 'hijabs-veils'],
+		collections: ['signature', 'premium'],
 		variants: [
-			{ color: 'Midnight', size: 'S (52)', sku: 'ABY-MIRA-MID-S', stockCount: 5 },
-			{ color: 'Midnight', size: 'M (54)', sku: 'ABY-MIRA-MID-M', stockCount: 7 },
-			{ color: 'Midnight', size: 'L (56)', sku: 'ABY-MIRA-MID-L', stockCount: 4 }
+			{ color: 'Midnight', size: 'S (52)', sku: 'ABY-LINA-MID-S', stockCount: 5 },
+			{ color: 'Midnight', size: 'M (54)', sku: 'ABY-LINA-MID-M', stockCount: 7 },
+			{ color: 'Midnight', size: 'L (56)', sku: 'ABY-LINA-MID-L', stockCount: 4 }
 		]
 	},
 	{
-		name: 'Huda Embroidered Abaya',
-		slug: 'huda-embroidered-abaya',
+		name: 'Nour Embellished Abaya',
+		slug: 'nour-embellished-abaya',
 		description:
-			'Black embroidered abaya with premium sleeve detail, ideal for occasion wear and gift-ready dressing.',
+			'Soft black embellished abaya with premium sleeve detail for occasion wear and refined styling.',
 		fabricDetails: 'Soft crepe base with embroidered sleeve panels and clean edge finishing.',
 		price: 13500,
 		salePrice: 12150,
 		images: [image('/ChatGPT Image May 25, 2026, 06_25_25 PM.png')],
-		collections: ['embroidered-edit', 'occasion-wear'],
+		collections: ['soft-black', 'premium', 'occasion'],
 		variants: [
-			{ color: 'Black', size: 'M (54)', sku: 'ABY-HUDA-BLK-M', stockCount: 5 },
-			{ color: 'Black', size: 'L (56)', sku: 'ABY-HUDA-BLK-L', stockCount: 4 },
-			{ color: 'Black', size: 'XL (58)', sku: 'ABY-HUDA-BLK-XL', stockCount: 3 }
+			{ color: 'Black', size: 'M (54)', sku: 'ABY-NOUR-BLK-M', stockCount: 5 },
+			{ color: 'Black', size: 'L (56)', sku: 'ABY-NOUR-BLK-L', stockCount: 4 },
+			{ color: 'Black', size: 'XL (58)', sku: 'ABY-NOUR-BLK-XL', stockCount: 3 }
 		]
 	},
 	{
@@ -132,7 +117,7 @@ const products = [
 		price: 14500,
 		salePrice: 12950,
 		images: [image('/ChatGPT Image May 25, 2026, 06_25_30 PM.png')],
-		collections: ['embroidered-edit', 'occasion-wear'],
+		collections: ['premium', 'occasion'],
 		variants: [
 			{ color: 'Ivory', size: 'S (52)', sku: 'ABY-AMANI-IVR-S', stockCount: 4 },
 			{ color: 'Ivory', size: 'M (54)', sku: 'ABY-AMANI-IVR-M', stockCount: 5 },
@@ -156,15 +141,15 @@ const products = [
 		]
 	},
 	{
-		name: 'Zoya Premium Nida Set',
-		slug: 'zoya-premium-nida-set',
+		name: 'Zoya Premium Nida Abaya Set',
+		slug: 'zoya-premium-nida-abaya-set',
 		description:
 			'Premium Nida abaya set with matching scarf, designed as a complete modest outfit.',
 		fabricDetails: 'Premium Nida abaya with matching chiffon scarf included.',
 		price: 12500,
 		salePrice: 11250,
 		images: [image('/ChatGPT Image May 25, 2026, 06_07_28 PM.png')],
-		collections: ['nida-essentials', 'occasion-wear'],
+		collections: ['nida-essentials', 'premium'],
 		variants: [
 			{ color: 'Charcoal', size: 'S (52)', sku: 'ABY-ZOYA-CHR-S', stockCount: 5 },
 			{ color: 'Charcoal', size: 'M (54)', sku: 'ABY-ZOYA-CHR-M', stockCount: 6 },
@@ -172,49 +157,51 @@ const products = [
 		]
 	},
 	{
-		name: 'Safa Chiffon Hijab',
-		slug: 'safa-chiffon-hijab',
+		name: 'Emerald Layered Abaya',
+		slug: 'emerald-layered-abaya',
 		description:
-			'Soft chiffon hijab with a light fall, made for daily styling and occasion pairing.',
-		fabricDetails: 'Premium chiffon, soft touch, breathable and easy to pin.',
-		price: 2200,
-		salePrice: 1990,
+			'Emerald layered abaya with airy chiffon movement and a composed evening silhouette.',
+		fabricDetails: 'Layered chiffon with soft inner lining.',
+		price: 10800,
+		salePrice: 9720,
 		images: ['/abaya22.png'],
-		collections: ['hijabs-veils'],
+		collections: ['layered', 'occasion'],
 		variants: [
-			{ color: 'Black', size: 'One Size', sku: 'HJ-SAFACHF-BLK-OS', stockCount: 20 },
-			{ color: 'Ivory', size: 'One Size', sku: 'HJ-SAFACHF-IVR-OS', stockCount: 15 },
-			{ color: 'Emerald', size: 'One Size', sku: 'HJ-SAFACHF-EMR-OS', stockCount: 12 }
+			{ color: 'Emerald', size: 'S (52)', sku: 'ABY-EMLYR-EMR-S', stockCount: 6 },
+			{ color: 'Emerald', size: 'M (54)', sku: 'ABY-EMLYR-EMR-M', stockCount: 7 },
+			{ color: 'Emerald', size: 'L (56)', sku: 'ABY-EMLYR-EMR-L', stockCount: 5 }
 		]
 	},
 	{
-		name: 'Layan Soft Khimar',
-		slug: 'layan-soft-khimar',
+		name: 'Midnight Veil Abaya',
+		slug: 'midnight-veil-abaya',
 		description:
-			'Full coverage khimar with a soft rounded fall, made for prayer, daily errands, and modest layering.',
-		fabricDetails: 'Lightweight crepe blend with generous coverage.',
-		price: 3500,
-		salePrice: 3150,
+			'Midnight veil abaya with refined contrast and light movement for signature modest dressing.',
+		fabricDetails: 'Veil overlay with lined body and polished finishing.',
+		price: 11800,
+		salePrice: 10620,
 		images: ['/abaya11.png'],
-		collections: ['hijabs-veils', 'daily-wear'],
+		collections: ['signature', 'premium'],
 		variants: [
-			{ color: 'Black', size: 'One Size', sku: 'KH-LAYAN-BLK-OS', stockCount: 14 },
-			{ color: 'Navy', size: 'One Size', sku: 'KH-LAYAN-NVY-OS', stockCount: 10 }
+			{ color: 'Midnight', size: 'S (52)', sku: 'ABY-MIDVEIL-MID-S', stockCount: 5 },
+			{ color: 'Midnight', size: 'M (54)', sku: 'ABY-MIDVEIL-MID-M', stockCount: 6 },
+			{ color: 'Midnight', size: 'L (56)', sku: 'ABY-MIDVEIL-MID-L', stockCount: 4 }
 		]
 	},
 	{
-		name: 'Farah Prayer Chaddar',
-		slug: 'farah-prayer-chaddar',
+		name: 'Limited Eid Abaya',
+		slug: 'limited-eid-abaya',
 		description:
-			'Comfortable prayer chaddar with easy coverage and a soft breathable fabric feel.',
-		fabricDetails: 'Soft breathable crepe, easy-care modest coverage.',
-		price: 4200,
-		salePrice: null,
+			'Limited edition Eid abaya with a graceful fall, soft sleeves, and polished festive detailing.',
+		fabricDetails: 'Premium crepe blend with occasion-ready finishing.',
+		price: 13200,
+		salePrice: 11880,
 		images: [image('/ChatGPT Image May 25, 2026, 06_25_13 PM.png')],
-		collections: ['hijabs-veils'],
+		collections: ['limited', 'occasion'],
 		variants: [
-			{ color: 'White', size: 'One Size', sku: 'CH-FARAH-WHT-OS', stockCount: 12 },
-			{ color: 'Black', size: 'One Size', sku: 'CH-FARAH-BLK-OS', stockCount: 12 }
+			{ color: 'Ivory', size: 'S (52)', sku: 'ABY-LIMEID-IVR-S', stockCount: 4 },
+			{ color: 'Ivory', size: 'M (54)', sku: 'ABY-LIMEID-IVR-M', stockCount: 5 },
+			{ color: 'Ivory', size: 'L (56)', sku: 'ABY-LIMEID-IVR-L', stockCount: 3 }
 		]
 	},
 	{

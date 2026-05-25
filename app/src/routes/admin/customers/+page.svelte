@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { formatMoney } from '$lib/shared/money';
+
 	let { data } = $props();
 	let customers = $derived(data.customers || []);
 </script>
@@ -62,10 +64,17 @@
 						{customer.orderCount} orders
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium text-right">
-						${customer.totalSpent.toFixed(2)}
+						{formatMoney(customer.totalSpent)}
 					</td>
 				</tr>
 				{/each}
+				{#if customers.length === 0}
+				<tr>
+					<td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
+						No customers found
+					</td>
+				</tr>
+				{/if}
 			</tbody>
 		</table>
 	</div>

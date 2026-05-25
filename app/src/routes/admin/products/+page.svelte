@@ -3,6 +3,13 @@
 
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
+
+	const statusClass = (status: string) =>
+		({
+			Active: 'bg-blue-100 text-blue-800',
+			Draft: 'bg-yellow-100 text-yellow-800',
+			'Out of Stock': 'bg-red-100 text-red-800'
+		})[status] || 'bg-gray-100 text-gray-700';
 </script>
 
 <div class="max-w-7xl mx-auto">
@@ -77,7 +84,7 @@
 						</div>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {product.status === 'Draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'}">
+						<span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass(product.status)}`}>
 							{product.status}
 						</span>
 					</td>

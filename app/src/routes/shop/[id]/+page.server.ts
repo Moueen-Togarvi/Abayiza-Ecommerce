@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		}
 	});
 
-	if (!product) {
+	if (!product || !product.isActive) {
 		throw error(404, 'Product not found');
 	}
 
@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			id: { not: product.id },
 			collections: {
 				some: {
-					id: { in: product.collections.map((collection) => collection.id) }
+					id: { in: product.collections.map((collection: any) => collection.id) }
 				}
 			}
 		},
@@ -42,7 +42,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	return {
 		product: serializedProduct,
-		relatedProducts: relatedProducts.map((item) => ({
+		relatedProducts: relatedProducts.map((item: any) => ({
 			...item,
 			price: Number(item.price),
 			salePrice: item.salePrice ? Number(item.salePrice) : null

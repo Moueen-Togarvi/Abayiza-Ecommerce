@@ -3,11 +3,6 @@
 	let categories = $derived((data.categories || []) as Array<any>);
 	let editingId = $state<string | null>(null);
 
-	const hideBrokenImage = (event: Event) => {
-		const image = event.currentTarget as HTMLImageElement | null;
-		if (image) image.style.opacity = '0';
-	};
-
 	const productLabel = (count: number) => `${count} Product${count === 1 ? '' : 's'}`;
 </script>
 
@@ -68,63 +63,15 @@
 					/>
 				</div>
 
-				<div>
-					<label for="new-slug" class="mb-1 block text-sm font-medium text-[#000]/70">Slug</label>
+				<label class="flex h-10 items-center gap-2 rounded-md border border-[#000]/10 px-3 text-sm">
 					<input
-						id="new-slug"
-						name="slug"
-						type="text"
-						placeholder="daily-wear"
-						class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+						name="isVisible"
+						type="checkbox"
+						checked
+						class="h-4 w-4 rounded border-[#000]/20 text-[#000] focus:ring-blue-500"
 					/>
-				</div>
-
-				<div>
-					<label for="new-description" class="mb-1 block text-sm font-medium text-[#000]/70"
-						>Description</label
-					>
-					<textarea
-						id="new-description"
-						name="description"
-						rows="3"
-						class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-					></textarea>
-				</div>
-
-				<div>
-					<label for="new-image" class="mb-1 block text-sm font-medium text-[#000]/70">Image URL</label>
-					<input
-						id="new-image"
-						name="imageUrl"
-						type="url"
-						placeholder="https://..."
-						class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-					/>
-				</div>
-
-				<div class="grid grid-cols-[1fr_auto] items-end gap-4">
-					<div>
-						<label for="new-order" class="mb-1 block text-sm font-medium text-[#000]/70"
-							>Display Order</label
-						>
-						<input
-							id="new-order"
-							name="displayOrder"
-							type="number"
-							value="0"
-							class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-						/>
-					</div>
-					<label class="flex h-10 items-center gap-2 rounded-md border border-[#000]/10 px-3 text-sm">
-						<input
-							name="isVisible"
-							type="checkbox"
-							checked
-							class="h-4 w-4 rounded border-[#000]/20 text-[#000] focus:ring-blue-500"
-						/>
-						<span class="text-[#000]/70">Visible</span>
-					</label>
-				</div>
+					<span class="text-[#000]/70">Visible</span>
+				</label>
 
 				<button
 					type="submit"
@@ -152,30 +99,7 @@
 			<div class="divide-y divide-[#000]/10">
 				{#each categories as category}
 					<article class="p-5">
-						<div class="grid gap-4 lg:grid-cols-[5rem_1fr_auto] lg:items-start">
-							<div
-								class="relative aspect-square overflow-hidden rounded-md border border-[#000]/10 bg-orange-50"
-							>
-								<div class="absolute inset-0 flex items-center justify-center text-orange-600">
-									<svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="1.8"
-											d="M4 6h16M4 12h16M4 18h7"
-										/>
-									</svg>
-								</div>
-								{#if category.imageUrl}
-									<img
-										src={category.imageUrl}
-										alt={category.name}
-										class="relative z-10 h-full w-full object-cover transition-opacity"
-										onerror={hideBrokenImage}
-									/>
-								{/if}
-							</div>
-
+						<div class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
 							<div class="min-w-0">
 								<div class="flex flex-wrap items-center gap-2">
 									<h3 class="text-base font-semibold text-[#000]">{category.name}</h3>
@@ -190,13 +114,6 @@
 										{productLabel(category._count.products)}
 									</span>
 								</div>
-								<p class="mt-1 font-mono text-xs text-[#000]/45">/shop?collection={category.slug}</p>
-								{#if category.description}
-									<p class="mt-2 line-clamp-2 text-sm text-[#000]/60">{category.description}</p>
-								{/if}
-								<p class="mt-2 text-xs font-medium text-[#000]/45">
-									Order {category.displayOrder}
-								</p>
 							</div>
 
 							<div class="flex flex-wrap gap-2 lg:justify-end">
@@ -229,7 +146,7 @@
 							<form method="POST" action="?/update" class="mt-5 rounded-lg border border-[#000]/10 bg-gray-50 p-4">
 								<input type="hidden" name="id" value={category.id} />
 								<div class="grid gap-4 md:grid-cols-2">
-									<div>
+									<div class="md:col-span-2">
 										<label
 											for={`name-${category.id}`}
 											class="mb-1 block text-sm font-medium text-[#000]/70">Name</label
@@ -243,68 +160,15 @@
 											class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
 										/>
 									</div>
-									<div>
-										<label
-											for={`slug-${category.id}`}
-											class="mb-1 block text-sm font-medium text-[#000]/70">Slug</label
-										>
+									<label class="flex h-10 items-center gap-2 rounded-md border border-[#000]/10 bg-white px-3 text-sm">
 										<input
-											id={`slug-${category.id}`}
-											name="slug"
-											type="text"
-											value={category.slug}
-											class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+											name="isVisible"
+											type="checkbox"
+											checked={category.isVisible}
+											class="h-4 w-4 rounded border-[#000]/20 text-[#000] focus:ring-blue-500"
 										/>
-									</div>
-									<div class="md:col-span-2">
-										<label
-											for={`description-${category.id}`}
-											class="mb-1 block text-sm font-medium text-[#000]/70">Description</label
-										>
-										<textarea
-											id={`description-${category.id}`}
-											name="description"
-											rows="3"
-											class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-										>{category.description ?? ''}</textarea>
-									</div>
-									<div>
-										<label
-											for={`image-${category.id}`}
-											class="mb-1 block text-sm font-medium text-[#000]/70">Image URL</label
-										>
-										<input
-											id={`image-${category.id}`}
-											name="imageUrl"
-											type="url"
-											value={category.imageUrl ?? ''}
-											class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-										/>
-									</div>
-									<div class="grid grid-cols-[1fr_auto] items-end gap-4">
-										<div>
-											<label
-												for={`order-${category.id}`}
-												class="mb-1 block text-sm font-medium text-[#000]/70">Display Order</label
-											>
-											<input
-												id={`order-${category.id}`}
-												name="displayOrder"
-												type="number"
-												value={category.displayOrder}
-												class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-											/>
-										</div>
-										<label class="flex h-10 items-center gap-2 rounded-md border border-[#000]/10 bg-white px-3 text-sm">
-											<input
-												name="isVisible"
-												type="checkbox"
-												checked={category.isVisible}
-												class="h-4 w-4 rounded border-[#000]/20 text-[#000] focus:ring-blue-500"
-											/>
-											<span class="text-[#000]/70">Visible</span>
-										</label>
-									</div>
+										<span class="text-[#000]/70">Visible</span>
+									</label>
 								</div>
 
 								<div class="mt-4 flex justify-end gap-2">

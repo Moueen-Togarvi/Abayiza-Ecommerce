@@ -1,76 +1,193 @@
 <script lang="ts">
-	// Placeholder
+	import { cart } from '$lib/client/cart.svelte';
+	import { formatMoney } from '$lib/shared/money';
+	import { onMount } from 'svelte';
+
+	let { data } = $props();
+	let order = $derived(data.order as any);
+	let address = $derived((order?.shippingAddress || {}) as Record<string, string>);
+
+	const formatDateTime = (value: string) =>
+		new Date(value).toLocaleString('en-PK', {
+			day: '2-digit',
+			month: 'short',
+			year: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit'
+		});
+
+	onMount(() => {
+		if (order) cart.clear();
+	});
 </script>
 
 <svelte:head>
-	<title>Order Confirmed | Abayiza</title>
+	<title>Order Received | Abayiza</title>
 </svelte:head>
 
-<div class="max-w-3xl mx-auto px-4 py-16 md:py-24 text-center">
-	<div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6 text-green-600">
-		<svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-	</div>
-	
-	<h1 class="text-3xl md:text-4xl font-serif tracking-widest uppercase text-black mb-4">Order Confirmed</h1>
-	<p class="text-gray-500 font-light mb-2">Thank you for your purchase!</p>
-	<p class="text-sm font-medium mb-10">Order #10284</p>
-	
-	<div class="bg-gray-50 border border-gray-200 p-8 text-left mb-10">
-		<h2 class="text-lg font-serif mb-6">Order Details</h2>
-		<div class="space-y-4 text-sm">
-			<div class="flex justify-between border-b border-gray-200 pb-4">
-				<div class="flex">
-					<img src="https://images.unsplash.com/photo-1596455607563-ad6193f76b17?q=80&w=100&auto=format&fit=crop" class="w-12 h-16 object-cover bg-gray-100 mr-4" alt="Item">
+<div class="min-h-screen bg-[#f6f5f1] px-4 py-14">
+	{#if order}
+		<div class="mx-auto max-w-5xl">
+			<div class="mx-auto mb-8 max-w-sm rounded-2xl bg-white p-7 text-center shadow-[0_24px_80px_rgba(20,53,45,0.10)]">
+				<div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#fbf9f2] text-[#e4b43d]">
+					<svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="1.8"
+							d="M5 13l4 4L19 7"
+						/>
+					</svg>
+				</div>
+				<h1 class="text-xl font-black text-[#14352d]">Thank you!</h1>
+				<p class="mt-1 text-xs leading-5 text-gray-500">Your order has been placed successfully.</p>
+
+				<div class="relative my-6 border-t border-dashed border-gray-300">
+					<span class="absolute top-1/2 -left-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f6f5f1]"></span>
+					<span class="absolute top-1/2 -right-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f6f5f1]"></span>
+				</div>
+
+				<div class="grid grid-cols-2 gap-5 text-left">
 					<div>
-						<p class="font-medium text-black">Signature Nida Abaya</p>
-						<p class="text-gray-500 text-xs mt-1">Midnight Black / M (54)</p>
-						<p class="text-gray-500 text-xs mt-1">Qty: 1</p>
+						<p class="text-[0.65rem] font-bold tracking-[0.16em] text-gray-400 uppercase">Order</p>
+						<p class="mt-1 text-sm font-black text-[#14352d]">{order.orderNumber}</p>
+					</div>
+					<div class="text-right">
+						<p class="text-[0.65rem] font-bold tracking-[0.16em] text-gray-400 uppercase">Amount</p>
+						<p class="mt-1 text-sm font-black text-[#14352d]">{formatMoney(order.totalAmount)}</p>
+					</div>
+					<div class="col-span-2">
+						<p class="text-[0.65rem] font-bold tracking-[0.16em] text-gray-400 uppercase">Date & time</p>
+						<p class="mt-1 text-sm font-black text-[#14352d]">{formatDateTime(order.createdAt)}</p>
 					</div>
 				</div>
-				<span class="font-medium">$145.00</span>
 			</div>
-			
-			<div class="flex justify-between text-gray-600">
-				<span>Subtotal</span>
-				<span>$145.00</span>
-			</div>
-			<div class="flex justify-between text-gray-600">
-				<span>Shipping</span>
-				<span>Free</span>
-			</div>
-			<div class="flex justify-between text-black font-medium text-base pt-4 border-t border-gray-200">
-				<span>Total</span>
-				<span>$145.00</span>
-			</div>
-		</div>
-	</div>
 
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-12 border-b border-gray-200 pb-12">
-		<div>
-			<h3 class="text-sm font-bold tracking-widest uppercase text-black mb-3">Shipping Address</h3>
-			<p class="text-sm text-gray-600 font-light leading-relaxed">
-				Fatima Zahra<br>
-				123 Luxury Ave<br>
-				Apt 4B<br>
-				New York, NY 10001<br>
-				United States
-			</p>
-		</div>
-		<div>
-			<h3 class="text-sm font-bold tracking-widest uppercase text-black mb-3">Payment Method</h3>
-			<p class="text-sm text-gray-600 font-light leading-relaxed">
-				Cash on Delivery (COD)
-			</p>
-		</div>
-	</div>
+			<div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+				<section class="rounded-2xl bg-white p-6 shadow-[0_20px_70px_rgba(20,53,45,0.08)]">
+					<div class="mb-5 flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
+						<div>
+							<p class="text-xs font-bold tracking-[0.16em] text-[#b58b2b] uppercase">Order details</p>
+							<h2 class="mt-1 font-serif text-2xl text-[#14352d]">Cash on Delivery</h2>
+						</div>
+						<span class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-800">
+							{order.status}
+						</span>
+					</div>
 
-	<div class="flex flex-col sm:flex-row justify-center gap-4">
-		<a href="/shop" class="bg-black text-white px-8 py-4 text-sm tracking-widest uppercase hover:bg-gold transition-colors">
-			Continue Shopping
-		</a>
-		<a href="https://wa.me/1234567890" target="_blank" class="border border-black text-black px-8 py-4 text-sm tracking-widest uppercase hover:bg-gray-50 transition-colors flex items-center justify-center">
-			<svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-			Support via WhatsApp
-		</a>
-	</div>
+					<div class="space-y-4">
+						{#each order.items as item}
+							<div class="flex items-center gap-4 rounded-xl border border-gray-100 p-3">
+								<div class="h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+									{#if item.image}
+										<img src={item.image} alt={item.productName} class="h-full w-full object-cover" />
+									{/if}
+								</div>
+								<div class="min-w-0 flex-1">
+									<p class="font-medium text-[#14352d]">{item.productName}</p>
+									<p class="mt-1 text-xs text-gray-500">
+										{[item.variantColor, item.variantSize].filter(Boolean).join(' / ') || 'Abayiza'} x {item.quantity}
+									</p>
+								</div>
+								<p class="text-sm font-black text-[#14352d]">{formatMoney(item.lineTotal)}</p>
+							</div>
+						{/each}
+					</div>
+
+					<div class="mt-6 space-y-2 border-t border-gray-100 pt-5 text-sm">
+						<div class="flex justify-between text-gray-500">
+							<span>Subtotal</span>
+							<span>{formatMoney(order.subtotal)}</span>
+						</div>
+						<div class="flex justify-between text-gray-500">
+							<span>Shipping</span>
+							<span>{formatMoney(order.shippingCost)}</span>
+						</div>
+						<div class="flex justify-between text-gray-500">
+							<span>Discount</span>
+							<span>{formatMoney(order.discountTotal)}</span>
+						</div>
+						<div class="flex justify-between pt-3 text-base font-black text-[#14352d]">
+							<span>Total</span>
+							<span>{formatMoney(order.totalAmount)}</span>
+						</div>
+					</div>
+				</section>
+
+				<aside class="space-y-6">
+					<section class="rounded-2xl bg-white p-6 shadow-[0_20px_70px_rgba(20,53,45,0.08)]">
+						<p class="text-xs font-bold tracking-[0.16em] text-[#b58b2b] uppercase">Customer</p>
+						<h2 class="mt-2 font-serif text-xl text-[#14352d]">{order.customerName}</h2>
+						<div class="mt-4 space-y-2 text-sm text-gray-600">
+							<p>{order.customerEmail}</p>
+							<p>{order.customerPhone}</p>
+						</div>
+					</section>
+
+					<section class="rounded-2xl bg-white p-6 shadow-[0_20px_70px_rgba(20,53,45,0.08)]">
+						<p class="text-xs font-bold tracking-[0.16em] text-[#b58b2b] uppercase">Shipping address</p>
+						<div class="mt-4 space-y-3 text-sm">
+							<div>
+								<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Name</p>
+								<p class="mt-1 font-medium text-[#14352d]">{address.firstName || '-'} {address.lastName || ''}</p>
+							</div>
+							<div>
+								<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Address</p>
+								<p class="mt-1 leading-6 text-gray-600">{address.addressLine1 || '-'}</p>
+								{#if address.addressLine2}<p class="leading-6 text-gray-600">{address.addressLine2}</p>{/if}
+							</div>
+							<div class="grid grid-cols-2 gap-3">
+								<div>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">City</p>
+									<p class="mt-1 font-medium text-[#14352d]">{address.city || '-'}</p>
+								</div>
+								<div>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Postal Code</p>
+									<p class="mt-1 font-medium text-[#14352d]">{address.postalCode || '-'}</p>
+								</div>
+							</div>
+							<div class="grid grid-cols-2 gap-3">
+								<div>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Country</p>
+									<p class="mt-1 font-medium text-[#14352d]">{address.country || '-'}</p>
+								</div>
+								<div>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Mobile</p>
+									<p class="mt-1 font-medium text-[#14352d]">{address.phone || order.customerPhone || '-'}</p>
+								</div>
+							</div>
+						</div>
+					</section>
+				</aside>
+			</div>
+
+			<div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+				<a
+					href="/shop"
+					class="rounded-full bg-[#14352d] px-8 py-4 text-center text-sm font-black tracking-[0.08em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+				>
+					Continue Shopping
+				</a>
+				<a
+					href="/track"
+					class="rounded-full border border-[#14352d] px-8 py-4 text-center text-sm font-black tracking-[0.08em] text-[#14352d] uppercase transition-colors hover:bg-white"
+				>
+					Track Order
+				</a>
+			</div>
+		</div>
+	{:else}
+		<div class="mx-auto max-w-md rounded-2xl bg-white p-8 text-center shadow-[0_24px_80px_rgba(20,53,45,0.10)]">
+			<h1 class="font-serif text-3xl text-[#14352d]">Order not found</h1>
+			<p class="mt-3 text-sm leading-6 text-gray-500">
+				Use the checkout flow again or contact support with your order number.
+			</p>
+			<a
+				href="/shop"
+				class="mt-6 inline-flex rounded-full bg-[#14352d] px-7 py-3 text-sm font-black text-white"
+			>
+				Continue Shopping
+			</a>
+		</div>
+	{/if}
 </div>

@@ -10,6 +10,10 @@
 	function productImage(product: any) {
 		return product.images?.[0]?.url || product.collections?.[0]?.imageUrl || '/image.png';
 	}
+
+	function isOutOfStock(product: any) {
+		return !product.variants?.some((variant: any) => Number(variant.stockCount || 0) > 0);
+	}
 </script>
 
 <svelte:head>
@@ -100,6 +104,13 @@
 									alt={product.name}
 									class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
 								/>
+								{#if isOutOfStock(product)}
+									<span
+										class="absolute top-3 right-3 rounded-full bg-red-600 px-3 py-1 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
+									>
+										Out of Stock
+									</span>
+								{/if}
 							</div>
 							<p class="mb-1 text-xs font-light tracking-widest text-gray-400 uppercase">
 								{product.collections?.[0]?.name || 'Abayiza'}

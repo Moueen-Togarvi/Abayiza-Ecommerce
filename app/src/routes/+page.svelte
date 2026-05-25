@@ -6,6 +6,7 @@
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
 	let collections = $derived((data.collections || []) as Array<any>);
+	let reviewPhotos = $derived((data.reviewPhotos || []) as Array<any>);
 
 	let heroRoot: HTMLElement;
 	let heroSlideIndex = $state(0);
@@ -67,6 +68,7 @@
 		bestsellers.slice(4, 8).length ? bestsellers.slice(4, 8) : [...bestsellers].reverse()
 	]);
 	let bestsellerCategoryTags = $derived(collections.map((collection) => collection.name));
+	let reviewPhotoLoop = $derived([...reviewPhotos, ...reviewPhotos]);
 
 	const saleTapeItems = ['EID SALE', '30% OFF', 'ABAYIZA'];
 	const saleTapeLoop = Array.from({ length: 8 }, () => saleTapeItems).flat();
@@ -76,7 +78,11 @@
 	}
 
 	function primaryVariant(item: any) {
-		return item.variants?.[0];
+		return item.variants?.find((variant: any) => Number(variant.stockCount || 0) > 0) || item.variants?.[0];
+	}
+
+	function isOutOfStock(item: any) {
+		return !item.variants?.some((variant: any) => Number(variant.stockCount || 0) > 0);
 	}
 
 	function productHref(item: any) {
@@ -102,11 +108,13 @@
 	}
 
 	function addProductToCart(item: any) {
+		if (isOutOfStock(item)) return;
 		const variant = primaryVariant(item);
 
 		cart.addItem({
 			id: variant?.id || item.id,
 			productId: item.id,
+			variantId: variant?.id,
 			name: item.name,
 			price: productPrice(item),
 			quantity: 1,
@@ -237,7 +245,7 @@
 
 <section
 	bind:this={heroRoot}
-	class="hero-cinematic relative isolate -mt-[4.75rem] overflow-hidden bg-[#e4eee9] text-[#14352d]"
+	class="hero-cinematic relative isolate -mt-[4.25rem] overflow-hidden bg-[#e4eee9] text-[#14352d] md:-mt-[4.75rem]"
 >
 	<div
 		class="hero-bg absolute inset-0 -z-30"
@@ -252,7 +260,7 @@
 				height="941"
 				fetchpriority={index === 0 ? 'high' : 'auto'}
 				aria-hidden={index !== heroSlideIndex}
-				class="hero-bg__slide h-full w-full object-cover object-[38%_center] sm:object-center"
+				class="hero-bg__slide h-full w-full bg-[#eadac8] object-cover object-center"
 				class:hero-bg__slide--active={index === heroSlideIndex}
 				class:hero-bg__slide--previous-next={index === previousHeroSlideIndex &&
 					heroSlideDirection === 'next'}
@@ -295,33 +303,33 @@
 	</div>
 
 	<div
-		class="relative z-20 mx-auto flex max-w-7xl items-end px-4 pt-28 pb-12 sm:px-6 md:items-center md:pb-16 lg:px-8"
+		class="relative z-20 mx-auto flex min-h-[min(560px,100svh)] max-w-7xl items-end px-4 pt-24 pb-6 sm:min-h-0 sm:items-start sm:px-6 sm:pt-10 sm:pb-10 md:items-center md:pt-28 md:pb-16 lg:px-8"
 	>
 		<div
-			class="mt-12 ml-6 max-w-[32rem] pb-2 text-black drop-shadow-[0_4px_18px_rgba(255,255,255,0.35)] sm:mt-16 sm:ml-10 md:mt-20 md:ml-16 md:pb-0"
+			class="mt-0 ml-0 max-w-[15.5rem] pb-2 text-black drop-shadow-[0_4px_18px_rgba(255,255,255,0.45)] sm:mt-16 sm:ml-10 sm:max-w-[32rem] md:mt-20 md:ml-16 md:pb-0"
 		>
-			<p class="hero-reveal text-[0.68rem] font-bold tracking-[0.16em] text-black/70 uppercase">
+			<p class="hero-reveal text-[0.58rem] font-bold tracking-[0.16em] text-black/70 uppercase sm:text-[0.68rem]">
 				New Season Edit
 			</p>
 			<h1
-				class="hero-reveal mt-3 ml-[7px] min-h-[4.8rem] max-w-[9ch] font-serif text-4xl leading-[0.95] whitespace-pre-line text-black uppercase sm:min-h-[5.9rem] sm:text-5xl md:min-h-[6.9rem] md:text-6xl"
+				class="hero-reveal mt-1.5 ml-[11px] min-h-[2.95rem] max-w-[8.5ch] font-serif text-2xl leading-[0.95] whitespace-pre-line text-black uppercase sm:mt-3 sm:ml-[7px] sm:min-h-[5.9rem] sm:text-5xl md:min-h-[6.9rem] md:text-6xl"
 			>
 				<span class="hero-typewriter">{heroHeadlineText}</span>
 			</h1>
-			<p class="hero-reveal mt-4 max-w-sm text-sm leading-6 font-medium text-black/80 sm:text-base">
+			<p class="hero-reveal mt-2 max-w-[14.5rem] text-[0.66rem] leading-4 font-semibold text-black/82 sm:mt-4 sm:max-w-sm sm:text-base sm:leading-6">
 				Clean Nida silhouettes with soft movement, refined finishing, and everyday grace.
 			</p>
 
-			<div class="hero-reveal mt-8 flex flex-col gap-3 sm:flex-row">
+			<div class="hero-reveal mt-3 flex flex-row flex-nowrap gap-1.5 sm:mt-8 sm:gap-2">
 				<a
 					href="/shop"
-					class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#14352d] px-7 text-sm font-bold text-white shadow-[0_16px_34px_rgba(20,53,45,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c5a880] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+					class="inline-flex min-h-7 items-center justify-center gap-1 rounded-full bg-[#14352d] px-2 text-[0.56rem] font-bold whitespace-nowrap text-white shadow-[0_16px_34px_rgba(20,53,45,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c5a880] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:min-h-12 sm:gap-2 sm:px-7 sm:text-sm"
 				>
 					Shop Collection
 					<span
-						class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/92 text-[#14352d]"
+						class="inline-flex h-3 w-3 items-center justify-center rounded-full bg-white/92 text-[#14352d] sm:h-5 sm:w-5"
 					>
-						<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<svg class="h-2 w-2 sm:h-3 sm:w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -333,7 +341,7 @@
 				</a>
 				<a
 					href="/lookbook"
-					class="inline-flex min-h-12 items-center justify-center rounded-full border border-[#14352d]/20 bg-white/64 px-7 text-sm font-bold text-[#14352d] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+					class="inline-flex min-h-7 items-center justify-center rounded-full border border-[#14352d]/20 bg-white/72 px-2 text-[0.56rem] font-bold whitespace-nowrap text-[#14352d] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:min-h-12 sm:px-7 sm:text-sm"
 				>
 					View Lookbook
 				</a>
@@ -373,14 +381,14 @@
 			</p>
 		</div>
 
-		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+		<div class="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
 			{#each curatedEdits as edit}
 				<div
-					class="group mx-auto flex w-full max-w-[21rem] flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_48px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.14)]"
+					class="group mx-auto flex h-full w-full max-w-[21rem] flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_48px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.14)]"
 				>
 					<a
 						href={productHref(edit)}
-						class="block aspect-[16/10] overflow-hidden bg-[#e4eee9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+						class="relative block aspect-[16/10] overflow-hidden bg-[#e4eee9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 						aria-label={`View ${edit.name}`}
 					>
 						<img
@@ -388,37 +396,44 @@
 							alt={edit.name}
 							class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]"
 						/>
+						{#if isOutOfStock(edit)}
+							<span
+								class="absolute top-3 right-3 inline-flex min-h-7 items-center justify-center rounded-full bg-red-600 px-3 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
+							>
+								Out of Stock
+							</span>
+						{/if}
 					</a>
-					<span class="flex flex-col px-4 pt-4 pb-4">
+					<span class="flex flex-1 flex-col px-4 pt-3 pb-3">
 						<span class="text-[0.68rem] font-bold tracking-[0.18em] text-[#8a7444] uppercase">
 							{productCategory(edit)}
 						</span>
 						<a
 							href={productHref(edit)}
-							class="mt-2 block font-serif text-xl leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+							class="mt-2 block font-serif text-[1.1rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 						>
 							{edit.name}
 						</a>
-						<span class="mt-3 flex flex-wrap gap-2">
+						<span class="mt-2 flex flex-wrap gap-2">
 							{#each productTags(edit) as tag}
 								<span
-									class="inline-flex min-h-7 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-3 text-center text-[0.68rem] font-bold text-[#14352d]"
+									class="inline-flex min-h-6 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-2.5 text-center text-[0.66rem] font-bold text-[#14352d]"
 								>
 									{tag}
 								</span>
 							{/each}
 						</span>
-						<span class="mt-3 block text-sm leading-5 font-medium text-[#596c62]">
+						<span class="mt-2 block text-xs leading-4 font-medium text-[#596c62]">
 							{edit.description}
 						</span>
-						<span class="mt-4 flex items-end justify-between gap-3">
-							<span>
-								<span class="flex flex-wrap items-baseline gap-2">
-									<span class="text-xl font-black text-[#c0983f]">
+						<span class="mt-auto flex items-center justify-between gap-3 pt-3">
+							<span class="min-w-0">
+								<span class="block">
+									<span class="block whitespace-nowrap text-lg font-black text-[#c0983f]">
 										{formatMoney(edit.salePrice || edit.price)}
 									</span>
 									{#if edit.salePrice}
-										<span class="text-sm font-bold text-[#596c62]/65 line-through">
+										<span class="mt-1 block whitespace-nowrap text-xs font-bold text-red-600 line-through">
 											{formatMoney(edit.price)}
 										</span>
 									{/if}
@@ -427,7 +442,8 @@
 							</span>
 							<button
 								type="button"
-								class="inline-flex min-h-10 min-w-[8rem] items-center justify-center gap-2 rounded-full bg-[#e4b43d] px-4 text-xs font-black text-[#14352d] shadow-[0_10px_22px_rgba(196,152,63,0.24)] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+								disabled={isOutOfStock(edit)}
+								class="inline-flex min-h-10 min-w-[7.25rem] shrink-0 items-center justify-center gap-2 rounded-full bg-[#e4b43d] px-4 text-xs font-black text-[#14352d] shadow-[0_10px_22px_rgba(196,152,63,0.24)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 								onclick={() => addProductToCart(edit)}
 							>
 								<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -444,7 +460,7 @@
 										d="M10 21h.01M18 21h.01"
 									/>
 								</svg>
-								Add to Cart
+								{isOutOfStock(edit) ? 'Out of Stock' : 'Add to Cart'}
 							</button>
 						</span>
 					</span>
@@ -455,7 +471,7 @@
 </section>
 
 <!-- Brand Story Strip -->
-<section class="border-y border-[#14352d]/8 bg-[#fbfdfc] px-4 py-14 sm:px-6 lg:px-8">
+<section class="border-y border-[#14352d]/8 bg-cream px-4 py-14 sm:px-6 lg:px-8">
 	<div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-[0.88fr_1.12fr] md:items-center">
 		<div class="aspect-[4/3] overflow-hidden rounded-md bg-[#e4eee9] md:max-h-[360px]">
 			<img
@@ -501,7 +517,7 @@
 </section>
 
 <!-- New Arrivals (Horizontal Scroll / Grid) -->
-<section class="bg-[#e4eee9] px-4 py-16 sm:px-6 lg:px-8">
+<section class="bg-cream px-4 py-16 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-6xl">
 		<div class="mb-10 flex items-end justify-between">
 			<div>
@@ -516,10 +532,10 @@
 			</a>
 		</div>
 
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			{#each newArrivals as item}
 				<div
-					class="group overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_44px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.15)]"
+					class="group flex h-full flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_44px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.15)]"
 				>
 					<a
 						href={productHref(item)}
@@ -562,14 +578,21 @@
 						>
 							{productCategory(item)}
 						</span>
+						{#if isOutOfStock(item)}
+							<span
+								class="absolute top-3 left-14 inline-flex min-h-7 items-center justify-center rounded-full bg-red-600 px-3 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
+							>
+								Out of Stock
+							</span>
+						{/if}
 					</a>
 
-					<span class="block px-4 pt-4 pb-4">
-						<span class="flex items-start justify-between gap-3">
-							<span>
+					<span class="flex flex-1 flex-col px-4 pt-3 pb-3">
+						<span class="flex min-h-[3.2rem] items-start justify-between gap-3">
+							<span class="min-w-0">
 								<a
 									href={productHref(item)}
-									class="block font-serif text-lg leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+									class="block font-serif text-[1.05rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 								>
 									{item.name}
 								</a>
@@ -590,30 +613,31 @@
 							</span>
 						</span>
 
-						<span class="mt-4 flex flex-wrap gap-2">
+						<span class="mt-2 flex flex-wrap gap-2">
 							{#each productTags(item) as spec}
 								<span
-									class="inline-flex min-h-7 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-3 text-center text-[0.7rem] font-bold text-[#14352d]"
+									class="inline-flex min-h-6 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-2.5 text-center text-[0.66rem] font-bold text-[#14352d]"
 								>
 									{spec}
 								</span>
 							{/each}
 						</span>
 
-						<span class="mt-4 flex items-end justify-between gap-3">
-							<span class="flex flex-wrap items-baseline gap-2">
-								<span class="text-xl font-black text-[#14352d]">
+						<span class="mt-auto flex items-center justify-between gap-3 pt-3">
+							<span class="min-w-0">
+								<span class="block whitespace-nowrap text-lg font-black text-[#14352d]">
 									{formatMoney(item.salePrice || item.price)}
 								</span>
 								{#if item.salePrice}
-									<span class="text-sm font-bold text-[#596c62]/65 line-through">
+									<span class="mt-1 block whitespace-nowrap text-xs font-bold text-red-600 line-through">
 										{formatMoney(item.price)}
 									</span>
 								{/if}
 							</span>
 							<button
 								type="button"
-								class="inline-flex min-h-10 min-w-[8rem] items-center justify-center gap-2 rounded-full bg-[#e4b43d] px-4 text-xs font-black text-[#14352d] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+								disabled={isOutOfStock(item)}
+								class="inline-flex min-h-10 min-w-[7.25rem] shrink-0 items-center justify-center gap-2 rounded-full bg-[#e4b43d] px-4 text-xs font-black text-[#14352d] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 								onclick={() => addProductToCart(item)}
 							>
 								<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -630,7 +654,7 @@
 										d="M10 21h.01M18 21h.01"
 									/>
 								</svg>
-								Add to Cart
+								{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
 							</button>
 						</span>
 					</span>
@@ -755,7 +779,7 @@
 </section>
 
 <!-- Bestsellers -->
-<section class="overflow-hidden bg-[#e4eee9] py-14">
+<section class="overflow-hidden bg-cream py-14">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="mb-8 flex flex-col gap-6">
 			<div class="text-center">
@@ -782,11 +806,13 @@
 					aria-label={`Most loved products row ${rowIndex + 1}`}
 				>
 					<div class="product-loop__track">
-						{#each [...row, ...row] as item}
-							<div class="group w-[16.5rem] shrink-0 sm:w-[18rem] lg:w-[19rem]">
+						{#each [...row, ...row] as item, itemIndex}
+							<div
+								class={`product-loop__item group min-w-0 sm:w-[18rem] sm:shrink-0 lg:w-[19rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
+							>
 								<a
 									href={productHref(item)}
-									class="relative block h-52 overflow-hidden rounded-md bg-[#dfe9e4] ring-1 ring-[#14352d]/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:h-56"
+									class="relative block h-36 overflow-hidden rounded-md bg-[#dfe9e4] ring-1 ring-[#14352d]/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:h-56"
 									aria-label={`View ${item.name}`}
 								>
 									<img
@@ -795,26 +821,33 @@
 										class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
 									/>
 									<span
-										class="absolute top-3 left-3 inline-flex min-h-8 items-center justify-center rounded-full bg-white/82 px-3 text-[0.62rem] font-black tracking-[0.12em] text-[#14352d] uppercase shadow-[0_10px_20px_rgba(20,53,45,0.10)] backdrop-blur-md"
+										class="absolute top-2 left-2 inline-flex min-h-6 max-w-[6.5rem] items-center justify-center truncate rounded-full bg-white/82 px-2 text-[0.5rem] font-black tracking-[0.1em] text-[#14352d] uppercase shadow-[0_10px_20px_rgba(20,53,45,0.10)] backdrop-blur-md sm:top-3 sm:left-3 sm:min-h-8 sm:max-w-none sm:px-3 sm:text-[0.62rem] sm:tracking-[0.12em]"
 									>
 										{productCategory(item)}
 									</span>
+									{#if isOutOfStock(item)}
+										<span
+											class="absolute top-2 right-2 inline-flex min-h-6 items-center justify-center rounded-full bg-red-600 px-2 text-[0.5rem] font-black tracking-[0.1em] text-white uppercase shadow-[0_10px_20px_rgba(20,53,45,0.10)] sm:top-3 sm:right-3 sm:min-h-8 sm:px-3 sm:text-[0.62rem] sm:tracking-[0.12em]"
+										>
+											Out of Stock
+										</span>
+									{/if}
 								</a>
 
-								<div class="pt-4">
+								<div class="pt-2 sm:pt-4">
 									<a
 										href={productHref(item)}
-										class="block font-serif text-lg leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+										class="line-clamp-2 block min-h-[2.15rem] font-serif text-sm leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:min-h-0 sm:text-lg"
 									>
 										{item.name}
 									</a>
 
-									<div class="mt-2 flex flex-wrap items-baseline gap-2">
-										<span class="text-lg font-black text-[#14352d]">
+									<div class="mt-1.5 flex flex-wrap items-baseline gap-1.5 sm:mt-2 sm:gap-2">
+										<span class="text-sm font-black text-[#14352d] sm:text-lg">
 											{formatMoney(item.salePrice || item.price)}
 										</span>
 										{#if item.salePrice}
-											<span class="text-sm font-bold text-[#596c62]/65 line-through">
+											<span class="text-[0.65rem] font-bold text-red-600 line-through sm:text-sm">
 												{formatMoney(item.price)}
 											</span>
 										{/if}
@@ -829,33 +862,34 @@
 	</div>
 </section>
 
-<!-- Live Catalog Summary -->
-<section class="bg-white py-20">
-	<div class="mx-auto max-w-5xl px-4 text-center">
-		<p class="mb-4 text-xs font-black tracking-[0.2em] text-[#b58b2b] uppercase">
-			Live Catalog
-		</p>
-		<h2 class="font-serif text-3xl tracking-widest text-black uppercase">Abayiza Inventory</h2>
-		<p class="mx-auto mt-5 max-w-2xl text-sm leading-6 font-medium text-[#596c62]">
-			This storefront is connected to the same product and category records used in the admin
-			panel, so prices, descriptions, images, and availability come from the database.
-		</p>
-		<div class="mt-10 grid gap-4 sm:grid-cols-3">
-			<div class="rounded-md border border-[#14352d]/10 bg-[#fbf9f2] p-6">
-				<p class="font-serif text-3xl text-[#14352d]">{products.length}</p>
-				<p class="mt-2 text-xs font-black tracking-[0.14em] text-[#596c62] uppercase">Products</p>
-			</div>
-			<div class="rounded-md border border-[#14352d]/10 bg-[#fbf9f2] p-6">
-				<p class="font-serif text-3xl text-[#14352d]">{collections.length}</p>
-				<p class="mt-2 text-xs font-black tracking-[0.14em] text-[#596c62] uppercase">Categories</p>
-			</div>
-			<div class="rounded-md border border-[#14352d]/10 bg-[#fbf9f2] p-6">
-				<p class="font-serif text-3xl text-[#14352d]">PKR</p>
-				<p class="mt-2 text-xs font-black tracking-[0.14em] text-[#596c62] uppercase">Currency</p>
+{#if reviewPhotos.length}
+	<!-- Review Photos -->
+	<section class="overflow-hidden bg-cream py-16 sm:py-20">
+		<div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+			<p class="mb-4 text-xs font-black tracking-[0.2em] text-[#b58b2b] uppercase">
+				Customer Love
+			</p>
+			<h2 class="font-serif text-3xl tracking-widest text-[#14352d] uppercase sm:text-4xl">
+				Reviews
+			</h2>
+		</div>
+
+		<div class="review-photo-loop mt-10" aria-label="Customer review photos">
+			<div class="review-photo-loop__track">
+				{#each reviewPhotoLoop as photo, index}
+					<figure class="review-photo-card">
+						<img
+							src={photo.url}
+							alt={`Abayiza customer review ${index + 1}`}
+							class="h-full w-full object-cover object-center"
+							loading="lazy"
+						/>
+					</figure>
+				{/each}
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
+{/if}
 
 <style>
 	.hero-bg {
@@ -1024,12 +1058,52 @@
 		}
 	}
 
+	.review-photo-loop {
+		margin-inline: -1rem;
+		overflow: hidden;
+		padding-block: 0.5rem;
+	}
+
+	.review-photo-loop__track {
+		display: flex;
+		width: max-content;
+		gap: 1rem;
+		animation: review-photo-slide 34s linear infinite;
+		will-change: transform;
+	}
+
+	.review-photo-loop:hover .review-photo-loop__track,
+	.review-photo-loop:focus-within .review-photo-loop__track {
+		animation-play-state: paused;
+	}
+
+	.review-photo-card {
+		aspect-ratio: 4 / 5;
+		width: min(18rem, 72vw);
+		flex-shrink: 0;
+		overflow: hidden;
+		border-radius: 0.45rem;
+		background: #e4eee9;
+		box-shadow: 0 18px 44px rgba(20, 53, 45, 0.1);
+		outline: 1px solid rgba(20, 53, 45, 0.1);
+	}
+
+	@keyframes review-photo-slide {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.hero-bg__slide {
 			transition: none;
 		}
 
-		.product-loop__track {
+		.product-loop__track,
+		.review-photo-loop__track {
 			animation: none;
 			transform: none;
 		}
@@ -1048,6 +1122,56 @@
 
 		.sale-tape--gold {
 			top: 0.4rem;
+		}
+
+		.product-loop-stack {
+			gap: 1rem;
+		}
+
+		.product-loop {
+			margin-inline: 0;
+			overflow: visible;
+			padding-block: 0.2rem;
+		}
+
+		.product-loop__track {
+			display: grid;
+			width: 100%;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.8rem;
+			animation: none;
+			transform: none;
+		}
+
+		.product-loop__item {
+			width: auto;
+			min-width: 0;
+		}
+
+		.product-loop__item--duplicate {
+			display: none;
+		}
+
+		.category-ribbon {
+			margin-inline: -1rem;
+			padding-inline: 1rem;
+		}
+
+		.category-ribbon__track {
+			margin-inline: 0;
+		}
+
+		.review-photo-loop {
+			margin-inline: -1rem;
+		}
+
+		.review-photo-loop__track {
+			gap: 0.75rem;
+			animation-duration: 28s;
+		}
+
+		.review-photo-card {
+			width: 12.5rem;
 		}
 	}
 </style>

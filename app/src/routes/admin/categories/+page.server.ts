@@ -1,3 +1,4 @@
+import { setAdminFlash } from '$lib/server/admin-flash';
 import prisma from '$lib/server/prisma';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -12,27 +13,21 @@ const toSlug = (value: string) =>
 
 const readCategoryForm = (data: FormData) => {
 	const name = String(data.get('name') ?? '').trim();
-	const requestedSlug = String(data.get('slug') ?? '').trim();
-	const slug = toSlug(requestedSlug || name);
-	const description = String(data.get('description') ?? '').trim();
-	const imageUrl = String(data.get('imageUrl') ?? '').trim();
-	const displayOrderValue = Number(data.get('displayOrder') ?? 0);
-	const displayOrder = Number.isFinite(displayOrderValue) ? Math.trunc(displayOrderValue) : 0;
 	const isVisible = data.get('isVisible') === 'on';
 
 	return {
 		name,
-		slug,
-		description: description || null,
-		imageUrl: imageUrl || null,
-		displayOrder,
+		slug: toSlug(name),
+		description: null,
+		imageUrl: null,
+		displayOrder: 0,
 		isVisible
 	};
 };
 
 export const load: PageServerLoad = async () => {
 	const categories = await prisma.collection.findMany({
-		orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+		orderBy: { name: 'asc' },
 		include: {
 			_count: {
 				select: { products: true }
@@ -44,7 +39,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	create: async ({ request }) => {
+	create: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const category = readCategoryForm(data);
 
@@ -74,10 +69,11 @@ export const actions: Actions = {
 			});
 		}
 
+		setAdminFlash(cookies, 'Category added successfully.');
 		throw redirect(303, '/admin/categories');
 	},
 
-	update: async ({ request }) => {
+	update: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const id = String(data.get('id') ?? '');
 		const category = readCategoryForm(data);
@@ -109,10 +105,11 @@ export const actions: Actions = {
 			});
 		}
 
+		setAdminFlash(cookies, 'Category updated successfully.');
 		throw redirect(303, '/admin/categories');
 	},
 
-	delete: async ({ request }) => {
+	delete: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const id = String(data.get('id') ?? '');
 
@@ -132,6 +129,7 @@ export const actions: Actions = {
 			});
 		}
 
+		setAdminFlash(cookies, 'Category deleted successfully.');
 		throw redirect(303, '/admin/categories');
 	}
 };

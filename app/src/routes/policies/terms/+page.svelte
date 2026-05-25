@@ -15,7 +15,7 @@
 		</section>
 		<section class="border-t border-gray-100 pt-6">
 			<h2 class="text-base font-serif tracking-widest uppercase text-black mb-3">2. Products and Pricing</h2>
-			<p>We reserve the right to modify prices and product availability at any time. All prices are displayed in USD. We make every effort to ensure accuracy, but errors may occur.</p>
+			<p>We reserve the right to modify prices and product availability at any time. All prices are displayed in PKR. We make every effort to ensure accuracy, but errors may occur.</p>
 		</section>
 		<section class="border-t border-gray-100 pt-6">
 			<h2 class="text-base font-serif tracking-widest uppercase text-black mb-3">3. Orders and Payment</h2>

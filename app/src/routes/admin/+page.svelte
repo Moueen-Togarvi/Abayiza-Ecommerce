@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { formatMoney } from '$lib/shared/money';
+
 	let { data } = $props();
 	let selectedDateRange = $state('Last 7 days');
 </script>
@@ -31,12 +33,7 @@
 						<dl>
 							<dt class="truncate text-sm font-medium text-[#000]/55">Total Sales</dt>
 							<dd class="flex items-baseline">
-								<div class="text-2xl font-bold text-[#000]">${data.stats.totalSales.toFixed(2)}</div>
-								<div class="ml-2 flex items-baseline text-sm font-semibold text-orange-600">
-									<svg class="h-4 w-4 flex-shrink-0 self-center text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
-									<span class="sr-only">Increased by</span>
-									12.5%
-								</div>
+								<div class="text-2xl font-bold text-[#000]">{formatMoney(data.stats.totalSales)}</div>
 							</dd>
 						</dl>
 					</div>
@@ -56,11 +53,6 @@
 							<dt class="truncate text-sm font-medium text-[#000]/55">Total Orders</dt>
 							<dd class="flex items-baseline">
 								<div class="text-2xl font-bold text-[#000]">{data.stats.totalOrders}</div>
-								<div class="ml-2 flex items-baseline text-sm font-semibold text-blue-600">
-									<svg class="h-4 w-4 flex-shrink-0 self-center text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
-									<span class="sr-only">Increased by</span>
-									5.4%
-								</div>
 							</dd>
 						</dl>
 					</div>
@@ -68,7 +60,7 @@
 			</div>
 		</div>
 
-		<!-- Store Conversion -->
+		<!-- Products -->
 		<div class="overflow-hidden rounded-lg border border-[#000]/10 bg-white shadow-sm">
 			<div class="p-5">
 				<div class="flex items-center">
@@ -77,13 +69,11 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-[#000]/55">Store Conversion Rate</dt>
+							<dt class="truncate text-sm font-medium text-[#000]/55">Products In DB</dt>
 							<dd class="flex items-baseline">
-								<div class="text-2xl font-bold text-[#000]">{data.stats.conversionRate}%</div>
-								<div class="ml-2 flex items-baseline text-sm font-semibold text-red-600">
-									<svg class="h-4 w-4 flex-shrink-0 self-center text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-									<span class="sr-only">Decreased by</span>
-									0.4%
+								<div class="text-2xl font-bold text-[#000]">{data.meta.productCount}</div>
+								<div class="ml-2 text-sm font-semibold text-red-600">
+									{data.meta.categoryCount} categories
 								</div>
 							</dd>
 						</dl>
@@ -103,12 +93,7 @@
 						<dl>
 							<dt class="truncate text-sm font-medium text-[#000]/55">Average Order Value</dt>
 							<dd class="flex items-baseline">
-								<div class="text-2xl font-bold text-[#000]">${data.stats.averageOrderValue.toFixed(2)}</div>
-								<div class="ml-2 flex items-baseline text-sm font-semibold text-yellow-700">
-									<svg class="h-4 w-4 flex-shrink-0 self-center text-yellow-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
-									<span class="sr-only">Increased by</span>
-									2.1%
-								</div>
+								<div class="text-2xl font-bold text-[#000]">{formatMoney(data.stats.averageOrderValue)}</div>
 							</dd>
 						</dl>
 					</div>
@@ -119,13 +104,12 @@
 
 	<!-- Two Column Layout: Chart & Top Products -->
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-		<!-- Revenue Chart (Placeholder) -->
+		<!-- Revenue Chart -->
 		<div class="rounded-lg border border-[#000]/10 bg-white shadow-sm lg:col-span-2">
 			<div class="border-b border-[#000]/10 px-6 py-5">
 				<h3 class="text-lg leading-6 font-medium text-[#000]">Revenue</h3>
 			</div>
 			<div class="flex h-80 items-center justify-center rounded-b-lg bg-yellow-50/35 p-6">
-				<!-- Placeholder for Chart.js or similar -->
 				<div class="text-center">
 					<svg class="mx-auto h-12 w-12 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
 					<p class="mt-2 text-sm text-[#000]/60">Revenue Line Chart Visualization</p>
@@ -137,7 +121,7 @@
 		<!-- Top Products List -->
 		<div class="rounded-lg border border-[#000]/10 bg-white shadow-sm">
 			<div class="flex items-center justify-between border-b border-[#000]/10 px-6 py-5">
-				<h3 class="text-lg leading-6 font-medium text-[#000]">Top Products</h3>
+				<h3 class="text-lg leading-6 font-medium text-[#000]">Catalog Products</h3>
 				<a href="/admin/products" class="text-sm font-medium text-blue-600 hover:text-blue-500">View all</a>
 			</div>
 			<div class="p-0">
@@ -150,11 +134,11 @@
 							</div>
 							<div class="flex-1 min-w-0">
 								<p class="truncate text-sm font-medium text-[#000]">{product.name}</p>
-								<p class="truncate text-sm text-[#000]/55">{product.sales} sold</p>
+								<p class="truncate text-sm text-[#000]/55">{product.inventory} in stock</p>
 							</div>
 							<div>
 								<span class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-900">
-									${product.revenue.toFixed(2)}
+									{formatMoney(product.salePrice || product.price)}
 								</span>
 							</div>
 						</div>
@@ -195,7 +179,7 @@
 									{order.status}
 								</span>
 							</td>
-							<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-[#000]">${order.total.toFixed(2)}</td>
+							<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-[#000]">{formatMoney(order.total)}</td>
 						</tr>
 						{/each}
 						{#if data.recentOrders.length === 0}

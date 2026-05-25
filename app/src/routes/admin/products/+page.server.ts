@@ -1,3 +1,4 @@
+import { setAdminFlash } from '$lib/server/admin-flash';
 import prisma from '$lib/server/prisma';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -17,7 +18,11 @@ export const load: PageServerLoad = async () => {
 		price: Number(p.price),
 		salePrice: p.salePrice ? Number(p.salePrice) : null,
 		totalInventory: p.variants.reduce((acc: number, v: any) => acc + v.stockCount, 0),
-		status: p.isActive ? 'Active' : 'Draft'
+		status: !p.isActive
+			? 'Draft'
+			: p.variants.reduce((acc: number, v: any) => acc + v.stockCount, 0) <= 0
+				? 'Out of Stock'
+				: 'Active'
 	}));
 
 	return {
@@ -26,7 +31,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	delete: async ({ request }) => {
+	delete: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const id = String(data.get('id') ?? '');
 
@@ -42,6 +47,7 @@ export const actions: Actions = {
 			return fail(500, { error: 'Failed to delete product.' });
 		}
 
+		setAdminFlash(cookies, 'Product deleted successfully.');
 		throw redirect(303, '/admin/products');
 	}
 };

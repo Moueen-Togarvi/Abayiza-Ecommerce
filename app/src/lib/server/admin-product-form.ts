@@ -12,7 +12,7 @@ export type ParsedProductForm = {
 	price: number;
 	salePrice: number | null;
 	isActive: boolean;
-	imageUrl: string | null;
+	productStatus: 'ACTIVE' | 'DRAFT' | 'OUT_OF_STOCK';
 	collectionIds: string[];
 	variants: ParsedProductVariant[];
 };
@@ -53,8 +53,14 @@ export const parseProductForm = (data: FormData): ParsedProductForm => {
 	const description = String(data.get('description') ?? '').trim();
 	const price = getPrice(data.get('price'));
 	const salePrice = getOptionalPrice(data.get('salePrice'));
-	const isActive = data.get('isActive') === 'true';
-	const imageUrl = String(data.get('imageUrl') ?? '').trim() || null;
+	const submittedStatus = String(data.get('productStatus') ?? '').trim();
+	const productStatus =
+		submittedStatus === 'OUT_OF_STOCK' || submittedStatus === 'DRAFT' || submittedStatus === 'ACTIVE'
+			? submittedStatus
+			: data.get('isActive') === 'false'
+				? 'DRAFT'
+				: 'ACTIVE';
+	const isActive = productStatus !== 'DRAFT';
 	const collectionIds = data
 		.getAll('collectionIds')
 		.map((value) => String(value).trim())
@@ -66,7 +72,7 @@ export const parseProductForm = (data: FormData): ParsedProductForm => {
 	const variantStocks = data.getAll('variantStock');
 	const variantSkus = data.getAll('variantSku');
 
-	const variants = variantTypes
+	const parsedVariants = variantTypes
 		.map((typeValue, index) => {
 			const type = String(typeValue) === 'color' ? 'color' : 'size';
 			const color = type === 'color' ? getValue(variantColors, index) || 'Black' : 'Default';
@@ -85,6 +91,9 @@ export const parseProductForm = (data: FormData): ParsedProductForm => {
 			};
 		})
 		.filter((variant) => variant.color || variant.size);
+	const variants = productStatus === 'OUT_OF_STOCK'
+		? parsedVariants.map((variant) => ({ ...variant, stockCount: 0 }))
+		: parsedVariants;
 
 	return {
 		name,
@@ -93,7 +102,7 @@ export const parseProductForm = (data: FormData): ParsedProductForm => {
 		price,
 		salePrice,
 		isActive,
-		imageUrl,
+		productStatus,
 		collectionIds,
 		variants:
 			variants.length > 0
@@ -113,7 +122,7 @@ export const validateProductForm = (product: ParsedProductForm) => {
 	if (!product.name || !product.slug) return 'Product title is required.';
 	if (!Number.isFinite(product.price) || product.price < 0) return 'Valid price is required.';
 	if (product.salePrice !== null && (!Number.isFinite(product.salePrice) || product.salePrice < 0)) {
-		return 'Valid sale price is required.';
+		return 'Valid discount price is required.';
 	}
 
 	const seenSkus = new Set<string>();

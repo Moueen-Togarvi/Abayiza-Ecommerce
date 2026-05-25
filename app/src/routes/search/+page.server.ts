@@ -20,7 +20,8 @@ export const load: PageServerLoad = async ({ url }) => {
 					},
 					include: {
 						images: { orderBy: { displayOrder: 'asc' } },
-						collections: true
+						collections: true,
+						variants: true
 					},
 					orderBy: { createdAt: 'desc' }
 				})
@@ -34,7 +35,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	return {
 		query,
-		products: products.map((product) => ({
+		products: products.map((product: any) => ({
 			...product,
 			price: Number(product.price),
 			salePrice: product.salePrice ? Number(product.salePrice) : null

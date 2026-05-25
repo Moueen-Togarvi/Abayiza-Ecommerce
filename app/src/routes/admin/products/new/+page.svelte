@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ImageFileQueue from '$lib/components/admin/ImageFileQueue.svelte';
+
 	type VariantKind = 'size' | 'color';
 	type VariantRow = {
 		id: number;
@@ -78,7 +80,7 @@
 		</div>
 	{/if}
 
-	<form method="POST" action="?/create">
+	<form method="POST" action="?/create" enctype="multipart/form-data">
 		<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 			<div class="space-y-6 lg:col-span-2">
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
@@ -90,7 +92,7 @@
 								name="name"
 								type="text"
 								required
-								placeholder="e.g. Signature Nida Abaya"
+								placeholder="e.g. Ayla Nida Abaya"
 								class="block w-full rounded-md border border-gray-300 p-2.5 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
 							/>
 						</div>
@@ -121,14 +123,7 @@
 
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 					<h3 class="mb-4 text-base font-medium text-[#000]">Media</h3>
-					<label for="imageUrl" class="mb-1 block text-sm font-medium text-gray-700">Image URL</label>
-					<input
-						id="imageUrl"
-						name="imageUrl"
-						type="url"
-						placeholder="https://..."
-						class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
-					/>
+					<ImageFileQueue inputId="new-product-image-picker" label="Add Image" />
 				</div>
 
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
@@ -153,7 +148,7 @@
 						</div>
 						<div>
 							<label for="salePrice" class="mb-1 block text-sm font-medium text-gray-700"
-								>Sale Price</label
+								>Discount Price</label
 							>
 							<div class="relative rounded-md shadow-sm">
 								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -309,13 +304,16 @@
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 					<h3 class="mb-4 text-base font-medium text-[#000]">Product Status</h3>
 					<select
-						name="isActive"
+						name="productStatus"
 						class="mb-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
 					>
-						<option value="true">Active</option>
-						<option value="false">Draft</option>
+						<option value="ACTIVE">Active</option>
+						<option value="OUT_OF_STOCK">Out of Stock</option>
+						<option value="DRAFT">Draft</option>
 					</select>
-					<p class="text-xs text-gray-500">Draft products stay hidden from the storefront.</p>
+					<p class="text-xs leading-5 text-gray-500">
+						Draft stays hidden. Out of Stock stays visible but disables cart and checkout.
+					</p>
 				</div>
 
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">

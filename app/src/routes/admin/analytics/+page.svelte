@@ -1,142 +1,149 @@
 <script lang="ts">
-	let dateRange = 'Last 30 days';
+	import { formatMoney } from '$lib/shared/money';
+
+	let { data } = $props();
+	let dateRange = $state('All time');
 </script>
 
-<div class="max-w-7xl mx-auto">
-	<div class="flex justify-between items-center mb-6">
+<div class="mx-auto max-w-7xl">
+	<div class="mb-6 flex items-center justify-between">
 		<h1 class="text-2xl font-bold text-gray-900">Analytics</h1>
-		<select bind:value={dateRange} class="border-gray-300 rounded-md text-sm shadow-sm focus:ring-[#000] focus:border-[#000]">
+		<select
+			bind:value={dateRange}
+			class="rounded-md border-gray-300 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
+		>
+			<option>All time</option>
 			<option>Today</option>
 			<option>Last 7 days</option>
 			<option>Last 30 days</option>
-			<option>Last 90 days</option>
-			<option>This year</option>
 		</select>
 	</div>
 
-	<!-- KPI Cards -->
-	<div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+	<div class="mb-8 grid grid-cols-2 gap-5 lg:grid-cols-4">
 		{#each [
-			{ label: 'Total Revenue', value: '$48,290', change: '+18.2%', up: true, color: 'orange' },
-			{ label: 'Total Orders', value: '312', change: '+11.4%', up: true, color: 'blue' },
-			{ label: 'New Customers', value: '94', change: '-3.1%', up: false, color: 'red' },
-			{ label: 'Avg. Order Value', value: '$154.78', change: '+6.0%', up: true, color: 'yellow' },
+			{ label: 'Total Revenue', value: formatMoney(data.kpis.revenue), color: 'orange' },
+			{ label: 'Total Orders', value: data.kpis.orders, color: 'blue' },
+			{ label: 'Customers', value: data.kpis.customers, color: 'red' },
+			{ label: 'Avg. Order Value', value: formatMoney(data.kpis.averageOrderValue), color: 'yellow' }
 		] as kpi}
-		<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-5">
-			<p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">{kpi.label}</p>
-			<p class="text-2xl font-bold text-gray-900 mb-1">{kpi.value}</p>
-			<p class="text-sm {kpi.up ? 'text-blue-600' : 'text-red-500'} font-medium">
-				{kpi.up ? '↑' : '↓'} {kpi.change} vs previous period
-			</p>
-		</div>
+			<div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+				<p class="mb-2 text-xs font-medium tracking-wider text-gray-500 uppercase">{kpi.label}</p>
+				<p class="mb-1 text-2xl font-bold text-gray-900">{kpi.value}</p>
+				<p class="text-sm font-medium text-gray-500">From saved database records</p>
+			</div>
 		{/each}
 	</div>
 
-	<!-- Charts Row -->
-	<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-		<!-- Revenue Chart -->
-		<div class="bg-white shadow-sm rounded-lg border border-gray-200 lg:col-span-2">
-			<div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
-				<h3 class="font-medium text-gray-900">Revenue Over Time</h3>
-				<div class="flex space-x-2">
-					{#each ['Revenue', 'Orders'] as legend, i}
-					<span class="flex items-center text-xs text-gray-500">
-						<span class="w-3 h-1 inline-block rounded mr-1 {i === 0 ? 'bg-[#000]' : 'bg-yellow-500'}"></span>
-						{legend}
-					</span>
-					{/each}
-				</div>
+	<div class="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+		<div class="rounded-lg border border-gray-200 bg-white shadow-sm lg:col-span-2">
+			<div class="flex items-center justify-between border-b border-gray-200 px-6 py-5">
+				<h3 class="font-medium text-gray-900">Revenue Overview</h3>
+				<span class="text-xs font-semibold text-gray-500">{dateRange}</span>
 			</div>
-			<div class="p-6 h-64 flex items-center justify-center bg-gray-50 rounded-b-lg">
+			<div class="flex h-64 items-center justify-center rounded-b-lg bg-gray-50 p-6">
 				<div class="text-center">
-					<svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
-					<p class="mt-2 text-sm text-gray-500">Revenue Chart (Connect Chart.js)</p>
+					<svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+						/>
+					</svg>
+					<p class="mt-2 text-sm text-gray-500">
+						Revenue charts will populate after orders are saved.
+					</p>
 				</div>
 			</div>
 		</div>
 
-		<!-- Traffic Sources -->
-		<div class="bg-white shadow-sm rounded-lg border border-gray-200">
-			<div class="px-6 py-5 border-b border-gray-200">
-				<h3 class="font-medium text-gray-900">Traffic Sources</h3>
+		<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
+			<div class="border-b border-gray-200 px-6 py-5">
+				<h3 class="font-medium text-gray-900">Catalog Health</h3>
 			</div>
-			<div class="p-6 space-y-4">
-				{#each [
-					{ source: 'Direct', percentage: 38, color: 'bg-[#000]' },
-					{ source: 'Instagram', percentage: 28, color: 'bg-orange-500' },
-					{ source: 'Google Search', percentage: 20, color: 'bg-blue-500' },
-					{ source: 'WhatsApp', percentage: 9, color: 'bg-yellow-500' },
-					{ source: 'Other', percentage: 5, color: 'bg-gray-300' },
-				] as src}
-				<div>
-					<div class="flex justify-between text-xs text-gray-600 mb-1">
-						<span>{src.source}</span>
-						<span class="font-medium">{src.percentage}%</span>
-					</div>
-					<div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-						<div class="h-full {src.color} rounded-full" style="width: {src.percentage}%"></div>
-					</div>
+			<div class="space-y-4 p-6">
+				<div class="flex items-center justify-between">
+					<span class="text-sm text-gray-600">Products</span>
+					<span class="font-semibold text-gray-900">{data.kpis.products}</span>
 				</div>
-				{/each}
+				<div class="flex items-center justify-between">
+					<span class="text-sm text-gray-600">Categories</span>
+					<span class="font-semibold text-gray-900">{data.kpis.categories}</span>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<!-- Bottom Row: Top Products & Geo -->
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-		<!-- Top Products Table -->
-		<div class="bg-white shadow-sm rounded-lg border border-gray-200">
-			<div class="px-6 py-5 border-b border-gray-200">
+	<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+		<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
+			<div class="border-b border-gray-200 px-6 py-5">
 				<h3 class="font-medium text-gray-900">Top Selling Products</h3>
 			</div>
 			<div class="overflow-x-auto">
 				<table class="min-w-full divide-y divide-gray-200">
 					<thead class="bg-gray-50">
 						<tr>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-							<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
-							<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+							<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Product</th>
+							<th class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">Units</th>
+							<th class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">Revenue</th>
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200">
-						{#each [
-							{ name: 'Signature Nida Abaya', units: 88, revenue: '$12,760' },
-							{ name: 'Chiffon Layered Abaya', units: 64, revenue: '$10,560' },
-							{ name: 'Pearl Embellished Open Abaya', units: 42, revenue: '$9,240' },
-							{ name: 'Velvet Trim Evening Abaya', units: 38, revenue: '$7,030' },
-						] as prod}
-						<tr class="hover:bg-gray-50">
-							<td class="px-6 py-3 text-sm text-gray-900">{prod.name}</td>
-							<td class="px-6 py-3 text-sm text-gray-500 text-right">{prod.units}</td>
-							<td class="px-6 py-3 text-sm font-medium text-gray-900 text-right">{prod.revenue}</td>
-						</tr>
+						{#each data.topProducts as product}
+							<tr class="hover:bg-gray-50">
+								<td class="px-6 py-3 text-sm text-gray-900">{product.name}</td>
+								<td class="px-6 py-3 text-right text-sm text-gray-500">{product.units}</td>
+								<td class="px-6 py-3 text-right text-sm font-medium text-gray-900">
+									{formatMoney(product.revenue)}
+								</td>
+							</tr>
 						{/each}
+						{#if data.topProducts.length === 0}
+							<tr>
+								<td colspan="3" class="px-6 py-8 text-center text-sm text-gray-500">
+									No sales data yet.
+								</td>
+							</tr>
+						{/if}
 					</tbody>
 				</table>
 			</div>
 		</div>
 
-		<!-- Top Countries -->
-		<div class="bg-white shadow-sm rounded-lg border border-gray-200">
-			<div class="px-6 py-5 border-b border-gray-200">
-				<h3 class="font-medium text-gray-900">Top Markets</h3>
+		<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
+			<div class="border-b border-gray-200 px-6 py-5">
+				<h3 class="font-medium text-gray-900">Recent Orders</h3>
 			</div>
-			<div class="p-6 space-y-4">
-				{#each [
-					{ country: '🇦🇪 United Arab Emirates', orders: 98, revenue: '$15,240' },
-					{ country: '🇸🇦 Saudi Arabia', orders: 72, revenue: '$11,100' },
-					{ country: '🇵🇰 Pakistan', orders: 45, revenue: '$6,280' },
-					{ country: '🇬🇧 United Kingdom', orders: 38, revenue: '$5,960' },
-					{ country: '🇺🇸 United States', orders: 31, revenue: '$4,850' },
-				] as market}
-				<div class="flex items-center justify-between">
-					<div class="text-sm font-medium text-gray-900">{market.country}</div>
-					<div class="text-right">
-						<div class="text-sm font-medium text-gray-900">{market.revenue}</div>
-						<div class="text-xs text-gray-400">{market.orders} orders</div>
-					</div>
-				</div>
-				{/each}
+			<div class="overflow-x-auto">
+				<table class="min-w-full divide-y divide-gray-200">
+					<thead class="bg-gray-50">
+						<tr>
+							<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Order</th>
+							<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Status</th>
+							<th class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">Total</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-200">
+						{#each data.recentOrders as order}
+							<tr class="hover:bg-gray-50">
+								<td class="px-6 py-3 text-sm font-medium text-blue-600">
+									<a href={`/admin/orders/${order.id}`}>{order.orderNumber}</a>
+								</td>
+								<td class="px-6 py-3 text-sm text-gray-500">{order.status}</td>
+								<td class="px-6 py-3 text-right text-sm font-medium text-gray-900">
+									{formatMoney(order.totalAmount)}
+								</td>
+							</tr>
+						{/each}
+						{#if data.recentOrders.length === 0}
+							<tr>
+								<td colspan="3" class="px-6 py-8 text-center text-sm text-gray-500">
+									No orders saved yet.
+								</td>
+							</tr>
+						{/if}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

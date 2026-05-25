@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ImageFileQueue from '$lib/components/admin/ImageFileQueue.svelte';
+
 	type VariantKind = 'size' | 'color';
 	type VariantRow = {
 		id: number;
@@ -46,7 +48,16 @@
 	];
 
 	const selectedCollectionIds = product.collections.map((collection: any) => collection.id);
-	const firstImageUrl = product.images?.[0]?.url ?? '';
+	const totalInventory = product.variants.reduce((total: number, variant: any) => total + Number(variant.stockCount || 0), 0);
+	const productStatus = !product.isActive ? 'DRAFT' : totalInventory <= 0 ? 'OUT_OF_STOCK' : 'ACTIVE';
+	const productStatusLabel =
+		productStatus === 'OUT_OF_STOCK' ? 'Out of Stock' : productStatus === 'DRAFT' ? 'Draft' : 'Active';
+	const productStatusClass =
+		productStatus === 'OUT_OF_STOCK'
+			? 'bg-red-100 text-red-800'
+			: productStatus === 'DRAFT'
+				? 'bg-yellow-100 text-yellow-800'
+				: 'bg-blue-100 text-blue-800';
 
 	const addVariant = (type: VariantKind = 'size') => {
 		variants = [
@@ -92,11 +103,9 @@
 			<div>
 				<h1 class="text-2xl font-bold text-[#000]">{product.name}</h1>
 				<span
-					class="mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {product.isActive
-						? 'bg-blue-100 text-blue-800'
-						: 'bg-yellow-100 text-yellow-800'}"
+					class={`mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${productStatusClass}`}
 				>
-					{product.isActive ? 'Active' : 'Draft'}
+					{productStatusLabel}
 				</span>
 			</div>
 		</div>
@@ -124,7 +133,7 @@
 		</div>
 	{/if}
 
-	<form method="POST" action="?/update">
+	<form method="POST" action="?/update" enctype="multipart/form-data">
 		<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 			<div class="space-y-6 lg:col-span-2">
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
@@ -166,14 +175,41 @@
 
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 					<h3 class="mb-4 text-base font-medium text-[#000]">Media</h3>
-					<label for="imageUrl" class="mb-1 block text-sm font-medium text-gray-700">Image URL</label>
-					<input
-						id="imageUrl"
-						name="imageUrl"
-						type="url"
-						value={firstImageUrl}
-						placeholder="https://..."
-						class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
+					{#if product.images?.length}
+						<div class="mb-4 grid gap-3 sm:grid-cols-2">
+							{#each product.images as image}
+								<label class="overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+									<div class="aspect-[4/3] bg-gray-100">
+										<img
+											src={image.url}
+											alt={image.altText || product.name}
+											class="h-full w-full object-cover"
+										/>
+									</div>
+									<div class="flex items-center justify-between gap-3 border-t border-gray-200 px-3 py-2">
+										<span class="truncate text-xs font-medium text-gray-600">Current image</span>
+										<span class="inline-flex items-center gap-2 text-xs font-semibold text-red-600">
+											<input
+												type="checkbox"
+												name="removeImageIds"
+												value={image.id}
+												class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+											/>
+											Remove
+										</span>
+									</div>
+								</label>
+							{/each}
+						</div>
+					{:else}
+						<p class="mb-4 rounded-md border border-dashed border-gray-300 px-3 py-4 text-sm text-gray-500">
+							No images uploaded yet.
+						</p>
+					{/if}
+					<ImageFileQueue
+						inputId="edit-product-image-picker"
+						label="Add More Images"
+						emptyText="Select new images one by one. Checked current images will be removed after saving."
 					/>
 				</div>
 
@@ -199,7 +235,7 @@
 						</div>
 						<div>
 							<label for="salePrice" class="mb-1 block text-sm font-medium text-gray-700"
-								>Sale Price</label
+								>Discount Price</label
 							>
 							<div class="relative rounded-md shadow-sm">
 								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -355,12 +391,16 @@
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 					<h3 class="mb-4 text-base font-medium text-[#000]">Product Status</h3>
 					<select
-						name="isActive"
+						name="productStatus"
 						class="mb-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
 					>
-						<option value="true" selected={product.isActive}>Active</option>
-						<option value="false" selected={!product.isActive}>Draft</option>
+						<option value="ACTIVE" selected={productStatus === 'ACTIVE'}>Active</option>
+						<option value="OUT_OF_STOCK" selected={productStatus === 'OUT_OF_STOCK'}>Out of Stock</option>
+						<option value="DRAFT" selected={productStatus === 'DRAFT'}>Draft</option>
 					</select>
+					<p class="text-xs leading-5 text-gray-500">
+						Out of Stock stays visible on the storefront but disables cart and checkout.
+					</p>
 				</div>
 
 				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">

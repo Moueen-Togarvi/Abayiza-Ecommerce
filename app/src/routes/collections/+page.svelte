@@ -8,7 +8,7 @@
 			const query = categorySearch.trim().toLowerCase();
 			if (!query) return true;
 
-			return [collection.name, collection.description, collection.slug]
+			return [collection.name]
 				.filter(Boolean)
 				.some((value) => String(value).toLowerCase().includes(query));
 		})
@@ -29,8 +29,7 @@
 				<div>
 					<h1 class="font-serif text-4xl leading-tight uppercase sm:text-5xl">Collections</h1>
 					<p class="mt-4 max-w-2xl text-sm leading-6 font-medium text-[#596c62] sm:text-base">
-						Find abayas by category, edit, and occasion. Search a category, then open the matching
-						shop view.
+						Find abayas by category name, then open the matching shop view.
 					</p>
 				</div>
 
@@ -73,54 +72,16 @@
 
 		{#if filteredCollections.length}
 			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each filteredCollections as collection, index}
+				{#each filteredCollections as collection}
 					<a
 						href={`/shop?collection=${collection.slug}`}
-						class="group flex h-full flex-col overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1"
+						class="group flex min-h-32 items-center justify-center rounded-md border border-[#14352d]/10 bg-white p-6 text-center shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1"
 					>
-						<div class="relative aspect-[4/5] overflow-hidden bg-[#e4eee9]">
-							<img
-								src={collection.imageUrl}
-								alt={collection.name}
-								class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-							/>
-							<div
-								class="absolute inset-0 bg-gradient-to-t from-[#14352d]/72 via-[#14352d]/12 to-transparent"
-							></div>
-							<span
-								class="absolute top-3 left-3 rounded-full bg-[#fffaf0]/92 px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-[#14352d] uppercase"
-							>
-								Category {String(index + 1).padStart(2, '0')}
-							</span>
-						</div>
-
-						<div class="flex flex-1 flex-col p-5">
-							<h2
-								class="font-serif text-xl leading-tight text-[#14352d] transition-colors group-hover:text-[#b58b2b]"
-							>
-								{collection.name}
-							</h2>
-							<p class="mt-3 min-h-12 text-sm leading-6 font-medium text-[#596c62]">
-								{collection.description}
-							</p>
-							<div class="mt-5 flex items-center justify-between border-t border-[#14352d]/10 pt-4">
-								<span class="text-xs font-black tracking-[0.12em] text-[#b58b2b] uppercase">
-									{collection._count.products} Pieces
-								</span>
-								<span
-									class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#14352d] text-white transition-colors group-hover:bg-[#e4b43d] group-hover:text-[#14352d]"
-								>
-									<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="1.9"
-											d="M7 17L17 7M9 7h8v8"
-										/>
-									</svg>
-								</span>
-							</div>
-						</div>
+						<h2
+							class="font-serif text-2xl leading-tight text-[#14352d] transition-colors group-hover:text-[#b58b2b]"
+						>
+							{collection.name}
+						</h2>
 					</a>
 				{/each}
 			</div>
