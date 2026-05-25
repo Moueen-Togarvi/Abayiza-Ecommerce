@@ -1,6 +1,6 @@
-# sv
+# Abayiza Ecommerce
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+SvelteKit storefront and admin panel for Abayiza.
 
 ## Creating a project
 
@@ -39,7 +39,57 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Manual Vercel Deploy
+
+The deploy root is this `app` folder. In Vercel, set:
+
+```txt
+Root Directory: app
+Framework Preset: SvelteKit
+Install Command: npm install
+Build Command: npm run build
+Output Directory: leave default
+Node.js Version: 22.x
+```
+
+Required production environment variables:
+
+```sh
+DATABASE_URL="your Neon pooled PostgreSQL URL with sslmode=require"
+ADMIN_SESSION_SECRET="run: openssl rand -base64 32"
+AUTH_SECRET="run: openssl rand -base64 32"
+CLOUDINARY_URL="cloudinary://API_KEY:API_SECRET@CLOUD_NAME"
+CLOUDINARY_FOLDER="abayiza"
+```
+
+Optional order email variables:
+
+```sh
+RESEND_API_KEY=""
+RESEND_FROM_EMAIL="Abayiza <orders@your-domain.com>"
+ORDER_NOTIFY_EMAIL=""
+```
+
+Before the first production deploy, make sure the Neon database has the latest schema:
+
+```sh
+cd app
+npm install
+npx prisma db push
+```
+
+Manual CLI deploy:
+
+```sh
+cd app
+npm install
+npm run check
+npm run build
+npx vercel --prod
+```
+
+Do not upload local `static/uploads` to Vercel. Production product/review uploads should go to
+Cloudinary because serverless file writes are not persistent.
 
 ## Image Uploads On Vercel
 
