@@ -68,7 +68,8 @@
 		bestsellers.slice(4, 8).length ? bestsellers.slice(4, 8) : [...bestsellers].reverse()
 	]);
 	let bestsellerCategoryTags = $derived(collections.map((collection) => collection.name));
-	let reviewPhotoLoop = $derived([...reviewPhotos, ...reviewPhotos]);
+	let shouldAnimateReviewPhotos = $derived(reviewPhotos.length > 2);
+	let reviewPhotoLoop = $derived(shouldAnimateReviewPhotos ? [...reviewPhotos, ...reviewPhotos] : reviewPhotos);
 
 	const saleTapeItems = ['EID SALE', '30% OFF', 'ABAYIZA'];
 	const saleTapeLoop = Array.from({ length: 8 }, () => saleTapeItems).flat();
@@ -874,7 +875,10 @@
 			</h2>
 		</div>
 
-		<div class="review-photo-loop mt-10" aria-label="Customer review photos">
+		<div
+			class={`review-photo-loop mt-10 ${shouldAnimateReviewPhotos ? 'review-photo-loop--animated' : 'review-photo-loop--static'}`}
+			aria-label="Customer review photos"
+		>
 			<div class="review-photo-loop__track">
 				{#each reviewPhotoLoop as photo, index}
 					<figure class="review-photo-card">
@@ -1068,12 +1072,20 @@
 		display: flex;
 		width: max-content;
 		gap: 1rem;
-		animation: review-photo-slide 34s linear infinite;
 		will-change: transform;
 	}
 
-	.review-photo-loop:hover .review-photo-loop__track,
-	.review-photo-loop:focus-within .review-photo-loop__track {
+	.review-photo-loop--static .review-photo-loop__track {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.review-photo-loop--animated .review-photo-loop__track {
+		animation: review-photo-slide 34s linear infinite;
+	}
+
+	.review-photo-loop--animated:hover .review-photo-loop__track,
+	.review-photo-loop--animated:focus-within .review-photo-loop__track {
 		animation-play-state: paused;
 	}
 
@@ -1167,6 +1179,9 @@
 
 		.review-photo-loop__track {
 			gap: 0.75rem;
+		}
+
+		.review-photo-loop--animated .review-photo-loop__track {
 			animation-duration: 28s;
 		}
 

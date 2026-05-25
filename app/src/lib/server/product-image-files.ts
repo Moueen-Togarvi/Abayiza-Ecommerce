@@ -1,3 +1,8 @@
+import {
+	deleteImageFromCloudinary,
+	isCloudinaryConfigured,
+	uploadImageToCloudinary
+} from '$lib/server/cloudinary-media';
 import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -41,6 +46,10 @@ export const saveProductImageFiles = async (data: FormData) => {
 
 	if (files.length === 0) return [];
 
+	if (isCloudinaryConfigured()) {
+		return Promise.all(files.map((file) => uploadImageToCloudinary(file, 'products')));
+	}
+
 	await mkdir(uploadDir(), { recursive: true });
 
 	const urls: string[] = [];
@@ -61,6 +70,8 @@ export const saveProductImageFiles = async (data: FormData) => {
 export const deleteProductImageFiles = async (urls: string[]) => {
 	await Promise.all(
 		urls.map(async (url) => {
+			if (await deleteImageFromCloudinary(url)) return;
+
 			const relativePath = url.replace(/^\/+/, '');
 			if (!relativePath.startsWith('uploads/products/')) return;
 			await unlink(path.join(process.cwd(), 'static', relativePath)).catch(() => {});

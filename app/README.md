@@ -40,3 +40,26 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+## Image Uploads On Vercel
+
+Vercel serverless deployments do not keep files written to `static/uploads`, so production image
+uploads should use Cloudinary. The app automatically uploads product and review images to Cloudinary
+when either `CLOUDINARY_URL` exists:
+
+```sh
+CLOUDINARY_URL=cloudinary://your_api_key:your_api_secret@your_cloud_name
+CLOUDINARY_FOLDER=abayiza
+```
+
+Or when these separate environment variables exist:
+
+```sh
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_FOLDER=abayiza
+```
+
+Add the same variables in Vercel Project Settings -> Environment Variables, then redeploy.
+Local development can keep using `static/uploads` if the Cloudinary variables are missing.
