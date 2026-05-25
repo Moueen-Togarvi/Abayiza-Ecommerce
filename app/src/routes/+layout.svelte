@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import './layout.css';
+	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
 	import { cart } from '$lib/client/cart.svelte';
 
 	let { children } = $props();
@@ -41,9 +42,7 @@
 								class="h-12 w-12 rounded-full object-cover shadow-[0_14px_30px_rgba(20,53,45,0.22)] ring-1 ring-white/50"
 							/>
 							<span class="hidden leading-none sm:block">
-								<span class="block text-sm font-black tracking-[0.18em] text-[#14352d]"
-									>ABAYIZA</span
-								>
+								<AbayizaWordmark class="block text-sm text-[#14352d]" />
 								<span
 									class="mt-1 block text-[10px] font-semibold tracking-[0.18em] text-[#355f48] uppercase"
 									>Modest Atelier</span
@@ -237,9 +236,9 @@
 			class="fixed right-4 bottom-5 z-50 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/95 bg-[#25D366] text-white shadow-[0_12px_24px_rgba(20,53,45,0.22)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#1fb95a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] sm:right-6 sm:bottom-6 sm:h-10 sm:w-10"
 			aria-label="Contact Abayiza on WhatsApp"
 		>
-			<svg class="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+			<svg class="h-5 w-5 translate-x-[0.5px] -translate-y-[0.5px] sm:h-[1.35rem] sm:w-[1.35rem]" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
 				<path
-					d="M12.04 2a9.86 9.86 0 0 0-8.45 14.95L2.4 21.35l4.5-1.18A9.86 9.86 0 1 0 12.04 2Zm0 1.92a7.94 7.94 0 1 1-4.08 14.75l-.29-.17-2.68.7.72-2.6-.19-.3A7.94 7.94 0 0 1 12.04 3.92Zm-3.33 4.2c-.17 0-.45.06-.69.33-.24.26-.9.88-.9 2.14 0 1.27.92 2.49 1.05 2.66.13.17 1.78 2.85 4.41 3.89 2.18.86 2.62.69 3.1.64.47-.04 1.52-.62 1.73-1.22.22-.6.22-1.12.15-1.23-.06-.1-.24-.16-.5-.29-.26-.13-1.52-.75-1.76-.84-.23-.08-.4-.13-.57.13-.17.25-.67.83-.82 1-.15.18-.3.2-.56.07-.26-.13-1.09-.4-2.07-1.28-.77-.68-1.28-1.52-1.43-1.78-.15-.25-.02-.4.11-.52.12-.12.26-.31.39-.46.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.07-.13-.58-1.39-.8-1.91-.2-.5-.41-.43-.57-.44h-.49Z"
+					d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.066 7.926a7.9 7.9 0 0 0 1.057 3.965L0 16l4.204-1.103a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.928-7.93a7.9 7.9 0 0 0-2.325-5.606M7.998 14.524a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.002 3.628-2.959 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.331.065-.133.034-.247-.015-.346-.05-.099-.445-1.076-.612-1.47-.16-.39-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.397 2.132 3.383 2.992.473.205.842.327 1.13.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"
 				/>
 			</svg>
 		</a>
@@ -249,7 +248,7 @@
 			<div class="mx-auto max-w-7xl px-4 text-center sm:px-6 md:text-left lg:px-8">
 				<div class="grid grid-cols-1 gap-12 md:grid-cols-4">
 					<div class="col-span-1 md:col-span-1">
-						<h3 class="mb-6 font-serif text-xl tracking-widest uppercase">Abayiza</h3>
+						<h3 class="mb-6 text-xl"><AbayizaWordmark /></h3>
 						<p class="text-sm font-light text-gray-400">
 							Elevating modest fashion with premium craftsmanship and timeless design.
 						</p>
@@ -298,7 +297,9 @@
 				<div
 					class="mt-16 flex flex-col items-center justify-between border-t border-gray-800 pt-8 md:flex-row"
 				>
-					<p class="text-xs text-gray-500">&copy; 2026 Abayiza. All rights reserved.</p>
+					<p class="text-xs text-gray-500">
+						&copy; 2026 <AbayizaWordmark class="text-[0.9em]" />. All rights reserved.
+					</p>
 					<div class="mt-4 flex space-x-6 text-gray-500 md:mt-0">
 						<a href="https://instagram.com" class="transition-colors hover:text-white">Instagram</a>
 						<a href="https://tiktok.com" class="transition-colors hover:text-white">TikTok</a>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
+
 	let activeTab = $state<'login' | 'register'>('login');
 	let showPassword = $state(false);
 </script>
@@ -11,7 +13,7 @@
 	<div class="w-full max-w-md">
 		<!-- Logo -->
 		<div class="text-center mb-10">
-			<a href="/" class="text-3xl font-serif tracking-widest uppercase text-black">Abayiza</a>
+			<a href="/" class="text-3xl text-black"><AbayizaWordmark /></a>
 			<div class="w-10 h-[1px] bg-gold mx-auto mt-4"></div>
 		</div>
 

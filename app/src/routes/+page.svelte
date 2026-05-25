@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { cart } from '$lib/client/cart.svelte';
+	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
 	let { data } = $props();
@@ -73,6 +74,15 @@
 
 	const saleTapeItems = ['EID SALE', '30% OFF', 'ABAYIZA'];
 	const saleTapeLoop = Array.from({ length: 8 }, () => saleTapeItems).flat();
+	const brandPattern = /^(Abayiza|ABAYIZA)$/;
+
+	function textWithBrand(value: string) {
+		return value.split(/(Abayiza|ABAYIZA)/g).filter(Boolean);
+	}
+
+	function isBrandText(value: string) {
+		return brandPattern.test(value);
+	}
 
 	function productImage(item: any) {
 		return item.images?.[0]?.url || collections[0]?.imageUrl || '/image.png';
@@ -315,7 +325,15 @@
 			<h1
 				class="hero-reveal mt-1.5 ml-[11px] min-h-[2.95rem] max-w-[8.5ch] font-serif text-2xl leading-[0.95] whitespace-pre-line text-black uppercase sm:mt-3 sm:ml-[7px] sm:min-h-[5.9rem] sm:text-5xl md:min-h-[6.9rem] md:text-6xl"
 			>
-				<span class="hero-typewriter">{heroHeadlineText}</span>
+				<span class="hero-typewriter">
+					{#each textWithBrand(heroHeadlineText) as part}
+						{#if isBrandText(part)}
+							<AbayizaWordmark class="align-baseline" />
+						{:else}
+							{part}
+						{/if}
+					{/each}
+				</span>
 			</h1>
 			<p class="hero-reveal mt-2 max-w-[14.5rem] text-[0.66rem] leading-4 font-semibold text-black/82 sm:mt-4 sm:max-w-sm sm:text-base sm:leading-6">
 				Clean Nida silhouettes with soft movement, refined finishing, and everyday grace.
@@ -357,7 +375,13 @@
 		<div class="sale-tape sale-tape--gold">
 			<div class="sale-tape__track sale-tape__track--ltr">
 				{#each saleTapeLoop as item}
-					<span>{item}</span>
+					<span>
+						{#if isBrandText(item)}
+							<AbayizaWordmark />
+						{:else}
+							{item}
+						{/if}
+					</span>
 				{/each}
 			</div>
 		</div>
@@ -488,7 +512,7 @@
 				Designed for Quiet Presence
 			</h2>
 			<p class="mt-5 max-w-xl text-base leading-7 font-medium text-[#596c62]">
-				Every Abayiza piece is shaped around fluid movement, refined finishing, and modest
+				Every <AbayizaWordmark class="text-[0.78em] text-[#14352d]" /> piece is shaped around fluid movement, refined finishing, and modest
 				silhouettes that feel composed from morning plans to evening gatherings.
 			</p>
 
@@ -673,7 +697,7 @@
 		>
 			<div>
 				<p class="mb-3 text-[0.68rem] font-black tracking-[0.2em] text-[#e4b43d] uppercase">
-					Abayiza Promise
+					<AbayizaWordmark class="text-[0.92em]" /> Promise
 				</p>
 				<h2 class="font-serif text-3xl leading-tight uppercase sm:text-4xl">
 					Crafted For Quiet Luxury
