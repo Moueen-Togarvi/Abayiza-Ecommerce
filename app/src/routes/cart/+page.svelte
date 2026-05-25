@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
+	import { formatMoney } from '$lib/shared/money';
 
-	let shipping = 15.00; // Flat rate or calculated later
+	let shipping = 300;
+	let giftWrapPrice = 500;
+	let freeShippingThreshold = 15000;
 	let isGift = $state(false);
 	let giftMessage = $state('');
 </script>
@@ -44,7 +47,7 @@
 								<a href="/shop/{item.productId}" class="text-sm md:text-base font-serif hover:text-gold transition-colors mb-1">{item.name}</a>
 								<p class="text-xs text-gray-500 font-light mb-1">Color: {item.color}</p>
 								<p class="text-xs text-gray-500 font-light mb-2">Size: {item.size}</p>
-								<p class="text-sm font-medium block md:hidden">${item.price.toFixed(2)}</p>
+								<p class="text-sm font-medium block md:hidden">{formatMoney(item.price)}</p>
 								<button class="text-xs text-gray-400 underline hover:text-black self-start mt-2 uppercase tracking-wider" onclick={() => cart.removeItem(item.id)}>Remove</button>
 							</div>
 						</div>
@@ -60,7 +63,7 @@
 
 						<!-- Item Total -->
 						<div class="w-full md:w-1/6 text-left md:text-right">
-							<p class="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+							<p class="text-sm font-medium">{formatMoney(item.price * item.quantity)}</p>
 						</div>
 					</div>
 					{/each}
@@ -71,7 +74,9 @@
 					<label class="flex items-start space-x-3 cursor-pointer">
 						<input type="checkbox" bind:checked={isGift} class="form-checkbox h-5 w-5 text-black border-gray-300 rounded-none focus:ring-black mt-0.5">
 						<div>
-							<span class="text-sm font-medium tracking-wide uppercase block mb-1">Add Premium Gift Wrapping ($10.00)</span>
+							<span class="text-sm font-medium tracking-wide uppercase block mb-1">
+								Add Premium Gift Wrapping ({formatMoney(giftWrapPrice)})
+							</span>
 							<span class="text-xs text-gray-500 font-light">Your items will be beautifully packaged in our signature Abayiza gift box with a satin ribbon.</span>
 						</div>
 					</label>
@@ -93,24 +98,26 @@
 					<div class="space-y-4 mb-6 text-sm font-light">
 						<div class="flex justify-between">
 							<span class="text-gray-600">Subtotal</span>
-							<span>${cart.subtotal.toFixed(2)}</span>
+							<span>{formatMoney(cart.subtotal)}</span>
 						</div>
 						{#if isGift}
 						<div class="flex justify-between">
 							<span class="text-gray-600">Gift Wrapping</span>
-							<span>$10.00</span>
+							<span>{formatMoney(giftWrapPrice)}</span>
 						</div>
 						{/if}
 						<div class="flex justify-between">
 							<span class="text-gray-600">Estimated Shipping</span>
-							<span>{cart.subtotal > 250 ? 'Free' : '$' + shipping.toFixed(2)}</span>
+							<span>{cart.subtotal > freeShippingThreshold ? 'Free' : formatMoney(shipping)}</span>
 						</div>
 					</div>
 
 					<div class="border-t border-gray-200 pt-6 mb-8">
 						<div class="flex justify-between items-end">
 							<span class="text-base font-medium uppercase tracking-widest">Total</span>
-							<span class="text-xl font-serif text-black">${(cart.subtotal + (isGift ? 10 : 0) + (cart.subtotal > 250 ? 0 : shipping)).toFixed(2)}</span>
+							<span class="text-xl font-serif text-black">
+								{formatMoney(cart.subtotal + (isGift ? giftWrapPrice : 0) + (cart.subtotal > freeShippingThreshold ? 0 : shipping))}
+							</span>
 						</div>
 						<p class="text-xs text-gray-500 mt-2 text-right">Taxes calculated at checkout</p>
 					</div>

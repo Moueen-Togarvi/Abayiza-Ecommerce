@@ -1,205 +1,293 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
+	import { formatMoney } from '$lib/shared/money';
+
 	let { data } = $props();
-	let products = $derived(data.products || []);
+	let products = $derived((data.products || []) as Array<any>);
+	let collections = $derived((data.collections || []) as Array<any>);
+	let colors = $derived((data.colors || []) as string[]);
 	let isGridView = $state(true);
 	let showFilters = $state(false);
+
+	const colorHex: Record<string, string> = {
+		Black: '#101411',
+		White: '#ffffff',
+		Ivory: '#fff7ed',
+		Emerald: '#047857',
+		Midnight: '#111827',
+		Sage: '#8fa99a',
+		Olive: '#64763c',
+		Charcoal: '#374151',
+		Navy: '#172554'
+	};
+
+	function productImage(item: any) {
+		return item.images && item.images.length > 0 ? item.images[0].url : '';
+	}
+
+	function primaryVariant(item: any) {
+		return item.variants && item.variants.length > 0 ? item.variants[0] : undefined;
+	}
+
+	function productPrice(item: any) {
+		return Number(item.salePrice || item.price);
+	}
+
+	function addProductToCart(item: any) {
+		const variant = primaryVariant(item);
+
+		cart.addItem({
+			id: variant ? variant.id : item.id,
+			productId: item.id,
+			name: item.name,
+			price: productPrice(item),
+			quantity: 1,
+			image: productImage(item),
+			color: variant?.color,
+			size: variant?.size
+		});
+	}
 </script>
 
 <svelte:head>
 	<title>Shop All | Abayiza</title>
 </svelte:head>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-	<!-- Page Header -->
-	<div class="mb-12 text-center md:text-left">
-		<h1 class="text-4xl font-serif tracking-widest uppercase text-black mb-4">The Collection</h1>
-		<p class="text-gray-500 font-light max-w-2xl">
-			Explore our full range of meticulously crafted abayas. From everyday essentials to opulent occasion wear, find the perfect piece to elevate your wardrobe.
-		</p>
-	</div>
+<section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">
+	<div class="mx-auto max-w-7xl">
+		<div class="mb-8 border-b border-[#14352d]/10 pb-8">
+			<p class="mb-3 text-xs font-black tracking-[0.2em] text-[#b58b2b] uppercase">Shop Abayiza</p>
+			<div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+				<div>
+					<h1 class="font-serif text-4xl leading-tight uppercase sm:text-5xl">The Collection</h1>
+					<p class="mt-4 max-w-2xl text-sm leading-6 font-medium text-[#596c62] sm:text-base">
+						Explore premium abayas for daily wear, occasion styling, and refined modest wardrobes.
+					</p>
+				</div>
+				<div class="flex flex-wrap gap-2">
+					<span
+						class="rounded-full border border-[#14352d]/10 bg-white px-4 py-2 text-xs font-bold text-[#14352d]"
+					>
+						{products.length} Pieces
+					</span>
+					<span
+						class="rounded-full border border-[#14352d]/10 bg-white px-4 py-2 text-xs font-bold text-[#14352d]"
+					>
+						DB Catalog
+					</span>
+				</div>
+			</div>
+		</div>
 
-	<!-- Controls Toolbar -->
-	<div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-y border-black/10 mb-8 space-y-4 md:space-y-0">
-		<button 
-			class="flex items-center space-x-2 text-sm tracking-widest uppercase hover:text-gold transition-colors md:hidden"
-			onclick={() => showFilters = !showFilters}
+		<div
+			class="mb-8 flex flex-col gap-4 rounded-md border border-[#14352d]/10 bg-white/86 p-4 shadow-[0_18px_45px_rgba(20,53,45,0.08)] md:flex-row md:items-center md:justify-between"
 		>
-			<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-			</svg>
-			<span>Filter</span>
-		</button>
+			<button
+				type="button"
+				class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#14352d] px-5 text-xs font-black tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] md:hidden"
+				aria-expanded={showFilters}
+				onclick={() => (showFilters = !showFilters)}
+			>
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="1.7"
+						d="M3 4h18M6 12h12M10 20h4"
+					/>
+				</svg>
+				Filter
+			</button>
 
-		<div class="text-sm text-gray-500 font-light hidden md:block">
-			Showing {products.length} Products
+			<p class="hidden text-sm font-bold text-[#596c62] md:block">
+				Showing {products.length} products
+			</p>
+
+			<div class="flex flex-wrap items-center justify-between gap-4 md:justify-end">
+				<label class="flex items-center gap-2 text-sm font-medium text-[#596c62]">
+					<span>Sort by</span>
+					<select
+						class="rounded-full border border-[#14352d]/10 bg-[#fbf9f2] px-4 py-2 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
+					>
+						<option>Featured</option>
+						<option>New Arrivals</option>
+						<option>Price: Low to High</option>
+						<option>Price: High to Low</option>
+					</select>
+				</label>
+
+				<div
+					class="hidden items-center gap-2 rounded-full border border-[#14352d]/10 bg-[#fbf9f2] p-1 md:flex"
+				>
+					<button
+						type="button"
+						aria-label="Grid view"
+						class="inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors {isGridView
+							? 'bg-[#14352d] text-white'
+							: 'text-[#596c62] hover:bg-white'}"
+						onclick={() => (isGridView = true)}
+					>
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z" />
+						</svg>
+					</button>
+					<button
+						type="button"
+						aria-label="List view"
+						class="inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors {!isGridView
+							? 'bg-[#14352d] text-white'
+							: 'text-[#596c62] hover:bg-white'}"
+						onclick={() => (isGridView = false)}
+					>
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
+						</svg>
+					</button>
+				</div>
+			</div>
 		</div>
 
-		<div class="flex items-center space-x-6 w-full md:w-auto justify-between md:justify-end">
-			<div class="flex items-center space-x-2">
-				<span class="text-sm font-light text-gray-500">Sort by:</span>
-				<select class="border-none bg-transparent text-sm font-medium tracking-wide focus:ring-0 cursor-pointer hover:text-gold transition-colors">
-					<option>Featured</option>
-					<option>New Arrivals</option>
-					<option>Price: Low to High</option>
-					<option>Price: High to Low</option>
-				</select>
-			</div>
-			
-			<div class="hidden md:flex items-center space-x-2 border-l border-black/10 pl-6">
-				<button class="text-gray-400 hover:text-black transition-colors {isGridView ? 'text-black' : ''}" onclick={() => isGridView = true}>
-					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg>
-				</button>
-				<button class="text-gray-400 hover:text-black transition-colors {!isGridView ? 'text-black' : ''}" onclick={() => isGridView = false}>
-					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
-				</button>
-			</div>
-		</div>
-	</div>
-
-	<div class="flex flex-col md:flex-row gap-12">
-		<!-- Sidebar Filters (Desktop) -->
-		<aside class="w-full md:w-64 flex-shrink-0 {showFilters ? 'block' : 'hidden md:block'}">
-			<div class="space-y-8 sticky top-28">
-				<!-- Collection Filter -->
-				<div>
-					<h3 class="text-sm font-medium tracking-widest uppercase mb-4 border-b border-black/10 pb-2">Collection</h3>
-					<ul class="space-y-3">
-						<li>
-							<label class="flex items-center space-x-3 cursor-pointer group">
-								<input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-none focus:ring-black">
-								<span class="text-sm text-gray-600 font-light group-hover:text-black transition-colors">Everyday Abaya</span>
-							</label>
-						</li>
-						<li>
-							<label class="flex items-center space-x-3 cursor-pointer group">
-								<input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-none focus:ring-black">
-								<span class="text-sm text-gray-600 font-light group-hover:text-black transition-colors">Wedding Edit</span>
-							</label>
-						</li>
-						<li>
-							<label class="flex items-center space-x-3 cursor-pointer group">
-								<input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-none focus:ring-black">
-								<span class="text-sm text-gray-600 font-light group-hover:text-black transition-colors">Summer Breeze</span>
-							</label>
-						</li>
-					</ul>
-				</div>
-
-				<!-- Color Filter -->
-				<div>
-					<h3 class="text-sm font-medium tracking-widest uppercase mb-4 border-b border-black/10 pb-2">Color</h3>
-					<div class="flex flex-wrap gap-3">
-						<button class="w-6 h-6 rounded-full bg-black ring-1 ring-offset-2 ring-black" title="Black"></button>
-						<button class="w-6 h-6 rounded-full bg-[#d1b8b4] ring-1 ring-offset-2 ring-transparent hover:ring-gray-300" title="Dusty Rose"></button>
-						<button class="w-6 h-6 rounded-full bg-[#fdfbf7] border border-gray-200 ring-1 ring-offset-2 ring-transparent hover:ring-gray-300" title="Cream"></button>
-						<button class="w-6 h-6 rounded-full bg-[#c5a880] ring-1 ring-offset-2 ring-transparent hover:ring-gray-300" title="Gold"></button>
-						<button class="w-6 h-6 rounded-full bg-[#2c3e50] ring-1 ring-offset-2 ring-transparent hover:ring-gray-300" title="Navy"></button>
-					</div>
-				</div>
-
-				<!-- Fabric Filter -->
-				<div>
-					<h3 class="text-sm font-medium tracking-widest uppercase mb-4 border-b border-black/10 pb-2">Fabric</h3>
-					<ul class="space-y-3">
-						<li>
-							<label class="flex items-center space-x-3 cursor-pointer group">
-								<input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-none focus:ring-black">
-								<span class="text-sm text-gray-600 font-light group-hover:text-black transition-colors">Premium Nida</span>
-							</label>
-						</li>
-						<li>
-							<label class="flex items-center space-x-3 cursor-pointer group">
-								<input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-none focus:ring-black">
-								<span class="text-sm text-gray-600 font-light group-hover:text-black transition-colors">Silk Blend</span>
-							</label>
-						</li>
-						<li>
-							<label class="flex items-center space-x-3 cursor-pointer group">
-								<input type="checkbox" class="form-checkbox h-4 w-4 text-black border-gray-300 rounded-none focus:ring-black">
-								<span class="text-sm text-gray-600 font-light group-hover:text-black transition-colors">Linen</span>
-							</label>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</aside>
-
-		<!-- Product Grid -->
-		<div class="flex-grow">
-			<div class="grid {isGridView ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8' : 'grid-cols-1 gap-12'}">
-				{#each products as item}
-				<div class="group cursor-pointer {isGridView ? '' : 'flex flex-col sm:flex-row gap-8'}">
-					<!-- Image -->
-					<div class="relative overflow-hidden mb-4 bg-gray-100 {isGridView ? 'aspect-[3/4]' : 'w-full sm:w-1/3 aspect-[3/4] flex-shrink-0'}">
-						{#if item.salePrice}
-							<div class="absolute top-4 left-4 z-10 bg-black text-white text-xs px-2 py-1 uppercase tracking-wider">Sale</div>
-						{/if}
-						<img src={item.images && item.images.length > 0 ? item.images[0].url : ''} alt={item.name} class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
-						
-						<!-- Hover Actions -->
-						<div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex space-x-2">
-							<button class="flex-1 bg-black text-white py-3 text-sm tracking-widest uppercase hover:bg-gold transition-colors" onclick={(e) => {
-								e.preventDefault();
-								cart.addItem({
-									id: item.variants && item.variants.length > 0 ? item.variants[0].id : item.id,
-									productId: item.id,
-									name: item.name,
-									price: Number(item.salePrice || item.price),
-									quantity: 1,
-									image: item.images && item.images.length > 0 ? item.images[0].url : '',
-									color: item.variants && item.variants.length > 0 ? item.variants[0].color : undefined,
-									size: item.variants && item.variants.length > 0 ? item.variants[0].size : undefined,
-								});
-							}}>Add</button>
-							<button class="w-12 bg-white text-black py-3 flex items-center justify-center hover:bg-gray-100 transition-colors" title="Add to Wishlist">
-								<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-							</button>
+		<div class="flex flex-col gap-8 md:flex-row">
+			<aside class="w-full shrink-0 md:w-64 {showFilters ? 'block' : 'hidden md:block'}">
+				<div class="sticky top-28 space-y-4">
+					<div
+						class="rounded-md border border-[#14352d]/10 bg-white/90 p-5 shadow-[0_14px_34px_rgba(20,53,45,0.06)]"
+					>
+						<div class="mb-5 flex items-center justify-between">
+							<h2 class="text-xs font-black tracking-[0.16em] uppercase">Filters</h2>
+							<a href="/shop" class="text-xs font-bold text-[#b58b2b]">Clear</a>
 						</div>
-					</div>
-					
-					<!-- Info -->
-					<div class="flex flex-col justify-center {isGridView ? '' : 'flex-grow py-4'}">
-						<div class="flex justify-between items-start mb-1">
-							<h3 class="text-lg font-serif group-hover:text-gold transition-colors">{item.name}</h3>
-							<div class="flex flex-col items-end">
-								<p class="text-md font-medium whitespace-nowrap ml-4">${item.salePrice || item.price}</p>
-								{#if item.salePrice}
-								<p class="text-sm font-light text-gray-400 line-through">${item.price}</p>
-								{/if}
+
+						<div class="border-t border-[#14352d]/10 py-5 first:border-t-0 first:pt-0">
+							<h3 class="mb-4 text-xs font-black tracking-[0.14em] uppercase">Categories</h3>
+							<ul class="space-y-3">
+								{#each collections as collection}
+									<li>
+										<a
+											href={`/shop?collection=${collection.slug}`}
+											class="flex items-center justify-between gap-3 rounded-md px-2 py-1.5 text-sm font-medium text-[#596c62] transition-colors hover:bg-[#fbf9f2] hover:text-[#14352d]"
+										>
+											<span>{collection.name}</span>
+										</a>
+									</li>
+								{/each}
+							</ul>
+						</div>
+
+						<div class="border-t border-[#14352d]/10 pt-5">
+							<h3 class="mb-4 text-xs font-black tracking-[0.14em] uppercase">Color</h3>
+							<div class="flex flex-wrap gap-3">
+								{#each colors as color}
+									<button
+										type="button"
+										class="h-7 w-7 rounded-full border border-[#14352d]/12 ring-1 ring-[#14352d]/12 ring-offset-2 ring-offset-white transition-transform hover:scale-110"
+										style={`background-color: ${colorHex[color] || '#d9d0bd'}`}
+										title={color}
+										aria-label={color}
+									></button>
+								{/each}
 							</div>
 						</div>
-						
-						<p class="text-sm text-gray-500 font-light mb-3">{item.variants && item.variants.length > 0 ? item.variants[0].color : ''}</p>
-						
-						{#if !isGridView}
-							<p class="text-gray-600 font-light text-sm mb-6 max-w-xl">
-								{item.description}
-							</p>
-							<a href="/shop/{item.slug}" class="inline-block border-b border-black pb-1 text-sm tracking-widest uppercase hover:text-gold hover:border-gold transition-colors self-start">
-								View Details
-							</a>
-						{/if}
 					</div>
 				</div>
-				{/each}
-			</div>
+			</aside>
 
-			<!-- Pagination -->
-			<div class="mt-20 border-t border-black/10 pt-8 flex justify-center">
-				<nav class="flex items-center space-x-2">
-					<button class="w-10 h-10 flex items-center justify-center border border-gray-200 text-gray-400 hover:text-black hover:border-black transition-colors">
-						<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" /></svg>
-					</button>
-					<button class="w-10 h-10 flex items-center justify-center border border-black bg-black text-white text-sm font-medium">1</button>
-					<button class="w-10 h-10 flex items-center justify-center border border-gray-200 text-black text-sm font-medium hover:border-black transition-colors">2</button>
-					<button class="w-10 h-10 flex items-center justify-center border border-gray-200 text-black text-sm font-medium hover:border-black transition-colors">3</button>
-					<span class="px-2 text-gray-400">...</span>
-					<button class="w-10 h-10 flex items-center justify-center border border-gray-200 text-gray-400 hover:text-black hover:border-black transition-colors">
-						<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" /></svg>
-					</button>
-				</nav>
+			<div class="min-w-0 flex-1">
+				<div
+					class="grid {isGridView
+						? 'auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+						: 'grid-cols-1 gap-6'}"
+				>
+					{#each products as item}
+						<article
+							class="group flex h-full overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1 {isGridView
+								? 'flex-col'
+								: 'flex-col sm:flex-row'}"
+						>
+							<a
+								href={`/shop/${item.slug}`}
+								class="relative block overflow-hidden bg-[#e4eee9] {isGridView
+									? 'aspect-[4/5]'
+									: 'aspect-[4/5] sm:w-64 sm:shrink-0'}"
+								aria-label={`View ${item.name}`}
+							>
+								{#if item.salePrice}
+									<span
+										class="absolute top-3 left-3 z-10 rounded-full bg-[#e4b43d] px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-[#14352d] uppercase"
+									>
+										Sale
+									</span>
+								{/if}
+								<img
+									src={productImage(item)}
+									alt={item.name}
+									class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
+								/>
+							</a>
+
+							<div class="flex flex-1 flex-col p-4">
+								<div class="mb-3 flex items-start justify-between gap-3">
+									<div class="min-h-[4.5rem] min-w-0">
+										<a
+											href={`/shop/${item.slug}`}
+											class="block font-serif text-lg leading-tight text-[#14352d] transition-colors hover:text-[#b58b2b]"
+										>
+											{item.name}
+										</a>
+										<p class="mt-2 text-xs font-bold tracking-[0.08em] text-[#596c62] uppercase">
+											{primaryVariant(item)?.color || 'Signature edit'}
+										</p>
+									</div>
+									<div class="shrink-0 text-right">
+										<p class="text-base font-black text-[#14352d]">
+											{formatMoney(item.salePrice || item.price)}
+										</p>
+										{#if item.salePrice}
+											<p class="text-xs font-bold text-[#596c62]/60 line-through">
+												{formatMoney(item.price)}
+											</p>
+										{/if}
+									</div>
+								</div>
+
+								{#if !isGridView}
+									<p class="mb-5 max-w-2xl text-sm leading-6 font-medium text-[#596c62]">
+										{item.description}
+									</p>
+								{/if}
+
+								<div class="mt-auto flex items-center gap-2">
+									<button
+										type="button"
+										class="inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+										onclick={() => addProductToCart(item)}
+									>
+										Add to Cart
+									</button>
+									<button
+										type="button"
+										class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d]"
+										aria-label={`Add ${item.name} to wishlist`}
+									>
+										<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="1.7"
+												d="M12 20.25l-1.45-1.32C5.4 14.36 2 11.28 2 7.5A4.5 4.5 0 016.5 3c1.74 0 3.41.81 4.5 2.09A5.96 5.96 0 0115.5 3 4.5 4.5 0 0120 7.5c0 3.78-3.4 6.86-8.55 11.43L12 20.25z"
+											/>
+										</svg>
+									</button>
+								</div>
+							</div>
+						</article>
+					{/each}
+				</div>
+
+				<div class="mt-14 border-t border-[#14352d]/10 pt-8 text-center text-sm font-bold text-[#596c62]">
+					Showing all products from the database.
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</section>

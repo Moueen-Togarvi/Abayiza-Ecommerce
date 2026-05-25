@@ -1,57 +1,136 @@
 <script lang="ts">
 	let { data } = $props();
-	let collections = $derived(data.collections || []);
+	let collections = $derived((data.collections || []) as Array<any>);
+	let categorySearch = $state('');
+
+	let filteredCollections = $derived(
+		collections.filter((collection) => {
+			const query = categorySearch.trim().toLowerCase();
+			if (!query) return true;
+
+			return [collection.name, collection.description, collection.slug]
+				.filter(Boolean)
+				.some((value) => String(value).toLowerCase().includes(query));
+		})
+	);
 </script>
 
 <svelte:head>
 	<title>Collections | Abayiza</title>
 </svelte:head>
 
-<!-- Hero Banner -->
-<section class="relative h-[50vh] min-h-[300px] flex items-center justify-center overflow-hidden">
-	<div class="absolute inset-0 bg-black/40 z-10"></div>
-	<img 
-		src="https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?q=80&w=2000&auto=format&fit=crop"
-		alt="Collections" 
-		class="absolute inset-0 w-full h-full object-cover object-center"
-	/>
-	<div class="relative z-20 text-center px-4">
-		<h1 class="text-4xl md:text-5xl text-white font-serif tracking-widest uppercase mb-4">Our Collections</h1>
-		<p class="text-white/80 font-light text-lg">Curated with intention. Crafted with love.</p>
+<section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">
+	<div class="mx-auto max-w-7xl">
+		<div class="mb-8 border-b border-[#14352d]/10 pb-8">
+			<p class="mb-3 text-xs font-black tracking-[0.2em] text-[#b58b2b] uppercase">
+				Shop By Category
+			</p>
+			<div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+				<div>
+					<h1 class="font-serif text-4xl leading-tight uppercase sm:text-5xl">Collections</h1>
+					<p class="mt-4 max-w-2xl text-sm leading-6 font-medium text-[#596c62] sm:text-base">
+						Find abayas by category, edit, and occasion. Search a category, then open the matching
+						shop view.
+					</p>
+				</div>
+
+				<label class="relative block w-full max-w-lg">
+					<span class="sr-only">Search categories</span>
+					<span class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[#596c62]">
+						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.8"
+								d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+							/>
+						</svg>
+					</span>
+					<input
+						type="search"
+						bind:value={categorySearch}
+						placeholder="Search categories"
+						class="min-h-12 w-full rounded-full border border-[#14352d]/10 bg-white pr-4 pl-11 text-sm font-bold text-[#14352d] shadow-[0_14px_34px_rgba(20,53,45,0.07)] placeholder:text-[#596c62]/60 focus:border-[#14352d] focus:ring-[#14352d]"
+					/>
+				</label>
+			</div>
+		</div>
+
+		<div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+			<p class="text-sm font-bold text-[#596c62]">
+				Showing {filteredCollections.length} categories
+			</p>
+			{#if categorySearch}
+				<button
+					type="button"
+					class="rounded-full border border-[#14352d]/10 bg-white px-4 py-2 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase transition-colors hover:bg-[#14352d] hover:text-white"
+					onclick={() => (categorySearch = '')}
+				>
+					Clear Search
+				</button>
+			{/if}
+		</div>
+
+		{#if filteredCollections.length}
+			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+				{#each filteredCollections as collection, index}
+					<a
+						href={`/shop?collection=${collection.slug}`}
+						class="group flex h-full flex-col overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1"
+					>
+						<div class="relative aspect-[4/5] overflow-hidden bg-[#e4eee9]">
+							<img
+								src={collection.imageUrl}
+								alt={collection.name}
+								class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+							/>
+							<div
+								class="absolute inset-0 bg-gradient-to-t from-[#14352d]/72 via-[#14352d]/12 to-transparent"
+							></div>
+							<span
+								class="absolute top-3 left-3 rounded-full bg-[#fffaf0]/92 px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-[#14352d] uppercase"
+							>
+								Category {String(index + 1).padStart(2, '0')}
+							</span>
+						</div>
+
+						<div class="flex flex-1 flex-col p-5">
+							<h2
+								class="font-serif text-xl leading-tight text-[#14352d] transition-colors group-hover:text-[#b58b2b]"
+							>
+								{collection.name}
+							</h2>
+							<p class="mt-3 min-h-12 text-sm leading-6 font-medium text-[#596c62]">
+								{collection.description}
+							</p>
+							<div class="mt-5 flex items-center justify-between border-t border-[#14352d]/10 pt-4">
+								<span class="text-xs font-black tracking-[0.12em] text-[#b58b2b] uppercase">
+									{collection._count.products} Pieces
+								</span>
+								<span
+									class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#14352d] text-white transition-colors group-hover:bg-[#e4b43d] group-hover:text-[#14352d]"
+								>
+									<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="1.9"
+											d="M7 17L17 7M9 7h8v8"
+										/>
+									</svg>
+								</span>
+							</div>
+						</div>
+					</a>
+				{/each}
+			</div>
+		{:else}
+			<div
+				class="rounded-md border border-[#14352d]/10 bg-white p-10 text-center shadow-[0_16px_38px_rgba(20,53,45,0.08)]"
+			>
+				<p class="font-serif text-2xl text-[#14352d]">No categories found</p>
+				<p class="mt-3 text-sm font-medium text-[#596c62]">Try another category name.</p>
+			</div>
+		{/if}
 	</div>
 </section>
-
-<!-- Collections Grid -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-	<!-- Featured 2-up -->
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-		{#each collections.slice(0, 2) as col}
-		<a href="/shop?collection={col.slug}" class="group relative aspect-[4/3] overflow-hidden block bg-gray-100">
-			<img src={col.imageUrl} alt={col.name} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-			<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-			<div class="absolute bottom-0 left-0 right-0 p-8">
-				<h2 class="text-2xl md:text-3xl font-serif text-white mb-2">{col.name}</h2>
-				<p class="text-white/70 font-light text-sm mb-4">{col.description}</p>
-				<span class="inline-flex items-center text-white text-xs tracking-widest uppercase border-b border-white/50 pb-0.5 group-hover:border-gold group-hover:text-gold transition-colors">
-					Shop {col._count.products} Pieces
-					<svg class="w-3 h-3 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-				</span>
-			</div>
-		</a>
-		{/each}
-	</div>
-
-	<!-- 4-up Grid -->
-	<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-		{#each collections.slice(2) as col}
-		<a href="/shop?collection={col.slug}" class="group relative aspect-[3/4] overflow-hidden block bg-gray-100">
-			<img src={col.imageUrl} alt={col.name} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-			<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-			<div class="absolute bottom-0 left-0 right-0 p-5">
-				<h2 class="text-base md:text-lg font-serif text-white mb-1">{col.name}</h2>
-				<p class="text-white/60 font-light text-xs">{col._count.products} Pieces</p>
-			</div>
-		</a>
-		{/each}
-	</div>
-</div>

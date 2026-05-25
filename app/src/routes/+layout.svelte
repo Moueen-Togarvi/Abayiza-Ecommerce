@@ -11,7 +11,6 @@
 		{ href: '/', label: 'Home' },
 		{ href: '/shop', label: 'Shop' },
 		{ href: '/collections', label: 'Collections' },
-		{ href: '/lookbook', label: 'Lookbook' },
 		{ href: '/size-guide', label: 'Size Guide' },
 		{ href: '/about', label: 'About' },
 		{ href: '/contact', label: 'Contact' }
@@ -68,11 +67,13 @@
 						</button>
 
 						<a href="/" class="group inline-flex min-w-0 shrink-0 items-center gap-2.5">
-							<span
-								class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#14352d] font-serif text-lg text-white shadow-[0_14px_30px_rgba(20,53,45,0.22)]"
-							>
-								A
-							</span>
+							<img
+								src="/image.png"
+								alt="Abayiza"
+								width="640"
+								height="640"
+								class="h-12 w-12 rounded-full object-cover shadow-[0_14px_30px_rgba(20,53,45,0.22)] ring-1 ring-white/50"
+							/>
 							<span class="hidden leading-none sm:block">
 								<span class="block text-sm font-black tracking-[0.18em] text-[#14352d]"
 									>ABAYIZA</span
@@ -88,7 +89,7 @@
 							class="mx-auto hidden items-center gap-1 text-xs font-black lg:flex"
 							aria-label="Primary navigation"
 						>
-							{#each primaryNavItems.slice(1, 5) as item}
+							{#each primaryNavItems.slice(0, 4) as item}
 								<a
 									href={item.href}
 									class={`rounded-full px-3.5 py-2 transition-all duration-300 ${
@@ -231,8 +232,8 @@
 						<div
 							class="mt-3 flex items-center justify-between rounded-2xl border border-white/12 bg-white/8 px-4 py-3 text-xs font-semibold text-white"
 						>
-							<span>Free delivery over $200</span>
-							<span class="text-[#c8ff46]">USD</span>
+							<span>Free delivery over Rs. 15,000</span>
+							<span class="text-[#c8ff46]">PKR</span>
 						</div>
 					</div>
 				{/if}
@@ -258,20 +259,9 @@
 				<div>
 					<h4 class="mb-6 text-sm font-medium tracking-widest text-gray-200 uppercase">Shop</h4>
 					<ul class="space-y-4 text-sm font-light text-gray-400">
-						<li>
-							<a href="/collections/everyday" class="transition-colors hover:text-gold"
-								>Everyday Abayas</a
-							>
-						</li>
-						<li>
-							<a href="/collections/wedding" class="transition-colors hover:text-gold"
-								>Wedding Collection</a
-							>
-						</li>
-						<li>
-							<a href="/collections/summer" class="transition-colors hover:text-gold">Summer Edit</a
-							>
-						</li>
+						<li><a href="/shop" class="transition-colors hover:text-gold">All Products</a></li>
+						<li><a href="/collections" class="transition-colors hover:text-gold">Categories</a></li>
+						<li><a href="/search" class="transition-colors hover:text-gold">Search Catalog</a></li>
 					</ul>
 				</div>
 				<div>
@@ -314,7 +304,7 @@
 				<div class="mt-4 flex space-x-6 text-gray-500 md:mt-0">
 					<a href="https://instagram.com" class="transition-colors hover:text-white">Instagram</a>
 					<a href="https://tiktok.com" class="transition-colors hover:text-white">TikTok</a>
-					<a href="https://wa.me" class="transition-colors hover:text-white">WhatsApp</a>
+					<a href="https://wa.me/923116857822" class="transition-colors hover:text-white">WhatsApp</a>
 				</div>
 			</div>
 		</div>

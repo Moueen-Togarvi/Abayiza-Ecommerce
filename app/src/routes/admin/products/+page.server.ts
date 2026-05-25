@@ -1,25 +1,47 @@
 import prisma from '$lib/server/prisma';
-import type { PageServerLoad } from './$types';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const products = await prisma.product.findMany({
 		include: {
 			collections: true,
 			variants: true,
-			images: { orderBy: { displayOrder: 'asc' } },
+			images: { orderBy: { displayOrder: 'asc' } }
 		},
 		orderBy: { createdAt: 'desc' }
 	});
 
-	const serializedProducts = products.map(p => ({
+	const serializedProducts = products.map((p: any) => ({
 		...p,
 		price: Number(p.price),
 		salePrice: p.salePrice ? Number(p.salePrice) : null,
-		totalInventory: p.variants.reduce((acc, v) => acc + v.stockCount, 0),
+		totalInventory: p.variants.reduce((acc: number, v: any) => acc + v.stockCount, 0),
 		status: p.isActive ? 'Active' : 'Draft'
 	}));
 
 	return {
 		products: serializedProducts
 	};
+};
+
+export const actions: Actions = {
+	delete: async ({ request }) => {
+		const data = await request.formData();
+		const id = String(data.get('id') ?? '');
+
+		if (!id) {
+			return fail(400, { error: 'Product was not found.' });
+		}
+
+		try {
+			await prisma.product.delete({
+				where: { id }
+			});
+		} catch {
+			return fail(500, { error: 'Failed to delete product.' });
+		}
+
+		throw redirect(303, '/admin/products');
+	}
 };

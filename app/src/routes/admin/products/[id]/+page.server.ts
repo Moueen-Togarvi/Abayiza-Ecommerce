@@ -2,6 +2,7 @@ import prisma from '$lib/server/prisma';
 import type { PageServerLoad, Actions } from './$types';
 import { error, redirect } from '@sveltejs/kit';
 import { fail } from '@sveltejs/kit';
+import { parseProductForm, validateProductForm } from '$lib/server/admin-product-form';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const product = await prisma.product.findUnique({
@@ -34,35 +35,68 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	update: async ({ request, params }) => {
 		const data = await request.formData();
+		const product = parseProductForm(data);
+		const validationError = validateProductForm(product);
 
-		const name = data.get('name') as string;
-		const description = data.get('description') as string;
-		const price = parseFloat(data.get('price') as string);
-		const salePrice = data.get('salePrice') ? parseFloat(data.get('salePrice') as string) : null;
-		const isActive = data.get('isActive') === 'true';
-		const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+		if (validationError) {
+			return fail(400, { error: validationError });
+		}
 
-		if (!name || isNaN(price)) {
-			return fail(400, { error: 'Name and valid price are required.' });
+		const existing = await prisma.product.findUnique({
+			where: { slug: product.slug }
+		});
+
+		if (existing && existing.id !== params.id) {
+			return fail(400, { error: 'Product slug already exists. Change the title or slug.' });
 		}
 
 		try {
 			await prisma.product.update({
 				where: { id: params.id },
 				data: {
-					name,
-					slug,
-					description,
-					price,
-					salePrice,
-					isActive
-				}
+					name: product.name,
+					slug: product.slug,
+					description: product.description,
+					price: product.price,
+					salePrice: product.salePrice,
+					isActive: product.isActive,
+					collections: {
+						set: product.collectionIds.map((id) => ({ id }))
+					}
+				},
+				select: { id: true }
+			});
+
+			await prisma.productImage.deleteMany({
+				where: { productId: params.id }
+			});
+
+			if (product.imageUrl) {
+				await prisma.productImage.create({
+					data: {
+						productId: params.id,
+						url: product.imageUrl,
+						altText: product.name,
+						displayOrder: 0
+					}
+				});
+			}
+
+			await prisma.productVariant.deleteMany({
+				where: { productId: params.id }
+			});
+
+			await prisma.productVariant.createMany({
+				data: product.variants.map((variant) => ({
+					...variant,
+					productId: params.id
+				}))
 			});
 		} catch (e) {
-			return fail(500, { error: 'Failed to update product.' });
+			return fail(500, { error: 'Failed to update product. Check duplicate SKU values.' });
 		}
 
-		throw redirect(303, '/admin/products');
+		throw redirect(303, `/admin/products/${params.id}`);
 	},
 
 	delete: async ({ params }) => {

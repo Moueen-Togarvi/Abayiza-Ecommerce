@@ -4,46 +4,45 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ url }) => {
 	const collectionSlug = url.searchParams.get('collection');
 
-	let products = [];
-
-	if (collectionSlug) {
-		products = await prisma.product.findMany({
+	const [products, collections] = await Promise.all([
+		prisma.product.findMany({
 			where: {
 				isActive: true,
-				collections: {
-					some: {
-						slug: collectionSlug
-					}
-				}
+				...(collectionSlug
+					? {
+							collections: {
+								some: {
+									slug: collectionSlug
+								}
+							}
+						}
+					: {})
 			},
 			include: {
-				images: {
-					orderBy: { displayOrder: 'asc' }
-				},
-				variants: true
+				images: { orderBy: { displayOrder: 'asc' } },
+				variants: true,
+				collections: true
 			}
-		});
-	} else {
-		products = await prisma.product.findMany({
-			where: {
-				isActive: true
-			},
-			include: {
-				images: {
-					orderBy: { displayOrder: 'asc' }
-				},
-				variants: true
-			}
-		});
-	}
+		}),
+		prisma.collection.findMany({
+			where: { isVisible: true },
+			orderBy: { displayOrder: 'asc' }
+		})
+	]);
 
-	const serializedProducts = products.map(p => ({
+	const serializedProducts = products.map((p: any) => ({
 		...p,
 		price: Number(p.price),
 		salePrice: p.salePrice ? Number(p.salePrice) : null
 	}));
+	const colors = Array.from(
+		new Set(products.flatMap((product: any) => product.variants.map((variant: any) => variant.color)))
+	).filter(Boolean);
 
 	return {
-		products: serializedProducts
+		products: serializedProducts,
+		collections,
+		colors,
+		selectedCollection: collectionSlug
 	};
 };

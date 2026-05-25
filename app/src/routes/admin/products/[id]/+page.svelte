@@ -1,188 +1,399 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	let { data } = $props();
-	let product = $derived(data.product);
+	type VariantKind = 'size' | 'color';
+	type VariantRow = {
+		id: number;
+		type: VariantKind;
+		size: string;
+		color: string;
+		stockCount: number;
+		sku: string;
+	};
 
+	let { data, form } = $props();
+	// svelte-ignore state_referenced_locally
+	const product = data.product as any;
+	// svelte-ignore state_referenced_locally
+	const allCollections = (data.allCollections || []) as Array<any>;
 	let showDeleteConfirm = $state(false);
-	let saving = $state(false);
-	let deleting = $state(false);
-	let successMessage = $state('');
+	let nextVariantId = product.variants.length + 1;
+	let variants = $state<VariantRow[]>(
+		(product.variants.length
+			? product.variants.map((variant: any, index: number) => ({
+					id: index + 1,
+					type:
+						variant.size === 'One Size' && variant.color && variant.color !== 'Default'
+							? ('color' as VariantKind)
+							: ('size' as VariantKind),
+					size: variant.size || 'S (52)',
+					color: variant.color === 'Default' ? 'Black' : variant.color || 'Black',
+					stockCount: variant.stockCount || 0,
+					sku: variant.sku || ''
+				}))
+			: [{ id: 1, type: 'size', size: 'S (52)', color: 'Black', stockCount: 0, sku: '' }]) as VariantRow[]
+	);
+
+	const sizes = ['XS (50)', 'S (52)', 'M (54)', 'L (56)', 'XL (58)', 'XXL (60)', 'S-XL', 'XS-L'];
+	const colors = [
+		{ name: 'Black', hex: '#000000' },
+		{ name: 'White', hex: '#ffffff' },
+		{ name: 'Blue', hex: '#2563eb' },
+		{ name: 'Red', hex: '#dc2626' },
+		{ name: 'Yellow', hex: '#facc15' },
+		{ name: 'Orange', hex: '#f97316' },
+		{ name: 'Navy', hex: '#172554' },
+		{ name: 'Ivory', hex: '#fff7ed' },
+		{ name: 'Dusty Rose', hex: '#c08497' }
+	];
+
+	const selectedCollectionIds = product.collections.map((collection: any) => collection.id);
+	const firstImageUrl = product.images?.[0]?.url ?? '';
+
+	const addVariant = (type: VariantKind = 'size') => {
+		variants = [
+			...variants,
+			{
+				id: nextVariantId++,
+				type,
+				size: 'S (52)',
+				color: 'Black',
+				stockCount: 0,
+				sku: ''
+			}
+		];
+	};
+
+	const removeVariant = (id: number) => {
+		if (variants.length === 1) return;
+		variants = variants.filter((variant) => variant.id !== id);
+	};
 </script>
 
 <svelte:head>
 	<title>Edit: {product.name} | Admin</title>
 </svelte:head>
 
-<div class="max-w-4xl mx-auto pb-12">
-	<!-- Header -->
-	<div class="flex items-center justify-between mb-6">
+<div class="mx-auto max-w-5xl pb-12">
+	<div class="mb-6 flex items-center justify-between gap-4">
 		<div class="flex items-center space-x-4">
-			<a href="/admin/products" class="p-2 border border-gray-300 rounded-md text-gray-500 hover:bg-gray-50 bg-white shadow-sm" aria-label="Back to products">
-				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+			<a
+				href="/admin/products"
+				class="rounded-md border border-gray-300 bg-white p-2 text-gray-500 shadow-sm hover:bg-gray-50"
+				aria-label="Back to products"
+			>
+				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M10 19l-7-7m0 0l7-7m-7 7h18"
+					/>
+				</svg>
 			</a>
-			<h1 class="text-2xl font-bold text-gray-900">{product.name}</h1>
-			<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {product.isActive ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
-				{product.isActive ? 'Active' : 'Draft'}
-			</span>
+			<div>
+				<h1 class="text-2xl font-bold text-[#000]">{product.name}</h1>
+				<span
+					class="mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {product.isActive
+						? 'bg-blue-100 text-blue-800'
+						: 'bg-yellow-100 text-yellow-800'}"
+				>
+					{product.isActive ? 'Active' : 'Draft'}
+				</span>
+			</div>
 		</div>
-		<!-- Delete Button -->
+
 		<button
-			onclick={() => showDeleteConfirm = true}
-			class="inline-flex items-center px-3 py-2 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 transition-colors"
+			type="button"
+			onclick={() => (showDeleteConfirm = true)}
+			class="inline-flex items-center rounded-md border border-red-300 bg-white px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-50"
 		>
-			<svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+			<svg class="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+				/>
+			</svg>
 			Delete Product
 		</button>
 	</div>
 
-	{#if successMessage}
-	<div class="mb-4 bg-green-50 border border-green-200 rounded-md p-4 text-sm text-green-800">{successMessage}</div>
+	{#if form?.error}
+		<div class="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+			{form.error}
+		</div>
 	{/if}
 
-	<!-- Edit Form -->
-	<form method="POST" action="?/update" use:enhance={() => {
-		saving = true;
-		return async ({ update }) => {
-			await update();
-			saving = false;
-		};
-	}}>
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-			<!-- Left Column -->
-			<div class="lg:col-span-2 space-y-6">
-
-				<!-- Title and Description -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
+	<form method="POST" action="?/update">
+		<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+			<div class="space-y-6 lg:col-span-2">
+				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 					<div class="space-y-5">
 						<div>
-							<label for="name" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-							<input id="name" name="name" type="text" value={product.name} required
-								class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm p-2.5 border">
+							<label for="name" class="mb-1 block text-sm font-medium text-gray-700">Title</label>
+							<input
+								id="name"
+								name="name"
+								type="text"
+								value={product.name}
+								required
+								class="block w-full rounded-md border border-gray-300 p-2.5 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
+							/>
 						</div>
 						<div>
-							<label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-							<textarea id="description" name="description" rows="6"
-								class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm p-3"
-								>{product.description}</textarea>
+							<label for="slug" class="mb-1 block text-sm font-medium text-gray-700">Slug</label>
+							<input
+								id="slug"
+								name="slug"
+								type="text"
+								value={product.slug}
+								class="block w-full rounded-md border border-gray-300 p-2.5 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
+							/>
+						</div>
+						<div>
+							<label for="description" class="mb-1 block text-sm font-medium text-gray-700"
+								>Description</label
+							>
+							<textarea
+								id="description"
+								name="description"
+								rows="5"
+								class="block w-full rounded-md border border-gray-300 p-3 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
+							>{product.description}</textarea>
 						</div>
 					</div>
 				</div>
 
-				<!-- Media preview -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-					<h3 class="text-base font-medium text-gray-900 mb-4">Media</h3>
-					{#if product.images && product.images.length > 0}
-					<div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-						{#each product.images as img}
-						<div class="relative aspect-[3/4] rounded-md overflow-hidden border border-gray-200 bg-gray-50">
-							<img src={img.url} alt={img.altText || product.name} class="w-full h-full object-cover">
+				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<h3 class="mb-4 text-base font-medium text-[#000]">Media</h3>
+					<label for="imageUrl" class="mb-1 block text-sm font-medium text-gray-700">Image URL</label>
+					<input
+						id="imageUrl"
+						name="imageUrl"
+						type="url"
+						value={firstImageUrl}
+						placeholder="https://..."
+						class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
+					/>
+				</div>
+
+				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<h3 class="mb-4 text-base font-medium text-[#000]">Pricing</h3>
+					<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+						<div>
+							<label for="price" class="mb-1 block text-sm font-medium text-gray-700">Price</label>
+							<div class="relative rounded-md shadow-sm">
+								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+									<span class="text-sm text-gray-500">Rs.</span>
+								</div>
+								<input
+									id="price"
+									name="price"
+									type="number"
+									step="0.01"
+									value={product.price}
+									required
+									class="block w-full rounded-md border border-gray-300 py-2 pr-3 pl-7 text-sm focus:border-[#000] focus:ring-[#000]"
+								/>
+							</div>
 						</div>
+						<div>
+							<label for="salePrice" class="mb-1 block text-sm font-medium text-gray-700"
+								>Sale Price</label
+							>
+							<div class="relative rounded-md shadow-sm">
+								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+									<span class="text-sm text-gray-500">Rs.</span>
+								</div>
+								<input
+									id="salePrice"
+									name="salePrice"
+									type="number"
+									step="0.01"
+									value={product.salePrice ?? ''}
+									class="block w-full rounded-md border border-gray-300 py-2 pr-3 pl-7 text-sm focus:border-[#000] focus:ring-[#000]"
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+						<h3 class="text-base font-medium text-[#000]">Variants</h3>
+						<div class="flex flex-wrap gap-2">
+							<button
+								type="button"
+								class="rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
+								onclick={() => addVariant('size')}
+							>
+								Add Size Variant
+							</button>
+							<button
+								type="button"
+								class="rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-100"
+								onclick={() => addVariant('color')}
+							>
+								Add Colour Variant
+							</button>
+						</div>
+					</div>
+
+					<div class="space-y-4">
+						{#each variants as variant, index (variant.id)}
+							<div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+								<div class="grid gap-3 md:grid-cols-[9rem_1fr_7rem_1fr_auto] md:items-end">
+									<div>
+										<label for={`variant-type-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
+											>Variant Type</label
+										>
+										<select
+											id={`variant-type-${variant.id}`}
+											name="variantType"
+											bind:value={variant.type}
+											class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
+										>
+											<option value="size">Size</option>
+											<option value="color">Colour</option>
+										</select>
+									</div>
+
+									{#if variant.type === 'size'}
+										<div>
+											<label for={`variant-size-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
+												>Size</label
+											>
+											<select
+												id={`variant-size-${variant.id}`}
+												name="variantSize"
+												bind:value={variant.size}
+												class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
+											>
+												{#each sizes as size}
+													<option value={size}>{size}</option>
+												{/each}
+											</select>
+											<input type="hidden" name="variantColor" value="Default" />
+										</div>
+									{:else}
+										<div>
+											<label for={`variant-color-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
+												>Colour</label
+											>
+											<select
+												id={`variant-color-${variant.id}`}
+												name="variantColor"
+												bind:value={variant.color}
+												class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
+											>
+												{#each colors as color}
+													<option value={color.name}>{color.name}</option>
+												{/each}
+											</select>
+											<input type="hidden" name="variantSize" value="One Size" />
+										</div>
+									{/if}
+
+									<div>
+										<label for={`variant-stock-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
+											>Stock</label
+										>
+										<input
+											id={`variant-stock-${variant.id}`}
+											name="variantStock"
+											type="number"
+											min="0"
+											bind:value={variant.stockCount}
+											class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
+										/>
+									</div>
+									<div>
+										<label for={`variant-sku-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
+											>SKU</label
+										>
+										<input
+											id={`variant-sku-${variant.id}`}
+											name="variantSku"
+											type="text"
+											bind:value={variant.sku}
+											placeholder={`Auto SKU ${index + 1}`}
+											class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
+										/>
+									</div>
+									<button
+										type="button"
+										class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-40"
+										disabled={variants.length === 1}
+										onclick={() => removeVariant(variant.id)}
+									>
+										Remove
+									</button>
+								</div>
+
+								{#if variant.type === 'color'}
+									<div class="mt-3 flex flex-wrap gap-2">
+										{#each colors as color}
+											<button
+												type="button"
+												class="h-6 w-6 rounded-full border border-gray-300 ring-offset-2 transition {variant.color === color.name
+													? 'ring-2 ring-[#000]'
+													: ''}"
+												style={`background-color: ${color.hex}`}
+												aria-label={`Select ${color.name}`}
+												onclick={() => (variant.color = color.name)}
+											></button>
+										{/each}
+									</div>
+								{/if}
+							</div>
 						{/each}
 					</div>
-					{:else}
-					<div class="border-2 border-dashed border-gray-300 rounded-lg p-10 text-center text-gray-500 text-sm">
-						No images uploaded
-					</div>
-					{/if}
 				</div>
-
-				<!-- Pricing -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-					<h3 class="text-base font-medium text-gray-900 mb-4">Pricing</h3>
-					<div class="grid grid-cols-2 gap-4">
-						<div>
-							<label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
-							<div class="relative rounded-md shadow-sm">
-								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-									<span class="text-gray-500 sm:text-sm">$</span>
-								</div>
-								<input id="price" name="price" type="number" step="0.01" value={product.price} required
-									class="block w-full pl-7 pr-3 py-2 border-gray-300 border rounded-md focus:ring-black focus:border-black sm:text-sm">
-							</div>
-						</div>
-						<div>
-							<label for="salePrice" class="block text-sm font-medium text-gray-700 mb-1">Sale Price</label>
-							<div class="relative rounded-md shadow-sm">
-								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-									<span class="text-gray-500 sm:text-sm">$</span>
-								</div>
-								<input id="salePrice" name="salePrice" type="number" step="0.01" value={product.salePrice ?? ''}
-									class="block w-full pl-7 pr-3 py-2 border-gray-300 border rounded-md focus:ring-black focus:border-black sm:text-sm"
-									placeholder="0.00">
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Variants (read-only display) -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-					<h3 class="text-base font-medium text-gray-900 mb-4">Variants ({product.variants.length})</h3>
-					<div class="overflow-x-auto">
-						<table class="min-w-full divide-y divide-gray-200 text-sm">
-							<thead class="bg-gray-50">
-								<tr>
-									<th class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider text-xs">SKU</th>
-									<th class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider text-xs">Color</th>
-									<th class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider text-xs">Size</th>
-									<th class="px-4 py-2 text-right font-medium text-gray-500 uppercase tracking-wider text-xs">Stock</th>
-								</tr>
-							</thead>
-							<tbody class="divide-y divide-gray-200">
-								{#each product.variants as v}
-								<tr class="hover:bg-gray-50">
-									<td class="px-4 py-2 text-gray-600 font-mono text-xs">{v.sku}</td>
-									<td class="px-4 py-2 text-gray-700">{v.color}</td>
-									<td class="px-4 py-2 text-gray-700">{v.size}</td>
-									<td class="px-4 py-2 text-right {v.stockCount < 5 ? 'text-red-600 font-semibold' : 'text-gray-700'}">{v.stockCount}</td>
-								</tr>
-								{/each}
-							</tbody>
-						</table>
-					</div>
-				</div>
-
 			</div>
 
-			<!-- Right Column -->
 			<div class="space-y-6">
-				<!-- Status -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-					<h3 class="text-base font-medium text-gray-900 mb-4">Product status</h3>
-					<select name="isActive" class="block w-full border-gray-300 border rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm py-2 px-3 mb-2">
+				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<h3 class="mb-4 text-base font-medium text-[#000]">Product Status</h3>
+					<select
+						name="isActive"
+						class="mb-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
+					>
 						<option value="true" selected={product.isActive}>Active</option>
 						<option value="false" selected={!product.isActive}>Draft</option>
 					</select>
 				</div>
 
-				<!-- Collections -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-					<h3 class="text-base font-medium text-gray-900 mb-4">Collections</h3>
-					<div class="flex flex-wrap gap-2">
-						{#each product.collections as col}
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-							{col.name}
-						</span>
+				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<h3 class="mb-4 text-base font-medium text-[#000]">Categories</h3>
+					<div class="space-y-2">
+						{#each allCollections as collection}
+							<label
+								class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 text-sm transition-colors hover:bg-yellow-50"
+							>
+								<span class="font-medium text-gray-700">{collection.name}</span>
+								<input
+									type="checkbox"
+									name="collectionIds"
+									value={collection.id}
+									checked={selectedCollectionIds.includes(collection.id)}
+									class="h-4 w-4 rounded border-gray-300 text-[#000] focus:ring-[#000]"
+								/>
+							</label>
 						{/each}
-						{#if product.collections.length === 0}
-						<p class="text-sm text-gray-400">No collections assigned</p>
-						{/if}
 					</div>
 				</div>
 
-				<!-- Slug info -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-					<h3 class="text-base font-medium text-gray-900 mb-2">URL Handle</h3>
-					<p class="text-sm text-gray-500 font-mono break-all">/shop/{product.slug}</p>
-				</div>
-
-				<!-- Save Action -->
-				<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6 flex flex-col gap-3">
-					<button type="submit" disabled={saving}
-						class="w-full bg-black text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-60 transition-colors">
-						{saving ? 'Saving...' : 'Save Changes'}
+				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<button
+						type="submit"
+						class="w-full rounded-md bg-[#000] px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800"
+					>
+						Save Changes
 					</button>
-					<a href="/admin/products" class="w-full text-center text-sm text-gray-500 hover:text-gray-700 py-1">
+					<a
+						href="/admin/products"
+						class="mt-3 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
+					>
 						Cancel
 					</a>
 				</div>
@@ -191,34 +402,42 @@
 	</form>
 </div>
 
-<!-- Delete Confirmation Modal -->
 {#if showDeleteConfirm}
-<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-	<div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
-		<div class="flex items-center space-x-3 mb-4">
-			<div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-				<svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-[#000]/50 p-4">
+		<div class="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
+			<div class="mb-4 flex items-center space-x-3">
+				<div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+					<svg class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+						/>
+					</svg>
+				</div>
+				<h3 class="text-lg font-semibold text-[#000]">Delete Product</h3>
 			</div>
-			<h3 class="text-lg font-semibold text-gray-900">Delete Product</h3>
-		</div>
-		<p class="text-sm text-gray-600 mb-6">
-			Are you sure you want to delete <strong>{product.name}</strong>? This will permanently remove the product, all its variants, and images. This action cannot be undone.
-		</p>
-		<div class="flex space-x-3">
-			<button onclick={() => showDeleteConfirm = false}
-				class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-				Cancel
-			</button>
-			<form method="POST" action="?/delete" use:enhance={() => {
-				deleting = true;
-				return async ({ update }) => { await update(); deleting = false; };
-			}} class="flex-1">
-				<button type="submit" disabled={deleting}
-					class="w-full px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 disabled:opacity-60 transition-colors">
-					{deleting ? 'Deleting...' : 'Yes, Delete'}
+			<p class="mb-6 text-sm text-gray-600">
+				Delete <strong>{product.name}</strong>? This removes the product, images, and variants.
+			</p>
+			<div class="flex space-x-3">
+				<button
+					type="button"
+					onclick={() => (showDeleteConfirm = false)}
+					class="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+				>
+					Cancel
 				</button>
-			</form>
+				<form method="POST" action="?/delete" class="flex-1">
+					<button
+						type="submit"
+						class="w-full rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+					>
+						Yes, Delete
+					</button>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 {/if}

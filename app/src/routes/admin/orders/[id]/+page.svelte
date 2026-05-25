@@ -17,7 +17,7 @@
 		</div>
 		<div class="flex items-center space-x-3">
 			<button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 shadow-sm">Refund</button>
-			<button class="bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 shadow-sm">Mark as Fulfilled</button>
+			<button class="bg-[#000] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 shadow-sm">Mark as Fulfilled</button>
 		</div>
 	</div>
 
@@ -52,11 +52,11 @@
 						<div class="grid grid-cols-2 gap-4">
 							<div>
 								<label class="block text-xs font-medium text-gray-700 mb-1">Tracking Number</label>
-								<input type="text" placeholder="Enter tracking number" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring-black focus:border-black px-3 py-2">
+								<input type="text" placeholder="Enter tracking number" class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring-[#000] focus:border-[#000] px-3 py-2">
 							</div>
 							<div>
 								<label class="block text-xs font-medium text-gray-700 mb-1">Shipping Carrier</label>
-								<select class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring-black focus:border-black px-3 py-2">
+								<select class="w-full border-gray-300 text-sm rounded-md shadow-sm focus:ring-[#000] focus:border-[#000] px-3 py-2">
 									<option>DHL Express</option>
 									<option>Aramex</option>
 									<option>FedEx</option>
@@ -77,7 +77,7 @@
 				<div class="p-6 space-y-2 text-sm">
 					<div class="flex justify-between text-gray-600"><span>Subtotal (1 item)</span><span>$145.00</span></div>
 					<div class="flex justify-between text-gray-600"><span>Shipping (DHL Express)</span><span>$25.00</span></div>
-					<div class="flex justify-between text-gray-600"><span>Discount (WELCOME15)</span><span class="text-green-600">-$21.75</span></div>
+					<div class="flex justify-between text-gray-600"><span>Discount (WELCOME15)</span><span class="text-orange-600">-$21.75</span></div>
 					<div class="flex justify-between font-medium text-gray-900 pt-3 border-t border-gray-100">
 						<span>Total</span><span>$148.25</span>
 					</div>
@@ -107,7 +107,7 @@
 						{/each}
 					</div>
 					<div class="mt-6 pt-4 border-t border-gray-100">
-						<textarea class="w-full border-gray-300 rounded-md text-sm focus:ring-black focus:border-black" rows="2" placeholder="Add a note to this order..."></textarea>
+						<textarea class="w-full border-gray-300 rounded-md text-sm focus:ring-[#000] focus:border-[#000]" rows="2" placeholder="Add a note to this order..."></textarea>
 						<button class="mt-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm hover:bg-gray-50 shadow-sm">Add Note</button>
 					</div>
 				</div>
@@ -123,18 +123,18 @@
 				</div>
 				<div class="p-6">
 					<div class="flex items-center gap-3 mb-4">
-						<div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-serif font-bold">F</div>
+						<div class="w-10 h-10 rounded-full bg-[#000] text-white flex items-center justify-center font-serif font-bold">F</div>
 						<div>
 							<a href="/admin/customers/1" class="text-sm font-medium text-blue-600 hover:underline">Fatima Zahra</a>
 							<p class="text-xs text-gray-400">3 previous orders</p>
 						</div>
 					</div>
 					<div class="space-y-2 text-sm">
-						<a href="mailto:fatima.z@example.com" class="flex items-center gap-2 text-gray-600 hover:text-black transition-colors">
+						<a href="mailto:fatima.z@example.com" class="flex items-center gap-2 text-gray-600 hover:text-[#000] transition-colors">
 							<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
 							fatima.z@example.com
 						</a>
-						<a href="tel:+15551234567" class="flex items-center gap-2 text-gray-600 hover:text-black transition-colors">
+						<a href="tel:+15551234567" class="flex items-center gap-2 text-gray-600 hover:text-[#000] transition-colors">
 							<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
 							+1 (555) 123-4567
 						</a>
@@ -163,10 +163,10 @@
 					<h3 class="font-medium text-gray-900">Update Status</h3>
 				</div>
 				<div class="p-6 space-y-3">
-					<select bind:value={currentStatus} class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring-black focus:border-black px-3 py-2">
+					<select bind:value={currentStatus} class="w-full border-gray-300 rounded-md text-sm shadow-sm focus:ring-[#000] focus:border-[#000] px-3 py-2">
 						{#each statuses as s}<option>{s}</option>{/each}
 					</select>
-					<button class="w-full bg-black text-white py-2 rounded-md text-sm font-medium hover:bg-gray-800">
+					<button class="w-full bg-[#000] text-white py-2 rounded-md text-sm font-medium hover:bg-gray-800">
 						Update Order
 					</button>
 				</div>

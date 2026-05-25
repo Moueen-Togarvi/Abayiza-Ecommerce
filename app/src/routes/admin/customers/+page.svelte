@@ -10,7 +10,7 @@
 			<button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 shadow-sm">
 				Export
 			</button>
-			<button class="bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 shadow-sm">
+			<button class="bg-[#000] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 shadow-sm">
 				Add customer
 			</button>
 		</div>
@@ -23,7 +23,7 @@
 				<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 					<svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 				</div>
-				<input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-black focus:border-black sm:text-sm" placeholder="Filter customers">
+				<input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#000] focus:border-[#000] sm:text-sm" placeholder="Filter customers">
 			</div>
 			<button class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 font-medium text-sm hover:bg-gray-50 bg-white">
 				Filter
@@ -37,7 +37,7 @@
 			<thead class="bg-gray-50">
 				<tr>
 					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-8">
-						<input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
+						<input type="checkbox" class="rounded border-gray-300 text-[#000] focus:ring-[#000]">
 					</th>
 					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer name</th>
 					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
@@ -49,7 +49,7 @@
 				{#each customers as customer}
 				<tr class="hover:bg-gray-50 group cursor-pointer" onclick={() => window.location.href = `/admin/customers/${customer.id}`}>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
+						<input type="checkbox" class="rounded border-gray-300 text-[#000] focus:ring-[#000]">
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
 						<div class="text-sm font-medium text-blue-600 hover:underline">{customer.firstName} {customer.lastName}</div>

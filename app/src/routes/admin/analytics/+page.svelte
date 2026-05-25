@@ -5,7 +5,7 @@
 <div class="max-w-7xl mx-auto">
 	<div class="flex justify-between items-center mb-6">
 		<h1 class="text-2xl font-bold text-gray-900">Analytics</h1>
-		<select bind:value={dateRange} class="border-gray-300 rounded-md text-sm shadow-sm focus:ring-black focus:border-black">
+		<select bind:value={dateRange} class="border-gray-300 rounded-md text-sm shadow-sm focus:ring-[#000] focus:border-[#000]">
 			<option>Today</option>
 			<option>Last 7 days</option>
 			<option>Last 30 days</option>
@@ -17,15 +17,15 @@
 	<!-- KPI Cards -->
 	<div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 		{#each [
-			{ label: 'Total Revenue', value: '$48,290', change: '+18.2%', up: true, color: 'green' },
+			{ label: 'Total Revenue', value: '$48,290', change: '+18.2%', up: true, color: 'orange' },
 			{ label: 'Total Orders', value: '312', change: '+11.4%', up: true, color: 'blue' },
 			{ label: 'New Customers', value: '94', change: '-3.1%', up: false, color: 'red' },
-			{ label: 'Avg. Order Value', value: '$154.78', change: '+6.0%', up: true, color: 'green' },
+			{ label: 'Avg. Order Value', value: '$154.78', change: '+6.0%', up: true, color: 'yellow' },
 		] as kpi}
 		<div class="bg-white shadow-sm rounded-lg border border-gray-200 p-5">
 			<p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">{kpi.label}</p>
 			<p class="text-2xl font-bold text-gray-900 mb-1">{kpi.value}</p>
-			<p class="text-sm {kpi.up ? 'text-green-600' : 'text-red-500'} font-medium">
+			<p class="text-sm {kpi.up ? 'text-blue-600' : 'text-red-500'} font-medium">
 				{kpi.up ? '↑' : '↓'} {kpi.change} vs previous period
 			</p>
 		</div>
@@ -41,7 +41,7 @@
 				<div class="flex space-x-2">
 					{#each ['Revenue', 'Orders'] as legend, i}
 					<span class="flex items-center text-xs text-gray-500">
-						<span class="w-3 h-1 inline-block rounded mr-1 {i === 0 ? 'bg-black' : 'bg-gold'}"></span>
+						<span class="w-3 h-1 inline-block rounded mr-1 {i === 0 ? 'bg-[#000]' : 'bg-yellow-500'}"></span>
 						{legend}
 					</span>
 					{/each}
@@ -62,10 +62,10 @@
 			</div>
 			<div class="p-6 space-y-4">
 				{#each [
-					{ source: 'Direct', percentage: 38, color: 'bg-black' },
-					{ source: 'Instagram', percentage: 28, color: 'bg-pink-400' },
+					{ source: 'Direct', percentage: 38, color: 'bg-[#000]' },
+					{ source: 'Instagram', percentage: 28, color: 'bg-orange-500' },
 					{ source: 'Google Search', percentage: 20, color: 'bg-blue-500' },
-					{ source: 'WhatsApp', percentage: 9, color: 'bg-green-500' },
+					{ source: 'WhatsApp', percentage: 9, color: 'bg-yellow-500' },
 					{ source: 'Other', percentage: 5, color: 'bg-gray-300' },
 				] as src}
 				<div>
