@@ -76,7 +76,7 @@
 	{:else}
 		<div class="border border-gray-200 bg-white p-10 text-center">
 			<p class="font-serif text-2xl text-black">No catalog products yet</p>
-			<a href="/admin/products/new" class="mt-4 inline-block text-sm font-semibold text-blue-700 underline">
+			<a href="/abayiza-secure-admin-7k9x2p/products/new" class="mt-4 inline-block text-sm font-semibold text-blue-700 underline">
 				Add products in admin
 			</a>
 		</div>

@@ -41,6 +41,6 @@
 		"pg": "^8.21.0"
 	},
 	"prisma": {
-		"seed": "ts-node prisma/seed.ts"
+		"seed": "node prisma/seed.mjs"
 	}
 }

@@ -91,6 +91,21 @@ npx vercel --prod
 Do not upload local `static/uploads` to Vercel. Production product/review uploads should go to
 Cloudinary because serverless file writes are not persistent.
 
+Admin panel URL:
+
+```txt
+/abayiza-secure-admin-7k9x2p/login
+```
+
+Minimal seed/reset command:
+
+```sh
+npx prisma db seed
+```
+
+Set `ADMIN_SEED_PASSWORD` before running the seed if you want a specific admin password. If it is
+missing, the seed command generates and prints a one-time password.
+
 ## Image Uploads On Vercel
 
 Vercel serverless deployments do not keep files written to `static/uploads`, so production image

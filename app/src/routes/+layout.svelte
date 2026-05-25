@@ -19,7 +19,7 @@
 	const iconButtonClass =
 		'inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/24 bg-[#14352d]/92 text-white shadow-[0_12px_28px_rgba(20,53,45,0.18)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c8ff46] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#14352d]';
 
-	let isAdminRoute = $derived(page.url.pathname.startsWith('/admin'));
+	let isAdminRoute = $derived(page.url.pathname.startsWith('/abayiza-secure-admin-7k9x2p'));
 	let isScrolled = $derived(scrollY > 24);
 </script>
 
@@ -234,12 +234,12 @@
 			href="https://wa.me/923116857822"
 			target="_blank"
 			rel="noreferrer"
-			class="fixed right-4 bottom-4 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_16px_36px_rgba(20,53,45,0.28)] ring-2 ring-white/80 transition-all duration-300 hover:-translate-y-1 hover:bg-[#1fb95a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] sm:right-6 sm:bottom-6 sm:h-14 sm:w-14"
+			class="fixed right-4 bottom-5 z-50 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/95 bg-[#25D366] text-white shadow-[0_12px_24px_rgba(20,53,45,0.22)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#1fb95a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] sm:right-6 sm:bottom-6 sm:h-10 sm:w-10"
 			aria-label="Contact Abayiza on WhatsApp"
 		>
-			<svg class="h-7 w-7 sm:h-8 sm:w-8" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+			<svg class="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 				<path
-					d="M16.04 3.2A12.7 12.7 0 0 0 5.3 22.7L3.6 28.9l6.35-1.66A12.7 12.7 0 1 0 16.04 3.2Zm0 2.27a10.43 10.43 0 1 1-5.3 19.42l-.38-.23-3.77.99 1-3.67-.25-.39A10.42 10.42 0 0 1 16.04 5.47Zm-4.44 5.56c-.23 0-.6.09-.92.44-.31.35-1.2 1.17-1.2 2.85s1.23 3.31 1.4 3.54c.17.23 2.38 3.8 5.86 5.18 2.9 1.15 3.5.92 4.13.86.63-.06 2.03-.83 2.31-1.63.29-.8.29-1.49.2-1.63-.08-.15-.31-.23-.66-.4-.34-.17-2.03-1-2.34-1.11-.31-.12-.54-.17-.77.17-.23.34-.89 1.11-1.09 1.34-.2.23-.4.26-.74.09-.34-.17-1.45-.53-2.76-1.7-1.02-.91-1.71-2.03-1.91-2.37-.2-.34-.02-.53.15-.7.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.12-.23.06-.43-.03-.6-.08-.17-.77-1.85-1.06-2.54-.28-.67-.56-.58-.77-.59h-.65Z"
+					d="M12.04 2a9.86 9.86 0 0 0-8.45 14.95L2.4 21.35l4.5-1.18A9.86 9.86 0 1 0 12.04 2Zm0 1.92a7.94 7.94 0 1 1-4.08 14.75l-.29-.17-2.68.7.72-2.6-.19-.3A7.94 7.94 0 0 1 12.04 3.92Zm-3.33 4.2c-.17 0-.45.06-.69.33-.24.26-.9.88-.9 2.14 0 1.27.92 2.49 1.05 2.66.13.17 1.78 2.85 4.41 3.89 2.18.86 2.62.69 3.1.64.47-.04 1.52-.62 1.73-1.22.22-.6.22-1.12.15-1.23-.06-.1-.24-.16-.5-.29-.26-.13-1.52-.75-1.76-.84-.23-.08-.4-.13-.57.13-.17.25-.67.83-.82 1-.15.18-.3.2-.56.07-.26-.13-1.09-.4-2.07-1.28-.77-.68-1.28-1.52-1.43-1.78-.15-.25-.02-.4.11-.52.12-.12.26-.31.39-.46.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.07-.13-.58-1.39-.8-1.91-.2-.5-.41-.43-.57-.44h-.49Z"
 				/>
 			</svg>
 		</a>
