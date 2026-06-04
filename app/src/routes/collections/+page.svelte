@@ -3,6 +3,23 @@
 	let collections = $derived((data.collections || []) as Array<any>);
 	let categorySearch = $state('');
 
+	const fallbackImages = [
+		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+		'/abaya22.png',
+		'/abaya11.png',
+		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png',
+		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png',
+		'/ChatGPT%20Image%20May%2025,%202026,%2006_07_28%20PM.png'
+	];
+
+	const slugImages: Record<string, string> = {
+		'nida-essentials': '/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+		occasion: '/abaya22.png',
+		'daily-wear': '/abaya11.png',
+		'premium-nida': '/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png',
+		'eid-edit': '/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png'
+	};
+
 	let filteredCollections = $derived(
 		collections.filter((collection) => {
 			const query = categorySearch.trim().toLowerCase();
@@ -13,6 +30,18 @@
 				.some((value) => String(value).toLowerCase().includes(query));
 		})
 	);
+
+	function collectionImage(collection: any, index: number) {
+		return (
+			collection.imageUrl ||
+			slugImages[collection.slug] ||
+			fallbackImages[index % fallbackImages.length]
+		);
+	}
+
+	function productCount(collection: any) {
+		return Number(collection._count?.products || 0);
+	}
 </script>
 
 <svelte:head>
@@ -29,7 +58,8 @@
 				<div>
 					<h1 class="font-serif text-4xl leading-tight uppercase sm:text-5xl">Collections</h1>
 					<p class="mt-4 max-w-2xl text-sm leading-6 font-medium text-[#596c62] sm:text-base">
-						Find abayas by category name, then open the matching shop view.
+						Browse Abayiza by edit: everyday nida, occasion layers, Eid pieces, and premium black
+						abayas.
 					</p>
 				</div>
 
@@ -71,17 +101,55 @@
 		</div>
 
 		{#if filteredCollections.length}
-			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each filteredCollections as collection}
+			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+				{#each filteredCollections as collection, index}
 					<a
 						href={`/shop?collection=${collection.slug}`}
-						class="group flex min-h-32 items-center justify-center rounded-md border border-[#14352d]/10 bg-white p-6 text-center shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1"
+						class="group overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_18px_42px_rgba(20,53,45,0.1)] transition-transform duration-300 hover:-translate-y-1"
 					>
-						<h2
-							class="font-serif text-2xl leading-tight text-[#14352d] transition-colors group-hover:text-[#b58b2b]"
-						>
-							{collection.name}
-						</h2>
+						<div class="relative aspect-[4/3] overflow-hidden bg-[#e4eee9]">
+							<img
+								src={collectionImage(collection, index)}
+								alt={collection.name}
+								width="1200"
+								height="900"
+								class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+							/>
+							<div
+								class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#14352d]/82 to-transparent p-4"
+							>
+								<span
+									class="inline-flex rounded-full bg-white/92 px-3 py-1 text-[0.66rem] font-black tracking-[0.12em] text-[#14352d] uppercase"
+								>
+									{productCount(collection)} Pieces
+								</span>
+							</div>
+						</div>
+						<div class="p-5">
+							<div class="flex items-start justify-between gap-4">
+								<h2
+									class="font-serif text-2xl leading-tight text-[#14352d] transition-colors group-hover:text-[#b58b2b]"
+								>
+									{collection.name}
+								</h2>
+								<span
+									class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors group-hover:bg-[#e4b43d]"
+									aria-hidden="true"
+								>
+									<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="1.8"
+											d="M7 17L17 7M9 7h8v8"
+										/>
+									</svg>
+								</span>
+							</div>
+							<p class="mt-5 text-xs font-black tracking-[0.14em] text-[#b58b2b] uppercase">
+								Shop Category
+							</p>
+						</div>
 					</a>
 				{/each}
 			</div>

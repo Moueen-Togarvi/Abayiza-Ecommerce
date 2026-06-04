@@ -32,7 +32,7 @@
 					name="orderNumber"
 					value={form?.query?.orderNumber ?? ''}
 					placeholder="ABY-0001"
-					class="w-full rounded-none border border-gray-300 bg-white p-3.5 text-sm outline-none transition-colors focus:border-black focus:ring-0"
+					class="w-full rounded-none border border-gray-300 bg-white p-3.5 text-sm transition-colors outline-none focus:border-black focus:ring-0"
 				/>
 			</div>
 			<div>
@@ -45,7 +45,7 @@
 					name="email"
 					value={form?.query?.email ?? ''}
 					placeholder="your@email.com"
-					class="w-full rounded-none border border-gray-300 bg-white p-3.5 text-sm outline-none transition-colors focus:border-black focus:ring-0"
+					class="w-full rounded-none border border-gray-300 bg-white p-3.5 text-sm transition-colors outline-none focus:border-black focus:ring-0"
 				/>
 			</div>
 			<button
@@ -56,7 +56,9 @@
 			</button>
 		</form>
 		{#if form?.error}
-			<p class="mt-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+			<p
+				class="mt-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800"
+			>
 				{form.error}
 			</p>
 		{/if}
@@ -64,7 +66,9 @@
 
 	{#if order}
 		<div class="mt-8 space-y-6">
-			<div class="flex flex-col gap-4 bg-black p-6 text-white sm:flex-row sm:items-center sm:justify-between">
+			<div
+				class="flex flex-col gap-4 bg-black p-6 text-white sm:flex-row sm:items-center sm:justify-between"
+			>
 				<div>
 					<p class="mb-1 text-xs tracking-widest text-white/60 uppercase">
 						Order {order.orderNumber}
@@ -76,7 +80,7 @@
 				</div>
 				<div class="text-left sm:text-right">
 					<p class="mb-1 text-xs tracking-widest text-white/60 uppercase">Tracking</p>
-					<p class="text-sm font-mono">{order.trackingNumber || 'Not assigned yet'}</p>
+					<p class="font-mono text-sm">{order.trackingNumber || 'Not assigned yet'}</p>
 				</div>
 			</div>
 
@@ -118,6 +122,14 @@
 			class="text-sm font-medium tracking-widest text-green-700 uppercase transition-colors hover:text-green-800"
 		>
 			WhatsApp Abayiza
+		</a>
+		<a
+			href="https://wa.me/923346657779"
+			target="_blank"
+			rel="noreferrer"
+			class="ml-4 text-sm font-medium tracking-widest text-green-700 uppercase transition-colors hover:text-green-800"
+		>
+			WhatsApp 2
 		</a>
 	</div>
 </div>

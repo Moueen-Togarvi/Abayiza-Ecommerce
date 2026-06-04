@@ -14,6 +14,14 @@ const productInclude = {
 	collections: true
 } as const;
 
+const SHOP_PAGE_SIZE = 8;
+
+function requestedPageFrom(url: URL) {
+	const requestedPage = Number(url.searchParams.get('page') ?? '1');
+
+	return Number.isFinite(requestedPage) && requestedPage > 0 ? Math.floor(requestedPage) : 1;
+}
+
 function filtersFrom(url: URL) {
 	return {
 		q: String(url.searchParams.get('q') ?? '').trim(),
@@ -60,8 +68,37 @@ function buildOptions(products: any[]) {
 	};
 }
 
+function buildPagination(total: number, requestedPage: number) {
+	const totalPages = Math.max(1, Math.ceil(total / SHOP_PAGE_SIZE));
+	const page = Math.min(requestedPage, totalPages);
+
+	return {
+		page,
+		pageSize: SHOP_PAGE_SIZE,
+		total,
+		totalPages,
+		hasPrevious: page > 1,
+		hasNext: page < totalPages,
+		previousPage: Math.max(1, page - 1),
+		nextPage: Math.min(totalPages, page + 1)
+	};
+}
+
+function pageSlice(products: any[], requestedPage: number) {
+	const pagination = buildPagination(products.length, requestedPage);
+
+	return {
+		pagination,
+		products: products.slice(
+			(pagination.page - 1) * SHOP_PAGE_SIZE,
+			pagination.page * SHOP_PAGE_SIZE
+		)
+	};
+}
+
 export const load: PageServerLoad = async ({ url }) => {
 	const filters = filtersFrom(url);
+	const requestedPage = requestedPageFrom(url);
 
 	try {
 		const [allProducts, collections] = await Promise.all([
@@ -80,13 +117,15 @@ export const load: PageServerLoad = async ({ url }) => {
 			productMatchesFilters(product, filters)
 		);
 		const options = buildOptions(serializedProducts);
+		const pagedProducts = pageSlice(products, requestedPage);
 
 		return {
-			products,
+			products: pagedProducts.products,
 			collections,
 			colors: options.colors,
 			sizes: options.sizes,
 			filters,
+			pagination: pagedProducts.pagination,
 			totalProducts: serializedProducts.length,
 			selectedCollection: filters.category
 		};
@@ -100,13 +139,15 @@ export const load: PageServerLoad = async ({ url }) => {
 		const allProducts = getFallbackProducts();
 		const products = allProducts.filter((product) => productMatchesFilters(product, filters));
 		const options = buildOptions(allProducts);
+		const pagedProducts = pageSlice(products, requestedPage);
 
 		return {
-			products,
+			products: pagedProducts.products,
 			collections: getFallbackCollections(),
 			colors: options.colors,
 			sizes: options.sizes,
 			filters,
+			pagination: pagedProducts.pagination,
 			totalProducts: allProducts.length,
 			selectedCollection: filters.category
 		};

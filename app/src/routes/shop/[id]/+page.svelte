@@ -14,9 +14,7 @@
 	let colors = $derived(
 		Array.from(
 			new Set<string>(
-				(product.variants || [])
-					.map((variant: any) => String(variant.color || ''))
-					.filter(Boolean)
+				(product.variants || []).map((variant: any) => String(variant.color || '')).filter(Boolean)
 			)
 		)
 	);
@@ -115,7 +113,9 @@
 <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 	<div class="flex flex-col gap-12 lg:flex-row lg:gap-20">
 		<div class="flex w-full flex-col-reverse gap-4 lg:w-1/2 lg:flex-row">
-			<div class="flex flex-shrink-0 gap-4 overflow-x-auto pb-2 lg:w-20 lg:flex-col lg:overflow-visible lg:pb-0">
+			<div
+				class="flex flex-shrink-0 gap-4 overflow-x-auto pb-2 lg:w-20 lg:flex-col lg:overflow-visible lg:pb-0"
+			>
 				{#each images as image, index}
 					<button
 						type="button"
@@ -126,7 +126,11 @@
 						aria-label={`View product image ${index + 1}`}
 						onclick={() => (activeImage = index)}
 					>
-						<img src={image} alt={`${product.name} ${index + 1}`} class="h-full w-full object-cover object-top" />
+						<img
+							src={image}
+							alt={`${product.name} ${index + 1}`}
+							class="h-full w-full object-cover object-top"
+						/>
 					</button>
 				{/each}
 			</div>
@@ -159,9 +163,13 @@
 				<p class="mb-3 text-xs font-bold tracking-[0.18em] text-gold uppercase">
 					{product.collections?.map((collection: any) => collection.name).join(' / ') || 'Abayiza'}
 				</p>
-				<h1 class="mb-2 font-serif text-3xl tracking-wide text-black md:text-4xl">{product.name}</h1>
+				<h1 class="mb-2 font-serif text-3xl tracking-wide text-black md:text-4xl">
+					{product.name}
+				</h1>
 				<div class="mb-4 flex items-center space-x-4">
-					<p class="text-2xl font-light text-black">{formatMoney(product.salePrice || product.price)}</p>
+					<p class="text-2xl font-light text-black">
+						{formatMoney(product.salePrice || product.price)}
+					</p>
 					{#if product.salePrice}
 						<p class="text-xl font-light text-red-600 line-through">{formatMoney(product.price)}</p>
 					{/if}
@@ -204,7 +212,10 @@
 							Size:
 							<span class="ml-1 font-light text-gray-500 normal-case">{selectedSize}</span>
 						</span>
-						<a href="/size-guide" class="text-xs text-gray-500 underline transition-colors hover:text-black">
+						<a
+							href="/size-guide"
+							class="text-xs text-gray-500 underline transition-colors hover:text-black"
+						>
 							Size Guide
 						</a>
 					</div>
@@ -222,7 +233,11 @@
 						{/each}
 					</div>
 					{#if selectedVariant}
-						<p class="mt-2 text-xs font-light {Number(selectedVariant.stockCount || 0) > 0 ? 'text-gray-500' : 'text-red-600'}">
+						<p
+							class="mt-2 text-xs font-light {Number(selectedVariant.stockCount || 0) > 0
+								? 'text-gray-500'
+								: 'text-red-600'}"
+						>
 							{Number(selectedVariant.stockCount || 0) > 0
 								? `${selectedVariant.stockCount} available in this option`
 								: 'Out of stock in this option'}
@@ -249,7 +264,8 @@
 					/>
 					<button
 						type="button"
-						disabled={productOutOfStock || (selectedVariant && quantity >= Number(selectedVariant.stockCount || 0))}
+						disabled={productOutOfStock ||
+							(selectedVariant && quantity >= Number(selectedVariant.stockCount || 0))}
 						class="flex w-10 items-center justify-center text-gray-500 transition-colors hover:bg-gray-50 hover:text-black disabled:cursor-not-allowed disabled:text-gray-300"
 						onclick={() => quantity++}
 					>
@@ -278,6 +294,14 @@
 					>
 						Chat with Abayiza on WhatsApp
 					</a>
+					<a
+						href={`https://wa.me/923346657779?text=${encodeURIComponent(`I want to ask about ${product.name}`)}`}
+						target="_blank"
+						rel="noreferrer"
+						class="mt-2 block text-xs font-semibold text-green-700 underline"
+					>
+						Chat on WhatsApp 2
+					</a>
 				</div>
 			</div>
 
@@ -285,7 +309,8 @@
 				<div class="flex space-x-8 border-b border-gray-200">
 					<button
 						type="button"
-						class="relative py-4 text-sm font-medium tracking-widest uppercase {activeTab === 'details'
+						class="relative py-4 text-sm font-medium tracking-widest uppercase {activeTab ===
+						'details'
 							? 'text-black'
 							: 'text-gray-400 hover:text-black'}"
 						onclick={() => (activeTab = 'details')}
@@ -297,7 +322,8 @@
 					</button>
 					<button
 						type="button"
-						class="relative py-4 text-sm font-medium tracking-widest uppercase {activeTab === 'shipping'
+						class="relative py-4 text-sm font-medium tracking-widest uppercase {activeTab ===
+						'shipping'
 							? 'text-black'
 							: 'text-gray-400 hover:text-black'}"
 						onclick={() => (activeTab = 'shipping')}
@@ -312,18 +338,24 @@
 				<div class="py-6 text-sm leading-relaxed font-light text-gray-600">
 					{#if activeTab === 'details'}
 						<ul class="space-y-2">
-							<li><strong>Fabric:</strong> {product.fabricDetails || 'Premium modestwear fabric'}</li>
-							<li><strong>Categories:</strong> {product.collections?.map((collection: any) => collection.name).join(', ')}</li>
+							<li>
+								<strong>Fabric:</strong>
+								{product.fabricDetails || 'Premium modestwear fabric'}
+							</li>
+							<li>
+								<strong>Categories:</strong>
+								{product.collections?.map((collection: any) => collection.name).join(', ')}
+							</li>
 							<li><strong>SKU:</strong> {selectedVariant?.sku || 'Available on request'}</li>
 						</ul>
 					{:else}
 						<p class="mb-4">
-							<strong>Shipping:</strong> Orders are prepared after confirmation on WhatsApp or
-							checkout. Delivery charges and timings are confirmed before dispatch.
+							<strong>Shipping:</strong> Orders are prepared after confirmation on WhatsApp or checkout.
+							Delivery charges and timings are confirmed before dispatch.
 						</p>
 						<p>
-							<strong>Returns:</strong> Exchanges are handled according to product condition and
-							availability. Please contact Abayiza support for help with sizing before ordering.
+							<strong>Returns:</strong> Exchanges are handled according to product condition and availability.
+							Please contact Abayiza support for help with sizing before ordering.
 						</p>
 					{/if}
 				</div>
@@ -336,7 +368,9 @@
 	<div class="border-t border-gray-100 bg-white py-20">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="mb-12 text-center">
-				<h2 class="mb-4 font-serif text-2xl tracking-widest text-black uppercase">Related Products</h2>
+				<h2 class="mb-4 font-serif text-2xl tracking-widest text-black uppercase">
+					Related Products
+				</h2>
 				<div class="mx-auto h-[1px] w-12 bg-gold"></div>
 			</div>
 
@@ -350,8 +384,12 @@
 								class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
 							/>
 						</div>
-						<h3 class="mb-1 font-serif text-sm transition-colors group-hover:text-gold">{item.name}</h3>
-						<p class="text-xs font-medium text-gray-500">{formatMoney(item.salePrice || item.price)}</p>
+						<h3 class="mb-1 font-serif text-sm transition-colors group-hover:text-gold">
+							{item.name}
+						</h3>
+						<p class="text-xs font-medium text-gray-500">
+							{formatMoney(item.salePrice || item.price)}
+						</p>
 					</a>
 				{/each}
 			</div>

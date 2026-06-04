@@ -2,16 +2,43 @@
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
+	type Pagination = {
+		page: number;
+		pageSize: number;
+		total: number;
+		totalPages: number;
+		hasPrevious: boolean;
+		hasNext: boolean;
+		previousPage: number;
+		nextPage: number;
+	};
+
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
 	let collections = $derived((data.collections || []) as Array<any>);
 	let colors = $derived((data.colors || []) as string[]);
 	let sizes = $derived((data.sizes || []) as string[]);
+	let pagination = $derived(
+		(data.pagination || {
+			page: 1,
+			pageSize: 8,
+			total: products.length,
+			totalPages: 1,
+			hasPrevious: false,
+			hasNext: false,
+			previousPage: 1,
+			nextPage: 1
+		}) as Pagination
+	);
 	let filters = $derived(
 		(data.filters || { q: '', category: '', color: '', size: '' }) as Record<string, string>
 	);
 	let totalProducts = $derived(Number(data.totalProducts || products.length));
+	let visiblePages = $derived(
+		buildVisiblePages(Number(pagination.page), Number(pagination.totalPages))
+	);
 	let isGridView = $state(true);
+	let showFilters = $state(false);
 	let searchQuery = $state('');
 	let selectedCategory = $state('');
 	let selectedColor = $state('');
@@ -33,7 +60,8 @@
 		Sage: '#8fa99a',
 		Olive: '#64763c',
 		Charcoal: '#374151',
-		Navy: '#172554'
+		Navy: '#172554',
+		Mocha: '#7b5142'
 	};
 
 	function productImage(item: any) {
@@ -71,6 +99,23 @@
 			size: variant?.size
 		});
 	}
+
+	function pageHref(page: number) {
+		const params = new URLSearchParams();
+		params.set('page', String(page));
+		if (filters.q) params.set('q', filters.q);
+		if (filters.category) params.set('category', filters.category);
+		if (filters.color) params.set('color', filters.color);
+		if (filters.size) params.set('size', filters.size);
+
+		return `/shop?${params.toString()}`;
+	}
+
+	function buildVisiblePages(currentPage: number, totalPages: number) {
+		return Array.from(
+			new Set([1, currentPage - 1, currentPage, currentPage + 1, totalPages])
+		).filter((page) => page >= 1 && page <= totalPages);
+	}
 </script>
 
 <svelte:head>
@@ -92,7 +137,7 @@
 					<span
 						class="rounded-full border border-[#14352d]/10 bg-white px-4 py-2 text-xs font-bold text-[#14352d]"
 					>
-						{products.length} Pieces
+						{pagination.total} Matching
 					</span>
 					<span
 						class="rounded-full border border-[#14352d]/10 bg-white px-4 py-2 text-xs font-bold text-[#14352d]"
@@ -103,95 +148,21 @@
 			</div>
 		</div>
 
-		<form
-			method="GET"
-			action="/shop"
-			class="mb-8 grid gap-3 rounded-md border border-[#14352d]/10 bg-white/90 p-4 shadow-[0_18px_45px_rgba(20,53,45,0.08)] md:grid-cols-[1.4fr_1fr_1fr_1fr_auto_auto] md:items-end"
-		>
-			<div>
-				<label for="shop-q" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
-					Search
-				</label>
-				<input
-					id="shop-q"
-					name="q"
-					type="search"
-					bind:value={searchQuery}
-					placeholder="Search abayas"
-					class="w-full rounded-md border-[#14352d]/15 text-sm focus:border-[#14352d] focus:ring-[#14352d]"
-				/>
-			</div>
-			<div>
-				<label
-					for="shop-category"
-					class="mb-1 block text-xs font-black tracking-[0.12em] uppercase"
-				>
-					Category
-				</label>
-				<select
-					id="shop-category"
-					name="category"
-					bind:value={selectedCategory}
-					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
-				>
-					<option value="">All categories</option>
-					{#each collections as collection}
-						<option value={collection.slug}>{collection.name}</option>
-					{/each}
-				</select>
-			</div>
-			<div>
-				<label for="shop-color" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
-					Color
-				</label>
-				<select
-					id="shop-color"
-					name="color"
-					bind:value={selectedColor}
-					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
-				>
-					<option value="">All colors</option>
-					{#each colors as color}
-						<option value={color}>{color}</option>
-					{/each}
-				</select>
-			</div>
-			<div>
-				<label for="shop-size" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
-					Size
-				</label>
-				<select
-					id="shop-size"
-					name="size"
-					bind:value={selectedSize}
-					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
-				>
-					<option value="">All sizes</option>
-					{#each sizes as size}
-						<option value={size}>{size}</option>
-					{/each}
-				</select>
-			</div>
-			<button
-				type="submit"
-				class="inline-flex min-h-10 items-center justify-center rounded-full bg-[#14352d] px-5 text-xs font-black tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
-			>
-				Apply
-			</button>
-			<a
-				href="/shop"
-				class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-5 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase transition-colors hover:bg-[#f5f0e5]"
-			>
-				Clear
-			</a>
-		</form>
-
 		<div
 			class="mb-8 flex flex-col gap-4 rounded-md border border-[#14352d]/10 bg-white/86 p-4 shadow-[0_18px_45px_rgba(20,53,45,0.08)] md:flex-row md:items-center md:justify-between"
 		>
-			<p class="text-sm font-bold text-[#596c62]">
-				Showing {products.length} of {totalProducts} products
-			</p>
+			<div class="flex items-center justify-between gap-3">
+				<p class="text-sm font-bold text-[#596c62]">
+					Showing {products.length} of {pagination.total} matching products
+				</p>
+				<button
+					type="button"
+					class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-[#fbf9f2] px-4 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase md:hidden"
+					onclick={() => (showFilters = !showFilters)}
+				>
+					Filters
+				</button>
+			</div>
 
 			<div class="flex flex-wrap items-center justify-between gap-4 md:justify-end">
 				<label class="flex items-center gap-2 text-sm font-medium text-[#596c62]">
@@ -237,49 +208,174 @@
 			</div>
 		</div>
 
-		<div class="flex flex-col gap-8 md:flex-row">
-			<aside class="hidden">
-				<div class="sticky top-28 space-y-4">
-					<div
-						class="rounded-md border border-[#14352d]/10 bg-white/90 p-5 shadow-[0_14px_34px_rgba(20,53,45,0.06)]"
-					>
-						<div class="mb-5 flex items-center justify-between">
-							<h2 class="text-xs font-black tracking-[0.16em] uppercase">Filters</h2>
-							<a href="/shop" class="text-xs font-bold text-[#b58b2b]">Clear</a>
+		<div class="flex flex-col gap-8 md:flex-row md:items-start">
+			<aside class="{showFilters ? 'block' : 'hidden'} w-full shrink-0 md:block md:w-72 lg:w-80">
+				<form
+					method="GET"
+					action="/shop"
+					class="sticky top-28 rounded-md border border-[#14352d]/10 bg-white/92 p-3 shadow-[0_18px_45px_rgba(20,53,45,0.08)]"
+				>
+					<div class="mb-3 flex items-center justify-between gap-3">
+						<h2 class="text-sm font-black tracking-[0.14em] text-[#b58b2b] uppercase">
+							Filter Search
+						</h2>
+						<a
+							href="/shop"
+							class="rounded-full border border-[#14352d]/10 px-2.5 py-1 text-[0.65rem] font-black tracking-[0.1em] text-[#14352d] uppercase transition-colors hover:bg-[#fbf9f2]"
+						>
+							Clear
+						</a>
+					</div>
+
+					<div class="space-y-3">
+						<div>
+							<label
+								for="shop-sidebar-q"
+								class="mb-1 block text-[0.68rem] font-black tracking-[0.12em] uppercase"
+							>
+								Search
+							</label>
+							<input
+								id="shop-sidebar-q"
+								name="q"
+								type="search"
+								bind:value={searchQuery}
+								placeholder="Search by name, color..."
+								class="h-9 w-full rounded-md border-[#14352d]/15 bg-[#fbf9f2] text-xs font-semibold text-[#14352d] placeholder:text-[#596c62]/70 focus:border-[#14352d] focus:ring-[#14352d]"
+							/>
 						</div>
 
-						<div class="border-t border-[#14352d]/10 py-5 first:border-t-0 first:pt-0">
-							<h3 class="mb-4 text-xs font-black tracking-[0.14em] uppercase">Categories</h3>
-							<ul class="space-y-3">
+						<div class="border-t border-[#14352d]/10 pt-3">
+							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Category</h3>
+							<div class="grid gap-1.5">
+								<label
+									class="flex min-h-8 cursor-pointer items-center justify-between rounded-md border px-2.5 text-xs font-bold transition-colors {selectedCategory ===
+									''
+										? 'border-[#14352d] bg-[#14352d] text-white'
+										: 'border-[#14352d]/10 bg-[#fbf9f2] text-[#596c62] hover:border-[#14352d]/30 hover:text-[#14352d]'}"
+								>
+									<span>All categories</span>
+									<input
+										class="sr-only"
+										type="radio"
+										name="category"
+										value=""
+										bind:group={selectedCategory}
+									/>
+								</label>
 								{#each collections as collection}
-									<li>
-										<a
-											href={`/shop?collection=${collection.slug}`}
-											class="flex items-center justify-between gap-3 rounded-md px-2 py-1.5 text-sm font-medium text-[#596c62] transition-colors hover:bg-[#fbf9f2] hover:text-[#14352d]"
-										>
-											<span>{collection.name}</span>
-										</a>
-									</li>
+									<label
+										class="flex min-h-8 cursor-pointer items-center justify-between gap-2 rounded-md border px-2.5 text-xs font-bold transition-colors {selectedCategory ===
+										collection.slug
+											? 'border-[#14352d] bg-[#14352d] text-white'
+											: 'border-[#14352d]/10 bg-[#fbf9f2] text-[#596c62] hover:border-[#14352d]/30 hover:text-[#14352d]'}"
+									>
+										<span>{collection.name}</span>
+										<input
+											class="sr-only"
+											type="radio"
+											name="category"
+											value={collection.slug}
+											bind:group={selectedCategory}
+										/>
+									</label>
 								{/each}
-							</ul>
+							</div>
 						</div>
 
-						<div class="border-t border-[#14352d]/10 pt-5">
-							<h3 class="mb-4 text-xs font-black tracking-[0.14em] uppercase">Color</h3>
-							<div class="flex flex-wrap gap-3">
+						<div class="border-t border-[#14352d]/10 pt-3">
+							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Color</h3>
+							<div class="grid grid-cols-2 gap-1.5">
+								<label
+									class="flex min-h-8 cursor-pointer items-center gap-2 rounded-md border px-2.5 text-xs font-bold transition-colors {selectedColor ===
+									''
+										? 'border-[#14352d] bg-[#14352d] text-white'
+										: 'border-[#14352d]/10 bg-[#fbf9f2] text-[#596c62] hover:border-[#14352d]/30 hover:text-[#14352d]'}"
+								>
+									<span
+										class="h-3.5 w-3.5 rounded-full border border-current bg-white"
+										aria-hidden="true"
+									></span>
+									<span>All</span>
+									<input
+										class="sr-only"
+										type="radio"
+										name="color"
+										value=""
+										bind:group={selectedColor}
+									/>
+								</label>
 								{#each colors as color}
-									<button
-										type="button"
-										class="h-7 w-7 rounded-full border border-[#14352d]/12 ring-1 ring-[#14352d]/12 ring-offset-2 ring-offset-white transition-transform hover:scale-110"
-										style={`background-color: ${colorHex[color] || '#d9d0bd'}`}
-										title={color}
-										aria-label={color}
-									></button>
+									<label
+										class="flex min-h-8 cursor-pointer items-center gap-2 rounded-md border px-2.5 text-xs font-bold transition-colors {selectedColor ===
+										color
+											? 'border-[#14352d] bg-[#14352d] text-white'
+											: 'border-[#14352d]/10 bg-[#fbf9f2] text-[#596c62] hover:border-[#14352d]/30 hover:text-[#14352d]'}"
+									>
+										<span
+											class="h-3.5 w-3.5 rounded-full border border-[#14352d]/20 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.35)]"
+											style={`background-color: ${colorHex[color] || '#d9d0bd'}`}
+											aria-hidden="true"
+										></span>
+										<span>{color}</span>
+										<input
+											class="sr-only"
+											type="radio"
+											name="color"
+											value={color}
+											bind:group={selectedColor}
+										/>
+									</label>
+								{/each}
+							</div>
+						</div>
+
+						<div class="border-t border-[#14352d]/10 pt-3">
+							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Size</h3>
+							<div class="flex flex-wrap gap-1.5">
+								<label
+									class="inline-flex min-h-8 cursor-pointer items-center rounded-full border px-3 text-xs font-black transition-colors {selectedSize ===
+									''
+										? 'border-[#14352d] bg-[#14352d] text-white'
+										: 'border-[#14352d]/10 bg-[#fbf9f2] text-[#596c62] hover:border-[#14352d]/30 hover:text-[#14352d]'}"
+								>
+									All
+									<input
+										class="sr-only"
+										type="radio"
+										name="size"
+										value=""
+										bind:group={selectedSize}
+									/>
+								</label>
+								{#each sizes as size}
+									<label
+										class="inline-flex min-h-8 cursor-pointer items-center rounded-full border px-3 text-xs font-black transition-colors {selectedSize ===
+										size
+											? 'border-[#14352d] bg-[#14352d] text-white'
+											: 'border-[#14352d]/10 bg-[#fbf9f2] text-[#596c62] hover:border-[#14352d]/30 hover:text-[#14352d]'}"
+									>
+										{size}
+										<input
+											class="sr-only"
+											type="radio"
+											name="size"
+											value={size}
+											bind:group={selectedSize}
+										/>
+									</label>
 								{/each}
 							</div>
 						</div>
 					</div>
-				</div>
+
+					<button
+						type="submit"
+						class="mt-4 inline-flex min-h-9 w-full items-center justify-center rounded-full bg-[#14352d] px-4 text-xs font-black tracking-[0.1em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+					>
+						Apply Filters
+					</button>
+				</form>
 			</aside>
 
 			<div class="min-w-0 flex-1">
@@ -404,8 +500,68 @@
 				<div
 					class="mt-14 border-t border-[#14352d]/10 pt-8 text-center text-sm font-bold text-[#596c62]"
 				>
-					Showing {products.length} matching products.
+					Page {pagination.page} of {pagination.totalPages} · {pagination.pageSize} per page
 				</div>
+
+				{#if pagination.totalPages > 1}
+					<nav
+						class="mt-8 flex flex-col items-center justify-between gap-4 text-sm font-bold text-[#14352d] sm:flex-row"
+						aria-label="Shop pagination"
+					>
+						{#if pagination.hasPrevious}
+							<a
+								href={pageHref(Number(pagination.previousPage))}
+								class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-5 transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+							>
+								Previous
+							</a>
+						{:else}
+							<span
+								class="inline-flex min-h-10 cursor-not-allowed items-center justify-center rounded-full border border-[#14352d]/8 bg-white/50 px-5 text-[#596c62]/55"
+							>
+								Previous
+							</span>
+						{/if}
+
+						<div class="flex flex-wrap items-center justify-center gap-2">
+							{#each visiblePages as page, index}
+								{#if index > 0 && page - visiblePages[index - 1] > 1}
+									<span class="px-1 text-[#596c62]">...</span>
+								{/if}
+								{#if page === pagination.page}
+									<span
+										aria-current="page"
+										class="inline-flex h-10 min-w-10 items-center justify-center rounded-full bg-[#14352d] px-3 text-white"
+									>
+										{page}
+									</span>
+								{:else}
+									<a
+										href={pageHref(page)}
+										class="inline-flex h-10 min-w-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-3 transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+									>
+										{page}
+									</a>
+								{/if}
+							{/each}
+						</div>
+
+						{#if pagination.hasNext}
+							<a
+								href={pageHref(Number(pagination.nextPage))}
+								class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-5 transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+							>
+								Next
+							</a>
+						{:else}
+							<span
+								class="inline-flex min-h-10 cursor-not-allowed items-center justify-center rounded-full border border-[#14352d]/8 bg-white/50 px-5 text-[#596c62]/55"
+							>
+								Next
+							</span>
+						{/if}
+					</nav>
+				{/if}
 			</div>
 		</div>
 	</div>

@@ -1,4 +1,5 @@
 import { setAdminFlash } from '$lib/server/admin-flash';
+import { deleteCategoryImageFiles, saveCategoryImageFile } from '$lib/server/category-image-files';
 import prisma from '$lib/server/prisma';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -19,7 +20,6 @@ const readCategoryForm = (data: FormData) => {
 		name,
 		slug: toSlug(name),
 		description: null,
-		imageUrl: null,
 		displayOrder: 0,
 		isVisible
 	};
@@ -60,12 +60,16 @@ export const actions: Actions = {
 		}
 
 		try {
+			const imageUrl = await saveCategoryImageFile(data);
 			await prisma.collection.create({
-				data: category
+				data: {
+					...category,
+					imageUrl
+				}
 			});
 		} catch {
 			return fail(500, {
-				createError: 'Failed to create category.'
+				createError: 'Failed to create category. Check the image file and try again.'
 			});
 		}
 
@@ -95,13 +99,29 @@ export const actions: Actions = {
 		}
 
 		try {
+			const currentCategory = await prisma.collection.findUnique({
+				where: { id },
+				select: { imageUrl: true }
+			});
+			const uploadedImageUrl = await saveCategoryImageFile(data);
+			const removeImage = data.get('removeImage') === 'on';
+			const nextImageUrl =
+				uploadedImageUrl || (removeImage ? null : currentCategory?.imageUrl || null);
+
 			await prisma.collection.update({
 				where: { id },
-				data: category
+				data: {
+					...category,
+					imageUrl: nextImageUrl
+				}
 			});
+
+			if ((uploadedImageUrl || removeImage) && currentCategory?.imageUrl) {
+				await deleteCategoryImageFiles([currentCategory.imageUrl]);
+			}
 		} catch {
 			return fail(500, {
-				updateError: 'Failed to update category.'
+				updateError: 'Failed to update category. Check the image file and try again.'
 			});
 		}
 
@@ -120,9 +140,16 @@ export const actions: Actions = {
 		}
 
 		try {
+			const category = await prisma.collection.findUnique({
+				where: { id },
+				select: { imageUrl: true }
+			});
 			await prisma.collection.delete({
 				where: { id }
 			});
+			if (category?.imageUrl) {
+				await deleteCategoryImageFiles([category.imageUrl]);
+			}
 		} catch {
 			return fail(500, {
 				deleteError: 'Failed to delete category.'

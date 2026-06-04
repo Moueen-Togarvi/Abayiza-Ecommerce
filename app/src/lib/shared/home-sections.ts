@@ -1,6 +1,6 @@
 export const HOME_PAGE_KEY = 'home';
 
-export const HOME_SECTION_PAGE_SIZE = 12;
+export const HOME_SECTION_PAGE_SIZE = 8;
 
 export const HOME_SECTION_CONFIGS = [
 	{

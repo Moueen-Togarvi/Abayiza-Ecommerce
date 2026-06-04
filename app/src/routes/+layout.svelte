@@ -19,6 +19,8 @@
 
 	const iconButtonClass =
 		'inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/24 bg-[#14352d]/92 text-white shadow-[0_12px_28px_rgba(20,53,45,0.18)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c8ff46] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#14352d]';
+	const primaryWhatsAppHref = 'https://wa.me/923116857822';
+	const secondaryWhatsAppHref = 'https://wa.me/923346657779';
 
 	let isAdminRoute = $derived(page.url.pathname.startsWith('/abayiza-secure-admin-7k9x2p'));
 	let isScrolled = $derived(scrollY > 24);
@@ -26,7 +28,9 @@
 
 <svelte:window bind:scrollY />
 
-<div class={`flex min-h-screen flex-col font-sans text-black ${isAdminRoute ? 'bg-white' : 'bg-cream'}`}>
+<div
+	class={`flex min-h-screen flex-col font-sans text-black ${isAdminRoute ? 'bg-white' : 'bg-cream'}`}
+>
 	{#if !isAdminRoute}
 		<!-- Navbar -->
 		<header class="sticky top-0 z-50 px-3 pt-3 sm:px-5">
@@ -229,19 +233,35 @@
 	</main>
 
 	{#if !isAdminRoute}
-		<a
-			href="https://wa.me/923116857822"
-			target="_blank"
-			rel="noreferrer"
-			class="fixed right-4 bottom-5 z-50 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/95 bg-[#25D366] text-white shadow-[0_12px_24px_rgba(20,53,45,0.22)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#1fb95a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] sm:right-6 sm:bottom-6 sm:h-10 sm:w-10"
-			aria-label="Contact Abayiza on WhatsApp"
-		>
-			<svg class="h-5 w-5 translate-x-[0.5px] -translate-y-[0.5px] sm:h-[1.35rem] sm:w-[1.35rem]" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-				<path
-					d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.066 7.926a7.9 7.9 0 0 0 1.057 3.965L0 16l4.204-1.103a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.928-7.93a7.9 7.9 0 0 0-2.325-5.606M7.998 14.524a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.002 3.628-2.959 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.331.065-.133.034-.247-.015-.346-.05-.099-.445-1.076-.612-1.47-.16-.39-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.397 2.132 3.383 2.992.473.205.842.327 1.13.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"
-				/>
-			</svg>
-		</a>
+		<div class="fixed right-4 bottom-5 z-50 flex flex-col items-end gap-2 sm:right-6 sm:bottom-6">
+			<a
+				href={secondaryWhatsAppHref}
+				target="_blank"
+				rel="noreferrer"
+				class="inline-flex min-h-8 items-center justify-center rounded-full border border-white/95 bg-white px-3 text-[0.65rem] font-black tracking-[0.08em] text-[#14352d] uppercase shadow-[0_12px_24px_rgba(20,53,45,0.18)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#c8ff46] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366]"
+				aria-label="Contact Abayiza on WhatsApp second number"
+			>
+				WhatsApp 2
+			</a>
+			<a
+				href={primaryWhatsAppHref}
+				target="_blank"
+				rel="noreferrer"
+				class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/95 bg-[#25D366] text-white shadow-[0_12px_24px_rgba(20,53,45,0.22)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#1fb95a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] sm:h-10 sm:w-10"
+				aria-label="Contact Abayiza on WhatsApp"
+			>
+				<svg
+					class="h-5 w-5 translate-x-[0.5px] -translate-y-[0.5px] sm:h-[1.35rem] sm:w-[1.35rem]"
+					viewBox="0 0 16 16"
+					fill="currentColor"
+					aria-hidden="true"
+				>
+					<path
+						d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.066 7.926a7.9 7.9 0 0 0 1.057 3.965L0 16l4.204-1.103a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.928-7.93a7.9 7.9 0 0 0-2.325-5.606M7.998 14.524a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.002 3.628-2.959 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.331.065-.133.034-.247-.015-.346-.05-.099-.445-1.076-.612-1.47-.16-.39-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.397 2.132 3.383 2.992.473.205.842.327 1.13.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"
+					/>
+				</svg>
+			</a>
+		</div>
 
 		<!-- Minimal Footer -->
 		<footer class="bg-black pt-16 pb-8 text-white">
@@ -257,8 +277,12 @@
 						<h4 class="mb-6 text-sm font-medium tracking-widest text-gray-200 uppercase">Shop</h4>
 						<ul class="space-y-4 text-sm font-light text-gray-400">
 							<li><a href="/shop" class="transition-colors hover:text-gold">All Products</a></li>
-							<li><a href="/collections" class="transition-colors hover:text-gold">Categories</a></li>
-							<li><a href="/search" class="transition-colors hover:text-gold">Search Catalog</a></li>
+							<li>
+								<a href="/collections" class="transition-colors hover:text-gold">Categories</a>
+							</li>
+							<li>
+								<a href="/search" class="transition-colors hover:text-gold">Search Catalog</a>
+							</li>
 						</ul>
 					</div>
 					<div>
@@ -301,9 +325,12 @@
 						&copy; 2026 <AbayizaWordmark class="text-[0.9em]" />. All rights reserved.
 					</p>
 					<div class="mt-4 flex space-x-6 text-gray-500 md:mt-0">
-						<a href="https://instagram.com" class="transition-colors hover:text-white">Instagram</a>
-						<a href="https://tiktok.com" class="transition-colors hover:text-white">TikTok</a>
-						<a href="https://wa.me/923116857822" class="transition-colors hover:text-white">WhatsApp</a>
+						<a href="https://www.tiktok.com/@_abayiza_" class="transition-colors hover:text-white"
+							>TikTok</a
+						>
+						<a href={primaryWhatsAppHref} class="transition-colors hover:text-white">WhatsApp</a>
+						<a href={secondaryWhatsAppHref} class="transition-colors hover:text-white">WhatsApp 2</a
+						>
 					</div>
 				</div>
 			</div>

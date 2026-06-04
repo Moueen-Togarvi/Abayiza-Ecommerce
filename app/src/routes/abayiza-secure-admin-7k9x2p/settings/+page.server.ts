@@ -1,13 +1,10 @@
 import { setAdminFlash } from '$lib/server/admin-flash';
-import {
-	defaultStoreSettings,
-	getSettings,
-	saveSettings
-} from '$lib/server/store-settings';
+import { defaultStoreSettings, getSettings, saveSettings } from '$lib/server/store-settings';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-const getText = (data: FormData, key: string, fallback = '') => String(data.get(key) ?? fallback).trim();
+const getText = (data: FormData, key: string, fallback = '') =>
+	String(data.get(key) ?? fallback).trim();
 
 const isEmail = (value: string) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
@@ -16,8 +13,10 @@ const readSettingsForm = (data: FormData) => ({
 	store_contact_email: getText(data, 'store_contact_email'),
 	sender_email: getText(data, 'sender_email'),
 	support_phone: getText(data, 'support_phone'),
+	support_phone_secondary: getText(data, 'support_phone_secondary'),
 	whatsapp_catalog: getText(data, 'whatsapp_catalog'),
 	whatsapp_order_number: getText(data, 'whatsapp_order_number'),
+	whatsapp_order_number_secondary: getText(data, 'whatsapp_order_number_secondary'),
 	timezone: getText(data, 'timezone'),
 	unit_system: getText(data, 'unit_system'),
 	store_currency: getText(data, 'store_currency'),

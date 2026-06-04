@@ -14,8 +14,8 @@
 		<section class="border border-gray-200 bg-white p-6 md:col-span-2">
 			<h2 class="mb-3 font-serif text-xl text-black">No customer session is active</h2>
 			<p class="text-sm leading-6 font-light text-gray-600">
-				Order history, addresses, and profile details will show here after customer login is wired to
-				the database. This page now avoids showing sample customer records.
+				Order history, addresses, and profile details will show here after customer login is wired
+				to the database. This page now avoids showing sample customer records.
 			</p>
 			<div class="mt-6 flex flex-col gap-3 sm:flex-row">
 				<a
@@ -45,6 +45,14 @@
 				class="text-sm font-medium tracking-widest text-green-700 uppercase hover:text-green-800"
 			>
 				Contact Abayiza
+			</a>
+			<a
+				href="https://wa.me/923346657779"
+				target="_blank"
+				rel="noreferrer"
+				class="mt-3 block text-sm font-medium tracking-widest text-green-700 uppercase hover:text-green-800"
+			>
+				Contact Abayiza 2
 			</a>
 		</aside>
 	</div>

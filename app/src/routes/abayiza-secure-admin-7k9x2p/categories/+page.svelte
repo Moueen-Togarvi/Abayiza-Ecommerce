@@ -28,6 +28,7 @@
 		<form
 			method="POST"
 			action="?/create"
+			enctype="multipart/form-data"
 			class="rounded-lg border border-[#000]/10 bg-white p-5 shadow-sm"
 		>
 			<div class="mb-5 flex items-center gap-3">
@@ -62,6 +63,16 @@
 						class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
 					/>
 				</div>
+				<div>
+					<label for="new-image" class="mb-1 block text-sm font-medium text-[#000]/70">Image</label>
+					<input
+						id="new-image"
+						name="image"
+						type="file"
+						accept="image/*"
+						class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm file:mr-3 file:rounded-md file:border-0 file:bg-[#000] file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+					/>
+				</div>
 
 				<label class="flex h-10 items-center gap-2 rounded-md border border-[#000]/10 px-3 text-sm">
 					<input
@@ -91,7 +102,9 @@
 			</div>
 
 			{#if form?.updateError || form?.deleteError}
-				<div class="mx-5 mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+				<div
+					class="mx-5 mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+				>
 					{form.updateError || form.deleteError}
 				</div>
 			{/if}
@@ -101,18 +114,41 @@
 					<article class="p-5">
 						<div class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
 							<div class="min-w-0">
-								<div class="flex flex-wrap items-center gap-2">
-									<h3 class="text-base font-semibold text-[#000]">{category.name}</h3>
-									<span
-										class="rounded-full px-2.5 py-0.5 text-xs font-medium {category.isVisible
-											? 'bg-blue-100 text-blue-800'
-											: 'bg-yellow-100 text-yellow-800'}"
+								<div class="flex gap-4">
+									<div
+										class="h-16 w-20 shrink-0 overflow-hidden rounded-md border border-[#000]/10 bg-gray-100"
 									>
-										{category.isVisible ? 'Visible' : 'Hidden'}
-									</span>
-									<span class="rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">
-										{productLabel(category._count.products)}
-									</span>
+										{#if category.imageUrl}
+											<img
+												src={category.imageUrl}
+												alt={category.name}
+												class="h-full w-full object-cover object-center"
+											/>
+										{:else}
+											<div
+												class="flex h-full w-full items-center justify-center text-xs text-gray-400"
+											>
+												No image
+											</div>
+										{/if}
+									</div>
+									<div class="min-w-0">
+										<div class="flex flex-wrap items-center gap-2">
+											<h3 class="text-base font-semibold text-[#000]">{category.name}</h3>
+											<span
+												class="rounded-full px-2.5 py-0.5 text-xs font-medium {category.isVisible
+													? 'bg-blue-100 text-blue-800'
+													: 'bg-yellow-100 text-yellow-800'}"
+											>
+												{category.isVisible ? 'Visible' : 'Hidden'}
+											</span>
+											<span
+												class="rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700"
+											>
+												{productLabel(category._count.products)}
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -143,10 +179,15 @@
 						</div>
 
 						{#if editingId === category.id}
-							<form method="POST" action="?/update" class="mt-5 rounded-lg border border-[#000]/10 bg-gray-50 p-4">
+							<form
+								method="POST"
+								action="?/update"
+								enctype="multipart/form-data"
+								class="mt-5 rounded-lg border border-[#000]/10 bg-gray-50 p-4"
+							>
 								<input type="hidden" name="id" value={category.id} />
 								<div class="grid gap-4 md:grid-cols-2">
-									<div class="md:col-span-2">
+									<div>
 										<label
 											for={`name-${category.id}`}
 											class="mb-1 block text-sm font-medium text-[#000]/70">Name</label
@@ -160,7 +201,43 @@
 											class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
 										/>
 									</div>
-									<label class="flex h-10 items-center gap-2 rounded-md border border-[#000]/10 bg-white px-3 text-sm">
+									<div>
+										<label
+											for={`image-${category.id}`}
+											class="mb-1 block text-sm font-medium text-[#000]/70">Image</label
+										>
+										<input
+											id={`image-${category.id}`}
+											name="image"
+											type="file"
+											accept="image/*"
+											class="block w-full rounded-md border border-[#000]/15 bg-white px-3 py-2 text-sm text-[#000] shadow-sm file:mr-3 file:rounded-md file:border-0 file:bg-[#000] file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+										/>
+									</div>
+									{#if category.imageUrl}
+										<div class="md:col-span-2">
+											<div class="mb-3 overflow-hidden rounded-md border border-[#000]/10 bg-white">
+												<img
+													src={category.imageUrl}
+													alt={category.name}
+													class="h-36 w-full object-cover object-center"
+												/>
+											</div>
+											<label
+												class="flex h-10 items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 text-sm"
+											>
+												<input
+													name="removeImage"
+													type="checkbox"
+													class="h-4 w-4 rounded border-red-300 text-red-600 focus:ring-red-500"
+												/>
+												<span class="font-medium text-red-700">Remove current image</span>
+											</label>
+										</div>
+									{/if}
+									<label
+										class="flex h-10 items-center gap-2 rounded-md border border-[#000]/10 bg-white px-3 text-sm"
+									>
 										<input
 											name="isVisible"
 											type="checkbox"
