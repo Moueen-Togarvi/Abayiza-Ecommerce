@@ -5,6 +5,16 @@
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
 	import { cart } from '$lib/client/cart.svelte';
 	import { wishlist } from '$lib/client/wishlist.svelte';
+	import {
+		PRIMARY_WHATSAPP_URL,
+		SECONDARY_WHATSAPP_URL,
+		SITE_BRAND,
+		SITE_IMAGE,
+		SITE_NAME,
+		TIKTOK_URL,
+		absoluteUrl,
+		jsonLdScript
+	} from '$lib/shared/seo';
 
 	let { children } = $props();
 	let mobileMenuOpen = $state(false);
@@ -28,16 +38,103 @@
 	let isAdminRoute = $derived(page.url.pathname.startsWith('/abayiza-secure-admin-7k9x2p'));
 	let isScrolled = $derived(scrollY > 24);
 	let isNavigating = $derived(Boolean(navigating.to));
+	let canonicalHref = $derived(canonicalUrl(page.url));
+	let robotsMeta = $derived(
+		shouldNoindex(page.url) ? 'noindex,follow' : 'index,follow,max-image-preview:large'
+	);
+	let socialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let siteJsonLd = $derived(
+		jsonLdScript([
+			{
+				'@context': 'https://schema.org',
+				'@type': 'Organization',
+				name: SITE_NAME,
+				alternateName: SITE_BRAND,
+				url: absoluteUrl('/', page.url.origin),
+				logo: socialImage,
+				image: socialImage,
+				sameAs: [TIKTOK_URL, PRIMARY_WHATSAPP_URL, SECONDARY_WHATSAPP_URL],
+				contactPoint: [
+					{
+						'@type': 'ContactPoint',
+						contactType: 'customer support',
+						telephone: '+92 311 6857822',
+						areaServed: 'PK',
+						availableLanguage: ['en', 'ur']
+					},
+					{
+						'@type': 'ContactPoint',
+						contactType: 'customer support',
+						telephone: '+92 334 6657779',
+						areaServed: 'PK',
+						availableLanguage: ['en', 'ur']
+					}
+				]
+			},
+			{
+				'@context': 'https://schema.org',
+				'@type': 'WebSite',
+				name: SITE_NAME,
+				url: absoluteUrl('/', page.url.origin),
+				potentialAction: {
+					'@type': 'SearchAction',
+					target: `${absoluteUrl('/search', page.url.origin)}?q={search_term_string}`,
+					'query-input': 'required name=search_term_string'
+				}
+			}
+		])
+	);
+
+	function shouldNoindex(url: URL) {
+		const noindexPrefixes = [
+			'/abayiza-secure-admin-7k9x2p',
+			'/account',
+			'/cart',
+			'/checkout',
+			'/login',
+			'/track',
+			'/wishlist',
+			'/search'
+		];
+		const hasFilterParams = ['q', 'color', 'size', 'category', 'collection'].some((key) =>
+			url.searchParams.has(key)
+		);
+
+		return noindexPrefixes.some((prefix) => url.pathname.startsWith(prefix)) || hasFilterParams;
+	}
+
+	function canonicalUrl(url: URL) {
+		const canonical = new URL(url.pathname, url.origin);
+		const pageNumber = Number(url.searchParams.get('page') || '1');
+		const isPaginatedListing = url.pathname === '/shop' || url.pathname.startsWith('/sections/');
+
+		if (isPaginatedListing && Number.isFinite(pageNumber) && pageNumber > 1) {
+			canonical.searchParams.set('page', String(Math.floor(pageNumber)));
+		}
+
+		return canonical.toString();
+	}
 </script>
 
 <svelte:window bind:scrollY />
+
+<svelte:head>
+	<meta name="robots" content={robotsMeta} />
+	<link rel="canonical" href={canonicalHref} />
+	<meta property="og:site_name" content={SITE_NAME} />
+	<meta property="og:url" content={canonicalHref} />
+	<meta property="og:image" content={socialImage} />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content={socialImage} />
+	{@html siteJsonLd}
+</svelte:head>
 
 <div
 	class={`flex min-h-screen flex-col font-sans text-black ${isAdminRoute ? 'bg-white' : 'bg-cream'}`}
 >
 	{#if !isAdminRoute}
 		<!-- Navbar -->
-		<header class="sticky top-0 z-50 px-3 py-3 sm:px-5">
+		<header class="sticky top-0 z-50 px-3 pt-0 pb-3 sm:px-5">
 			<div class="mx-auto max-w-7xl">
 				<div class="transition-all duration-300">
 					<div class="flex h-14 items-center justify-between gap-2">
@@ -50,11 +147,9 @@
 								class="h-12 w-12 rounded-full object-cover shadow-[0_14px_30px_rgba(20,53,45,0.28)] ring-2 ring-white/80"
 							/>
 							<span class="hidden leading-none sm:block">
-								<AbayizaWordmark
-									class="block text-sm text-white mix-blend-difference drop-shadow-[0_1px_6px_rgba(0,0,0,0.38)]"
-								/>
+								<AbayizaWordmark class="brand-adaptive-text block text-sm" />
 								<span
-									class="mt-1 block text-[10px] font-semibold tracking-[0.18em] text-white uppercase mix-blend-difference drop-shadow-[0_1px_6px_rgba(0,0,0,0.38)]"
+									class="brand-adaptive-text mt-1 block text-[10px] font-semibold tracking-[0.18em] uppercase"
 									>Modest Atelier</span
 								>
 							</span>
@@ -427,6 +522,14 @@
 </div>
 
 <style>
+	.brand-adaptive-text {
+		color: #14352d;
+		text-shadow:
+			0 1px 8px rgba(255, 255, 255, 0.94),
+			0 2px 16px rgba(255, 255, 255, 0.62),
+			0 1px 10px rgba(20, 53, 45, 0.2);
+	}
+
 	.route-loading-pill {
 		animation: route-loading-needle 1400ms cubic-bezier(0.65, 0, 0.35, 1) infinite both;
 		transform-box: fill-box;

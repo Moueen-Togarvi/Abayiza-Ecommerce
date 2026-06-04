@@ -1,7 +1,30 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { SITE_NAME, absoluteUrl, jsonLdScript } from '$lib/shared/seo';
+
 	let { data } = $props();
 	let collections = $derived((data.collections || []) as Array<any>);
 	let categorySearch = $state('');
+	const collectionsDescription =
+		'Browse Abayiza collections by modest edit, including everyday nida abayas, occasion layers, Eid pieces, and premium black abayas.';
+	let collectionsJsonLd = $derived(
+		jsonLdScript({
+			'@context': 'https://schema.org',
+			'@type': 'CollectionPage',
+			name: `Collections | ${SITE_NAME}`,
+			description: collectionsDescription,
+			url: absoluteUrl('/collections', page.url.origin),
+			mainEntity: {
+				'@type': 'ItemList',
+				itemListElement: collections.map((collection, index) => ({
+					'@type': 'ListItem',
+					position: index + 1,
+					name: collection.name,
+					url: absoluteUrl(`/shop?category=${collection.slug}`, page.url.origin)
+				}))
+			}
+		})
+	);
 
 	const fallbackImages = [
 		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
@@ -46,6 +69,13 @@
 
 <svelte:head>
 	<title>Collections | Abayiza</title>
+	<meta name="description" content={collectionsDescription} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={`Collections | ${SITE_NAME}`} />
+	<meta property="og:description" content={collectionsDescription} />
+	<meta name="twitter:title" content={`Collections | ${SITE_NAME}`} />
+	<meta name="twitter:description" content={collectionsDescription} />
+	{@html collectionsJsonLd}
 </svelte:head>
 
 <section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">

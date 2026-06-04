@@ -1,6 +1,8 @@
 <script lang="ts">
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
+	const lookbookDescription =
+		'Explore the Abayiza lookbook for premium abaya styling, modest layers, nida essentials, and occasion outfit ideas.';
 
 	function productImage(product: any) {
 		return product.images?.[0]?.url || '/image.png';
@@ -9,9 +11,17 @@
 
 <svelte:head>
 	<title>Lookbook | Abayiza</title>
+	<meta name="description" content={lookbookDescription} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Lookbook | Abayiza" />
+	<meta property="og:description" content={lookbookDescription} />
+	<meta name="twitter:title" content="Lookbook | Abayiza" />
+	<meta name="twitter:description" content={lookbookDescription} />
 </svelte:head>
 
-<section class="relative flex h-[55vh] min-h-[360px] items-end justify-center overflow-hidden pb-14">
+<section
+	class="relative flex h-[55vh] min-h-[360px] items-end justify-center overflow-hidden pb-14"
+>
 	<div class="absolute inset-0 z-10 bg-black/45"></div>
 	{#if products[0]}
 		<img
@@ -45,7 +55,9 @@
 						? 'mt-16'
 						: ''} {index === 3 ? 'mt-8' : ''}"
 				>
-					<div class="overflow-hidden bg-gray-100 {index % 3 === 1 ? 'aspect-[2/3]' : 'aspect-[3/4]'}">
+					<div
+						class="overflow-hidden bg-gray-100 {index % 3 === 1 ? 'aspect-[2/3]' : 'aspect-[3/4]'}"
+					>
 						<img
 							src={productImage(item)}
 							alt={item.name}
@@ -76,7 +88,10 @@
 	{:else}
 		<div class="border border-gray-200 bg-white p-10 text-center">
 			<p class="font-serif text-2xl text-black">No catalog products yet</p>
-			<a href="/abayiza-secure-admin-7k9x2p/products/new" class="mt-4 inline-block text-sm font-semibold text-blue-700 underline">
+			<a
+				href="/abayiza-secure-admin-7k9x2p/products/new"
+				class="mt-4 inline-block text-sm font-semibold text-blue-700 underline"
+			>
 				Add products in admin
 			</a>
 		</div>

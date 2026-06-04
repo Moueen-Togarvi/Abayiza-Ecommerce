@@ -1,5 +1,10 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { SITE_NAME, absoluteUrl, jsonLdScript } from '$lib/shared/seo';
+
 	let openFaq = $state(0);
+	const contactDescription =
+		'Contact Abayiza for abaya sizing help, order questions, WhatsApp support, and modest styling advice.';
 
 	const faqs = [
 		{
@@ -23,10 +28,41 @@
 				'We recommend dry cleaning for our silk and premium Nida fabrics to maintain their drape and quality. Hand washing in cold water with mild detergent is suitable for everyday pieces.'
 		}
 	];
+
+	let contactJsonLd = $derived(
+		jsonLdScript([
+			{
+				'@context': 'https://schema.org',
+				'@type': 'ContactPage',
+				name: `Contact Us | ${SITE_NAME}`,
+				description: contactDescription,
+				url: absoluteUrl('/contact', page.url.origin)
+			},
+			{
+				'@context': 'https://schema.org',
+				'@type': 'FAQPage',
+				mainEntity: faqs.map((faq) => ({
+					'@type': 'Question',
+					name: faq.question,
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: faq.answer
+					}
+				}))
+			}
+		])
+	);
 </script>
 
 <svelte:head>
 	<title>Contact Us | Abayiza</title>
+	<meta name="description" content={contactDescription} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={`Contact Us | ${SITE_NAME}`} />
+	<meta property="og:description" content={contactDescription} />
+	<meta name="twitter:title" content={`Contact Us | ${SITE_NAME}`} />
+	<meta name="twitter:description" content={contactDescription} />
+	{@html contactJsonLd}
 </svelte:head>
 
 <!-- Header -->

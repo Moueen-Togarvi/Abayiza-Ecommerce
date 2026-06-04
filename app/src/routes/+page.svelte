@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { cart } from '$lib/client/cart.svelte';
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
+	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, absoluteUrl } from '$lib/shared/seo';
 
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
@@ -105,6 +107,7 @@
 	);
 	let saleTapeLoop = $derived(Array.from({ length: 8 }, () => saleTapeItems).flat());
 	let saleTapeEnabled = $derived(storefrontSettings.saleTapeEnabled !== false);
+	let homeSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
 	const brandPattern = /^(Abayiza|ABAYIZA)$/;
 
 	function textWithBrand(value: string) {
@@ -282,10 +285,17 @@
 
 <svelte:head>
 	<title>Abayiza | Premium Modest Fashion</title>
+	<meta name="description" content={SITE_DESCRIPTION} />
 	<meta
-		name="description"
-		content="Elevating modest fashion with premium craftsmanship and timeless design."
+		name="keywords"
+		content="premium abayas, nida abaya, modest fashion, eid abaya, black abaya"
 	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={`${SITE_NAME} | Premium Modest Fashion`} />
+	<meta property="og:description" content={SITE_DESCRIPTION} />
+	<meta property="og:image" content={homeSocialImage} />
+	<meta name="twitter:title" content={`${SITE_NAME} | Premium Modest Fashion`} />
+	<meta name="twitter:description" content={SITE_DESCRIPTION} />
 </svelte:head>
 
 <section

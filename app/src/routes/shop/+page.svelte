@@ -2,6 +2,7 @@
 	import { cart } from '$lib/client/cart.svelte';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
+	import { SITE_NAME } from '$lib/shared/seo';
 
 	type Pagination = {
 		page: number;
@@ -43,6 +44,8 @@
 	let selectedCategory = $state('');
 	let selectedColor = $state('');
 	let selectedSize = $state('');
+	const shopDescription =
+		'Shop Abayiza premium abayas, soft nida essentials, black abayas, Eid edits, and occasion modestwear pieces.';
 
 	$effect(() => {
 		searchQuery = filters.q || '';
@@ -120,6 +123,16 @@
 
 <svelte:head>
 	<title>Shop All | Abayiza</title>
+	<meta name="description" content={shopDescription} />
+	<meta
+		name="keywords"
+		content="shop abayas, nida abaya, premium abaya, black abaya, modest dresses"
+	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={`Shop All | ${SITE_NAME}`} />
+	<meta property="og:description" content={shopDescription} />
+	<meta name="twitter:title" content={`Shop All | ${SITE_NAME}`} />
+	<meta name="twitter:description" content={shopDescription} />
 </svelte:head>
 
 <section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">

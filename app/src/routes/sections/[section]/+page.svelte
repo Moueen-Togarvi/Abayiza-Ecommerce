@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
+	import { SITE_NAME, absoluteUrl, jsonLdScript, metaDescription } from '$lib/shared/seo';
 
 	let { data } = $props();
 	let section = $derived(data.section);
@@ -18,6 +20,37 @@
 	let selectedCategory = $state('');
 	let selectedColor = $state('');
 	let selectedSize = $state('');
+	let sectionTitle = $derived(`${section.title} | ${SITE_NAME}`);
+	let sectionDescription = $derived(metaDescription(section.description));
+	let sectionJsonLd = $derived(
+		jsonLdScript([
+			{
+				'@context': 'https://schema.org',
+				'@type': 'CollectionPage',
+				name: section.title,
+				description: sectionDescription,
+				url: absoluteUrl(section.href, page.url.origin)
+			},
+			{
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						position: 1,
+						name: 'Home',
+						item: absoluteUrl('/', page.url.origin)
+					},
+					{
+						'@type': 'ListItem',
+						position: 2,
+						name: section.title,
+						item: absoluteUrl(section.href, page.url.origin)
+					}
+				]
+			}
+		])
+	);
 
 	$effect(() => {
 		searchQuery = filters.q || '';
@@ -102,8 +135,14 @@
 </script>
 
 <svelte:head>
-	<title>{section.title} | Abayiza</title>
-	<meta name="description" content={section.description} />
+	<title>{sectionTitle}</title>
+	<meta name="description" content={sectionDescription} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={sectionTitle} />
+	<meta property="og:description" content={sectionDescription} />
+	<meta name="twitter:title" content={sectionTitle} />
+	<meta name="twitter:description" content={sectionDescription} />
+	{@html sectionJsonLd}
 </svelte:head>
 
 <section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">

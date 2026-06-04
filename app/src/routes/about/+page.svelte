@@ -1,13 +1,19 @@
 <script lang="ts">
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
+	import { SITE_NAME } from '$lib/shared/seo';
+
+	const aboutDescription =
+		'The story of Abayiza, started by university friends Chand Baloch and Mubahsir Ali after their first abaya ad video went viral.';
 </script>
 
 <svelte:head>
 	<title>About Abayiza | Our Story</title>
-	<meta
-		name="description"
-		content="The story of Abayiza, started by university friends Chand Baloch and Mubahsir Ali after their first abaya ad video went viral."
-	/>
+	<meta name="description" content={aboutDescription} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={`About ${SITE_NAME} | Our Story`} />
+	<meta property="og:description" content={aboutDescription} />
+	<meta name="twitter:title" content={`About ${SITE_NAME} | Our Story`} />
+	<meta name="twitter:description" content={aboutDescription} />
 </svelte:head>
 
 <section

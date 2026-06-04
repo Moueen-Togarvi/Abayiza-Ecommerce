@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
+	import { SITE_NAME, absoluteUrl, jsonLdScript, metaDescription } from '$lib/shared/seo';
 
 	let { data } = $props();
 	let product = $derived(data.product as any);
@@ -38,6 +40,70 @@
 	);
 	let selectedVariantOutOfStock = $derived(
 		productOutOfStock || !selectedVariant || Number(selectedVariant.stockCount || 0) < quantity
+	);
+	let productTitle = $derived(product.metaTitle || `${product.name} | ${SITE_NAME}`);
+	let productDescription = $derived(
+		metaDescription(
+			product.metaDescription || product.description,
+			`${product.name} by ${SITE_NAME}: premium modest abaya with refined finishing and easy styling.`
+		)
+	);
+	let productUrl = $derived(absoluteUrl(`/shop/${product.slug}`, page.url.origin));
+	let productSocialImage = $derived(
+		absoluteUrl(images[0] || productImage(product), page.url.origin)
+	);
+	let productJsonLd = $derived(
+		jsonLdScript([
+			{
+				'@context': 'https://schema.org',
+				'@type': 'Product',
+				name: product.name,
+				description: productDescription,
+				image: (images.length ? images : [productImage(product)]).map((image: string) =>
+					absoluteUrl(image, page.url.origin)
+				),
+				sku: selectedVariant?.sku || product.slug,
+				brand: {
+					'@type': 'Brand',
+					name: SITE_NAME
+				},
+				category: product.collections?.map((collection: any) => collection.name).join(', '),
+				offers: {
+					'@type': 'Offer',
+					url: productUrl,
+					priceCurrency: 'PKR',
+					price: String(Number(product.salePrice || product.price)),
+					availability: productOutOfStock
+						? 'https://schema.org/OutOfStock'
+						: 'https://schema.org/InStock',
+					itemCondition: 'https://schema.org/NewCondition'
+				}
+			},
+			{
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						position: 1,
+						name: 'Home',
+						item: absoluteUrl('/', page.url.origin)
+					},
+					{
+						'@type': 'ListItem',
+						position: 2,
+						name: 'Shop',
+						item: absoluteUrl('/shop', page.url.origin)
+					},
+					{
+						'@type': 'ListItem',
+						position: 3,
+						name: product.name,
+						item: productUrl
+					}
+				]
+			}
+		])
 	);
 
 	const colorHex: Record<string, string> = {
@@ -95,7 +161,20 @@
 </script>
 
 <svelte:head>
-	<title>{product.name} | Abayiza</title>
+	<title>{productTitle}</title>
+	<meta name="description" content={productDescription} />
+	<meta property="og:type" content="product" />
+	<meta property="og:title" content={productTitle} />
+	<meta property="og:description" content={productDescription} />
+	<meta property="og:image" content={productSocialImage} />
+	<meta
+		property="product:price:amount"
+		content={String(Number(product.salePrice || product.price))}
+	/>
+	<meta property="product:price:currency" content="PKR" />
+	<meta name="twitter:title" content={productTitle} />
+	<meta name="twitter:description" content={productDescription} />
+	{@html productJsonLd}
 </svelte:head>
 
 <div class="border-b border-black/5 bg-cream/50">

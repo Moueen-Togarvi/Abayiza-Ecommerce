@@ -1,5 +1,18 @@
+<script lang="ts">
+	import { SITE_NAME } from '$lib/shared/seo';
+
+	const sizeGuideDescription =
+		'Use the Abayiza size guide to choose the right abaya length, bust fit, and modest drape before ordering.';
+</script>
+
 <svelte:head>
 	<title>Size Guide | Abayiza</title>
+	<meta name="description" content={sizeGuideDescription} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={`Size Guide | ${SITE_NAME}`} />
+	<meta property="og:description" content={sizeGuideDescription} />
+	<meta name="twitter:title" content={`Size Guide | ${SITE_NAME}`} />
+	<meta name="twitter:description" content={sizeGuideDescription} />
 </svelte:head>
 
 <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">
