@@ -449,14 +449,6 @@
 					Refined edits for the pieces you reach for most: daily essentials, occasion layers, and
 					timeless black abayas.
 				</p>
-				{#if hasViewAll(signatureCollectionsSection)}
-					<a
-						href={signatureCollectionsSection.viewAllHref}
-						class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-5 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase shadow-[0_12px_28px_rgba(20,53,45,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
-					>
-						View All
-					</a>
-				{/if}
 			</div>
 		</div>
 
@@ -550,6 +542,17 @@
 				</div>
 			{/each}
 		</div>
+
+		{#if hasViewAll(signatureCollectionsSection)}
+			<div class="mt-8 text-center">
+				<a
+					href={signatureCollectionsSection.viewAllHref}
+					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase shadow-[0_12px_28px_rgba(20,53,45,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+				>
+					View All
+				</a>
+			</div>
+		{/if}
 	</div>
 </section>
 
@@ -607,14 +610,6 @@
 				<h2 class="mb-2 font-serif text-3xl tracking-widest text-black uppercase">New Arrivals</h2>
 				<p class="font-light text-gray-500">The latest additions to our collection</p>
 			</div>
-			{#if hasViewAll(newArrivalsSection)}
-				<a
-					href={newArrivalsSection.viewAllHref}
-					class="inline-flex self-start border-b border-black pb-1 text-sm tracking-widest uppercase transition-colors hover:border-gold hover:text-gold sm:self-auto"
-				>
-					View All
-				</a>
-			{/if}
 		</div>
 
 		<div class="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -750,6 +745,17 @@
 				</div>
 			{/each}
 		</div>
+
+		{#if hasViewAll(newArrivalsSection)}
+			<div class="mt-8 text-center">
+				<a
+					href={newArrivalsSection.viewAllHref}
+					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase shadow-[0_12px_28px_rgba(20,53,45,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+				>
+					View All
+				</a>
+			</div>
+		{/if}
 	</div>
 </section>
 
@@ -873,14 +879,6 @@
 		<div class="mb-8 flex flex-col gap-6">
 			<div class="text-center">
 				<h2 class="font-serif text-3xl tracking-widest text-[#14352d] uppercase">Most Loved</h2>
-				{#if hasViewAll(mostLovedSection)}
-					<a
-						href={mostLovedSection.viewAllHref}
-						class="mt-4 inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-5 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase shadow-[0_12px_28px_rgba(20,53,45,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
-					>
-						View All
-					</a>
-				{/if}
 			</div>
 
 			<div class="category-ribbon" aria-label="Bestseller categories">
@@ -958,6 +956,17 @@
 				</div>
 			{/each}
 		</div>
+
+		{#if hasViewAll(mostLovedSection)}
+			<div class="mt-8 text-center">
+				<a
+					href={mostLovedSection.viewAllHref}
+					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase shadow-[0_12px_28px_rgba(20,53,45,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+				>
+					View All
+				</a>
+			</div>
+		{/if}
 	</div>
 </section>
 

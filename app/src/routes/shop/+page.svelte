@@ -6,8 +6,23 @@
 	let products = $derived((data.products || []) as Array<any>);
 	let collections = $derived((data.collections || []) as Array<any>);
 	let colors = $derived((data.colors || []) as string[]);
+	let sizes = $derived((data.sizes || []) as string[]);
+	let filters = $derived(
+		(data.filters || { q: '', category: '', color: '', size: '' }) as Record<string, string>
+	);
+	let totalProducts = $derived(Number(data.totalProducts || products.length));
 	let isGridView = $state(true);
-	let showFilters = $state(false);
+	let searchQuery = $state('');
+	let selectedCategory = $state('');
+	let selectedColor = $state('');
+	let selectedSize = $state('');
+
+	$effect(() => {
+		searchQuery = filters.q || '';
+		selectedCategory = filters.category || '';
+		selectedColor = filters.color || '';
+		selectedSize = filters.size || '';
+	});
 
 	const colorHex: Record<string, string> = {
 		Black: '#101411',
@@ -82,34 +97,100 @@
 					<span
 						class="rounded-full border border-[#14352d]/10 bg-white px-4 py-2 text-xs font-bold text-[#14352d]"
 					>
-						DB Catalog
+						{totalProducts} Total
 					</span>
 				</div>
 			</div>
 		</div>
 
+		<form
+			method="GET"
+			action="/shop"
+			class="mb-8 grid gap-3 rounded-md border border-[#14352d]/10 bg-white/90 p-4 shadow-[0_18px_45px_rgba(20,53,45,0.08)] md:grid-cols-[1.4fr_1fr_1fr_1fr_auto_auto] md:items-end"
+		>
+			<div>
+				<label for="shop-q" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
+					Search
+				</label>
+				<input
+					id="shop-q"
+					name="q"
+					type="search"
+					bind:value={searchQuery}
+					placeholder="Search abayas"
+					class="w-full rounded-md border-[#14352d]/15 text-sm focus:border-[#14352d] focus:ring-[#14352d]"
+				/>
+			</div>
+			<div>
+				<label
+					for="shop-category"
+					class="mb-1 block text-xs font-black tracking-[0.12em] uppercase"
+				>
+					Category
+				</label>
+				<select
+					id="shop-category"
+					name="category"
+					bind:value={selectedCategory}
+					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
+				>
+					<option value="">All categories</option>
+					{#each collections as collection}
+						<option value={collection.slug}>{collection.name}</option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label for="shop-color" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
+					Color
+				</label>
+				<select
+					id="shop-color"
+					name="color"
+					bind:value={selectedColor}
+					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
+				>
+					<option value="">All colors</option>
+					{#each colors as color}
+						<option value={color}>{color}</option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label for="shop-size" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
+					Size
+				</label>
+				<select
+					id="shop-size"
+					name="size"
+					bind:value={selectedSize}
+					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
+				>
+					<option value="">All sizes</option>
+					{#each sizes as size}
+						<option value={size}>{size}</option>
+					{/each}
+				</select>
+			</div>
+			<button
+				type="submit"
+				class="inline-flex min-h-10 items-center justify-center rounded-full bg-[#14352d] px-5 text-xs font-black tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+			>
+				Apply
+			</button>
+			<a
+				href="/shop"
+				class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-5 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase transition-colors hover:bg-[#f5f0e5]"
+			>
+				Clear
+			</a>
+		</form>
+
 		<div
 			class="mb-8 flex flex-col gap-4 rounded-md border border-[#14352d]/10 bg-white/86 p-4 shadow-[0_18px_45px_rgba(20,53,45,0.08)] md:flex-row md:items-center md:justify-between"
 		>
-			<button
-				type="button"
-				class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#14352d] px-5 text-xs font-black tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] md:hidden"
-				aria-expanded={showFilters}
-				onclick={() => (showFilters = !showFilters)}
-			>
-				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="1.7"
-						d="M3 4h18M6 12h12M10 20h4"
-					/>
-				</svg>
-				Filter
-			</button>
-
-			<p class="hidden text-sm font-bold text-[#596c62] md:block">
-				Showing {products.length} products
+			<p class="text-sm font-bold text-[#596c62]">
+				Showing {products.length} of {totalProducts} products
 			</p>
 
 			<div class="flex flex-wrap items-center justify-between gap-4 md:justify-end">
@@ -157,7 +238,7 @@
 		</div>
 
 		<div class="flex flex-col gap-8 md:flex-row">
-			<aside class="w-full shrink-0 md:w-64 {showFilters ? 'block' : 'hidden md:block'}">
+			<aside class="hidden">
 				<div class="sticky top-28 space-y-4">
 					<div
 						class="rounded-md border border-[#14352d]/10 bg-white/90 p-5 shadow-[0_14px_34px_rgba(20,53,45,0.06)]"
@@ -202,111 +283,128 @@
 			</aside>
 
 			<div class="min-w-0 flex-1">
-				<div
-					class="grid {isGridView
-						? 'auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-						: 'grid-cols-1 gap-6'}"
-				>
-					{#each products as item}
-						<article
-							class="group flex h-full overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1 {isGridView
-								? 'flex-col'
-								: 'flex-col sm:flex-row'}"
-						>
-							<a
-								href={`/shop/${item.slug}`}
-								class="relative block aspect-[4/3] overflow-hidden bg-[#e4eee9] {isGridView
-									? ''
-									: 'sm:w-64 sm:shrink-0'}"
-								aria-label={`View ${item.name}`}
+				{#if products.length}
+					<div
+						class="grid {isGridView
+							? 'auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+							: 'grid-cols-1 gap-6'}"
+					>
+						{#each products as item}
+							<article
+								class="group flex h-full overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1 {isGridView
+									? 'flex-col'
+									: 'flex-col sm:flex-row'}"
 							>
-								{#if item.salePrice}
-									<span
-										class="absolute top-3 left-3 z-10 rounded-full bg-[#e4b43d] px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-[#14352d] uppercase"
-									>
-										Sale
-									</span>
-								{/if}
-								{#if isOutOfStock(item)}
-									<span
-										class="absolute top-3 right-3 z-10 rounded-full bg-red-600 px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-white uppercase"
-									>
-										Out of Stock
-									</span>
-								{/if}
-								<img
-									src={productImage(item)}
-									alt={item.name}
-									width="1200"
-									height="900"
-									class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
-								/>
-							</a>
-
-							<div class="flex flex-1 flex-col p-4">
-								<div class="mb-3 flex items-start justify-between gap-3">
-									<div class="min-h-[2.65rem] min-w-0">
-										<a
-											href={`/shop/${item.slug}`}
-											class="block overflow-hidden font-serif text-sm leading-tight font-semibold text-ellipsis whitespace-nowrap text-[#14352d] transition-colors hover:text-[#b58b2b]"
+								<a
+									href={`/shop/${item.slug}`}
+									class="relative block aspect-[4/3] overflow-hidden bg-[#e4eee9] {isGridView
+										? ''
+										: 'sm:w-64 sm:shrink-0'}"
+									aria-label={`View ${item.name}`}
+								>
+									{#if item.salePrice}
+										<span
+											class="absolute top-3 left-3 z-10 rounded-full bg-[#e4b43d] px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-[#14352d] uppercase"
 										>
-											{item.name}
-										</a>
-										<p class="mt-2 text-xs font-bold tracking-[0.08em] text-[#596c62] uppercase">
-											{primaryVariant(item)?.color || 'Signature edit'}
-										</p>
-									</div>
-									<div class="shrink-0 text-right">
-										<p class="text-base font-black whitespace-nowrap text-[#14352d]">
-											{formatMoney(item.salePrice || item.price)}
-										</p>
-										{#if item.salePrice}
-											<p class="text-xs font-bold whitespace-nowrap text-red-600 line-through">
-												{formatMoney(item.price)}
+											Sale
+										</span>
+									{/if}
+									{#if isOutOfStock(item)}
+										<span
+											class="absolute top-3 right-3 z-10 rounded-full bg-red-600 px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-white uppercase"
+										>
+											Out of Stock
+										</span>
+									{/if}
+									<img
+										src={productImage(item)}
+										alt={item.name}
+										width="1200"
+										height="900"
+										class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+									/>
+								</a>
+
+								<div class="flex flex-1 flex-col p-4">
+									<div class="mb-3 flex items-start justify-between gap-3">
+										<div class="min-h-[2.65rem] min-w-0">
+											<a
+												href={`/shop/${item.slug}`}
+												class="block overflow-hidden font-serif text-sm leading-tight font-semibold text-ellipsis whitespace-nowrap text-[#14352d] transition-colors hover:text-[#b58b2b]"
+											>
+												{item.name}
+											</a>
+											<p class="mt-2 text-xs font-bold tracking-[0.08em] text-[#596c62] uppercase">
+												{primaryVariant(item)?.color || 'Signature edit'}
 											</p>
-										{/if}
+										</div>
+										<div class="shrink-0 text-right">
+											<p class="text-base font-black whitespace-nowrap text-[#14352d]">
+												{formatMoney(item.salePrice || item.price)}
+											</p>
+											{#if item.salePrice}
+												<p class="text-xs font-bold whitespace-nowrap text-red-600 line-through">
+													{formatMoney(item.price)}
+												</p>
+											{/if}
+										</div>
+									</div>
+
+									{#if !isGridView}
+										<p class="mb-5 max-w-2xl text-sm leading-6 font-medium text-[#596c62]">
+											{item.description}
+										</p>
+									{/if}
+
+									<div class="mt-auto flex items-center gap-2">
+										<button
+											type="button"
+											disabled={isOutOfStock(item)}
+											class="inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+											onclick={() => addProductToCart(item)}
+										>
+											{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
+										</button>
+										<button
+											type="button"
+											class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d]"
+											aria-label={`Add ${item.name} to wishlist`}
+										>
+											<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="1.7"
+													d="M12 20.25l-1.45-1.32C5.4 14.36 2 11.28 2 7.5A4.5 4.5 0 016.5 3c1.74 0 3.41.81 4.5 2.09A5.96 5.96 0 0115.5 3 4.5 4.5 0 0120 7.5c0 3.78-3.4 6.86-8.55 11.43L12 20.25z"
+												/>
+											</svg>
+										</button>
 									</div>
 								</div>
-
-								{#if !isGridView}
-									<p class="mb-5 max-w-2xl text-sm leading-6 font-medium text-[#596c62]">
-										{item.description}
-									</p>
-								{/if}
-
-								<div class="mt-auto flex items-center gap-2">
-									<button
-										type="button"
-										disabled={isOutOfStock(item)}
-										class="inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-										onclick={() => addProductToCart(item)}
-									>
-										{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
-									</button>
-									<button
-										type="button"
-										class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d]"
-										aria-label={`Add ${item.name} to wishlist`}
-									>
-										<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="1.7"
-												d="M12 20.25l-1.45-1.32C5.4 14.36 2 11.28 2 7.5A4.5 4.5 0 016.5 3c1.74 0 3.41.81 4.5 2.09A5.96 5.96 0 0115.5 3 4.5 4.5 0 0120 7.5c0 3.78-3.4 6.86-8.55 11.43L12 20.25z"
-											/>
-										</svg>
-									</button>
-								</div>
-							</div>
-						</article>
-					{/each}
-				</div>
+							</article>
+						{/each}
+					</div>
+				{:else}
+					<div
+						class="rounded-md border border-dashed border-[#14352d]/18 bg-white/80 px-5 py-16 text-center shadow-[0_16px_38px_rgba(20,53,45,0.06)]"
+					>
+						<p class="font-serif text-2xl text-[#14352d]">No abayas found</p>
+						<p class="mx-auto mt-3 max-w-md text-sm leading-6 font-medium text-[#596c62]">
+							Try another search, category, color, or size.
+						</p>
+						<a
+							href="/shop"
+							class="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-[#14352d] px-6 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+						>
+							Clear Filters
+						</a>
+					</div>
+				{/if}
 
 				<div
 					class="mt-14 border-t border-[#14352d]/10 pt-8 text-center text-sm font-bold text-[#596c62]"
 				>
-					Showing all products from the database.
+					Showing {products.length} matching products.
 				</div>
 			</div>
 		</div>

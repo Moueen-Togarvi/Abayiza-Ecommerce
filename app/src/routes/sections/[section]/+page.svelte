@@ -6,7 +6,24 @@
 	let section = $derived(data.section);
 	let products = $derived((data.products || []) as Array<any>);
 	let pagination = $derived(data.pagination);
+	let filters = $derived(
+		(data.filters || { q: '', category: '', color: '', size: '' }) as Record<string, string>
+	);
+	let filterOptions = $derived(
+		(data.filterOptions || { categories: [], colors: [], sizes: [] }) as Record<string, any>
+	);
 	let visiblePages = $derived(buildVisiblePages(pagination.page, pagination.totalPages));
+	let searchQuery = $state('');
+	let selectedCategory = $state('');
+	let selectedColor = $state('');
+	let selectedSize = $state('');
+
+	$effect(() => {
+		searchQuery = filters.q || '';
+		selectedCategory = filters.category || '';
+		selectedColor = filters.color || '';
+		selectedSize = filters.size || '';
+	});
 
 	function productImage(item: any) {
 		return item.images?.[0]?.url || '/image.png';
@@ -36,7 +53,14 @@
 	}
 
 	function pageHref(page: number) {
-		return `${section.href}?page=${page}`;
+		const params = new URLSearchParams();
+		params.set('page', String(page));
+		if (filters.q) params.set('q', filters.q);
+		if (filters.category) params.set('category', filters.category);
+		if (filters.color) params.set('color', filters.color);
+		if (filters.size) params.set('size', filters.size);
+
+		return `${section.href}?${params.toString()}`;
 	}
 
 	function buildVisiblePages(currentPage: number, totalPages: number) {
@@ -103,6 +127,92 @@
 				</div>
 			</div>
 		</div>
+
+		<form
+			method="GET"
+			action={section.href}
+			class="mb-8 grid gap-3 rounded-md border border-[#14352d]/10 bg-white/90 p-4 shadow-[0_18px_45px_rgba(20,53,45,0.08)] md:grid-cols-[1.4fr_1fr_1fr_1fr_auto_auto] md:items-end"
+		>
+			<div>
+				<label for="section-q" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
+					Search
+				</label>
+				<input
+					id="section-q"
+					name="q"
+					type="search"
+					bind:value={searchQuery}
+					placeholder="Search abayas"
+					class="w-full rounded-md border-[#14352d]/15 text-sm focus:border-[#14352d] focus:ring-[#14352d]"
+				/>
+			</div>
+			<div>
+				<label
+					for="section-category"
+					class="mb-1 block text-xs font-black tracking-[0.12em] uppercase"
+				>
+					Category
+				</label>
+				<select
+					id="section-category"
+					name="category"
+					bind:value={selectedCategory}
+					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
+				>
+					<option value="">All categories</option>
+					{#each filterOptions.categories as category}
+						<option value={category.slug}>{category.name}</option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label
+					for="section-color"
+					class="mb-1 block text-xs font-black tracking-[0.12em] uppercase"
+				>
+					Color
+				</label>
+				<select
+					id="section-color"
+					name="color"
+					bind:value={selectedColor}
+					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
+				>
+					<option value="">All colors</option>
+					{#each filterOptions.colors as color}
+						<option value={color}>{color}</option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label for="section-size" class="mb-1 block text-xs font-black tracking-[0.12em] uppercase">
+					Size
+				</label>
+				<select
+					id="section-size"
+					name="size"
+					bind:value={selectedSize}
+					class="w-full rounded-md border-[#14352d]/15 text-sm font-bold text-[#14352d] focus:border-[#14352d] focus:ring-[#14352d]"
+				>
+					<option value="">All sizes</option>
+					{#each filterOptions.sizes as size}
+						<option value={size}>{size}</option>
+					{/each}
+				</select>
+			</div>
+			<button
+				type="submit"
+				class="inline-flex min-h-10 items-center justify-center rounded-full bg-[#14352d] px-5 text-xs font-black tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+			>
+				Apply
+			</button>
+			<a
+				href={section.href}
+				class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-white px-5 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase transition-colors hover:bg-[#f5f0e5] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+			>
+				Clear
+			</a>
+		</form>
 
 		{#if products.length}
 			<div class="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

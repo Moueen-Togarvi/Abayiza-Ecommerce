@@ -70,8 +70,135 @@ const fallbackCollectionSeed: StorefrontCollectionBase[] = [
 		imageUrl: '/abaya22.png',
 		isVisible: true,
 		displayOrder: 1
+	},
+	{
+		id: 'fallback-collection-daily-wear',
+		name: 'Daily Wear',
+		slug: 'daily-wear',
+		description: null,
+		imageUrl: '/abaya11.png',
+		isVisible: true,
+		displayOrder: 2
+	},
+	{
+		id: 'fallback-collection-premium-nida',
+		name: 'Premium Nida',
+		slug: 'premium-nida',
+		description: null,
+		imageUrl: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+		isVisible: true,
+		displayOrder: 3
+	},
+	{
+		id: 'fallback-collection-eid-edit',
+		name: 'Eid Edit',
+		slug: 'eid-edit',
+		description: null,
+		imageUrl: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png',
+		isVisible: true,
+		displayOrder: 4
 	}
 ];
+
+const fallbackDemoNames = [
+	'Haya Soft Nida Abaya',
+	'Noor Everyday Abaya',
+	'Zahra Layered Abaya',
+	'Amani Front Open Abaya',
+	'Layla Occasion Abaya',
+	'Safa Premium Nida Abaya',
+	'Maryam Pleated Abaya',
+	'Rida Classic Black Abaya',
+	'Mina Flow Abaya',
+	'Amal Pearl Sleeve Abaya',
+	'Yasmin Minimal Abaya',
+	'Sahar Chiffon Layer Abaya',
+	'Inaya Daily Abaya',
+	'Noura Eid Abaya',
+	'Areeba Button Abaya',
+	'Meher Modest Abaya',
+	'Zoya Bell Sleeve Abaya',
+	'Hiba Soft Drape Abaya',
+	'Maira Essential Abaya',
+	'Aleena Wrap Abaya',
+	'Dua Midnight Abaya',
+	'Iqra Luxe Abaya',
+	'Reem Everyday Abaya',
+	'Saira Cloud Nida Abaya',
+	'Hoor Occasion Layer Abaya',
+	'Anaya Signature Abaya',
+	'Fiza Travel Abaya',
+	'Javeria Grace Abaya',
+	'Kiran Soft Fall Abaya',
+	'Lina Premium Black Abaya'
+];
+
+const fallbackDemoImages = [
+	'/abaya11.png',
+	'/abaya22.png',
+	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png',
+	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png',
+	'/ChatGPT%20Image%20May%2025,%202026,%2006_07_28%20PM.png',
+	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_25%20PM.png'
+];
+
+const fallbackDemoColors = ['Black', 'Emerald', 'Sage', 'Ivory', 'Navy', 'Charcoal', 'Olive'];
+
+function slugifyFallback(value: string) {
+	return value
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/(^-|-$)/g, '');
+}
+
+function createFallbackDemoProducts(): StorefrontProduct[] {
+	return fallbackDemoNames.map((name, index) => {
+		const number = String(index + 1).padStart(2, '0');
+		const color = fallbackDemoColors[index % fallbackDemoColors.length];
+		const primaryCollection = fallbackCollectionSeed[index % fallbackCollectionSeed.length];
+		const secondaryCollection = fallbackCollectionSeed[(index + 2) % fallbackCollectionSeed.length];
+		const price = 6900 + index * 280;
+
+		return {
+			id: `fallback-demo-product-${number}`,
+			name,
+			slug: `demo-${slugifyFallback(name)}`,
+			description: `${name} with premium modest drape, clean finishing, and a comfortable fit for daily and occasion styling.`,
+			fabricDetails: 'Soft nida blend with graceful fall and easy care finish.',
+			price,
+			salePrice: index % 4 === 0 ? Math.round(price * 0.9) : null,
+			metaTitle: null,
+			metaDescription: null,
+			isActive: true,
+			images: [
+				{
+					id: `fallback-demo-image-${number}`,
+					url: fallbackDemoImages[index % fallbackDemoImages.length],
+					altText: name,
+					displayOrder: 0
+				}
+			],
+			variants: [
+				{
+					id: `fallback-demo-variant-${number}-s`,
+					color,
+					size: 'S (52)',
+					sku: `FALLBACK-${number}-${color.toUpperCase()}-S`,
+					stockCount: 8 + (index % 9)
+				},
+				{
+					id: `fallback-demo-variant-${number}-m`,
+					color,
+					size: 'M (54)',
+					sku: `FALLBACK-${number}-${color.toUpperCase()}-M`,
+					stockCount: 10 + (index % 7)
+				}
+			],
+			collections: [primaryCollection, secondaryCollection]
+		};
+	});
+}
 
 const fallbackProductSeed: StorefrontProduct[] = [
 	{
@@ -149,7 +276,8 @@ const fallbackProductSeed: StorefrontProduct[] = [
 			}
 		],
 		collections: [fallbackCollectionSeed[1]]
-	}
+	},
+	...createFallbackDemoProducts()
 ];
 
 const fallbackReviewPhotos = [

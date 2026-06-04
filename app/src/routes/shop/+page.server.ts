@@ -1,7 +1,6 @@
 import prisma from '$lib/server/prisma';
 import {
 	getFallbackCollections,
-	getFallbackColors,
 	getFallbackProducts,
 	isDatabaseUnavailable,
 	serializeStorefrontProduct,
@@ -9,48 +8,87 @@ import {
 } from '$lib/server/storefront-fallback';
 import type { PageServerLoad } from './$types';
 
+const productInclude = {
+	images: { orderBy: { displayOrder: 'asc' } },
+	variants: true,
+	collections: true
+} as const;
+
+function filtersFrom(url: URL) {
+	return {
+		q: String(url.searchParams.get('q') ?? '').trim(),
+		category: String(
+			url.searchParams.get('category') ?? url.searchParams.get('collection') ?? ''
+		).trim(),
+		color: String(url.searchParams.get('color') ?? '').trim(),
+		size: String(url.searchParams.get('size') ?? '').trim()
+	};
+}
+
+function productMatchesFilters(product: any, filters: ReturnType<typeof filtersFrom>) {
+	const query = filters.q.toLowerCase();
+	const matchesQuery =
+		!query ||
+		[product.name, product.slug, product.description, product.fabricDetails]
+			.filter(Boolean)
+			.some((value) => String(value).toLowerCase().includes(query));
+	const matchesCategory =
+		!filters.category ||
+		product.collections?.some((collection: any) => collection.slug === filters.category);
+	const matchesColor =
+		!filters.color || product.variants?.some((variant: any) => variant.color === filters.color);
+	const matchesSize =
+		!filters.size || product.variants?.some((variant: any) => variant.size === filters.size);
+
+	return matchesQuery && matchesCategory && matchesColor && matchesSize;
+}
+
+function buildOptions(products: any[]) {
+	const colors = new Set<string>();
+	const sizes = new Set<string>();
+
+	for (const product of products) {
+		for (const variant of product.variants || []) {
+			if (variant.color) colors.add(variant.color);
+			if (variant.size) sizes.add(variant.size);
+		}
+	}
+
+	return {
+		colors: Array.from(colors).sort((a, b) => a.localeCompare(b)),
+		sizes: Array.from(sizes).sort((a, b) => a.localeCompare(b))
+	};
+}
+
 export const load: PageServerLoad = async ({ url }) => {
-	const collectionSlug = url.searchParams.get('collection');
+	const filters = filtersFrom(url);
 
 	try {
-		const [products, collections] = await Promise.all([
+		const [allProducts, collections] = await Promise.all([
 			prisma.product.findMany({
-				where: {
-					isActive: true,
-					...(collectionSlug
-						? {
-								collections: {
-									some: {
-										slug: collectionSlug
-									}
-								}
-							}
-						: {})
-				},
-				include: {
-					images: { orderBy: { displayOrder: 'asc' } },
-					variants: true,
-					collections: true
-				}
+				where: { isActive: true },
+				include: productInclude,
+				orderBy: { createdAt: 'desc' }
 			}),
 			prisma.collection.findMany({
 				where: { isVisible: true },
 				orderBy: { displayOrder: 'asc' }
 			})
 		]);
-
-		const serializedProducts = products.map(serializeStorefrontProduct);
-		const colors = Array.from(
-			new Set(
-				products.flatMap((product: any) => product.variants.map((variant: any) => variant.color))
-			)
-		).filter(Boolean);
+		const serializedProducts = allProducts.map(serializeStorefrontProduct);
+		const products = serializedProducts.filter((product: any) =>
+			productMatchesFilters(product, filters)
+		);
+		const options = buildOptions(serializedProducts);
 
 		return {
-			products: serializedProducts,
+			products,
 			collections,
-			colors,
-			selectedCollection: collectionSlug
+			colors: options.colors,
+			sizes: options.sizes,
+			filters,
+			totalProducts: serializedProducts.length,
+			selectedCollection: filters.category
 		};
 	} catch (error) {
 		if (!isDatabaseUnavailable(error)) {
@@ -59,13 +97,18 @@ export const load: PageServerLoad = async ({ url }) => {
 
 		warnStorefrontFallback('/shop', error);
 
-		const products = getFallbackProducts({ collectionSlug });
+		const allProducts = getFallbackProducts();
+		const products = allProducts.filter((product) => productMatchesFilters(product, filters));
+		const options = buildOptions(allProducts);
 
 		return {
 			products,
 			collections: getFallbackCollections(),
-			colors: getFallbackColors(products),
-			selectedCollection: collectionSlug
+			colors: options.colors,
+			sizes: options.sizes,
+			filters,
+			totalProducts: allProducts.length,
+			selectedCollection: filters.category
 		};
 	}
 };
