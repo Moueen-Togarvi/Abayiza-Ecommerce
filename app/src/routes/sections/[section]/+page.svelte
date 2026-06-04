@@ -443,11 +443,13 @@
 										{/if}
 									</div>
 
-									<div class="mt-auto grid grid-cols-[1fr_auto_auto] items-center gap-1.5 sm:gap-2">
+									<div
+										class="mt-auto grid grid-cols-[minmax(5.4rem,1fr)_auto_auto] items-center gap-1 sm:gap-2"
+									>
 										<button
 											type="button"
 											disabled={isOutOfStock(item)}
-											class="inline-flex min-h-9 flex-1 items-center justify-center rounded-full bg-[#14352d] px-2 text-xs font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:px-4 sm:text-sm"
+											class="inline-flex min-h-9 flex-1 items-center justify-center rounded-full bg-[#14352d] px-2 text-[0.68rem] leading-none font-bold whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:px-4 sm:text-sm"
 											onclick={() => addProductToCart(item)}
 										>
 											{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}

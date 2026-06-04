@@ -529,7 +529,7 @@
 							<button
 								type="button"
 								disabled={isOutOfStock(edit)}
-								class="inline-flex min-h-10 min-w-[6.8rem] shrink-0 items-center justify-center gap-2 rounded-full bg-[#e4b43d] px-4 text-xs font-black text-[#14352d] shadow-[0_10px_22px_rgba(196,152,63,0.24)] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+								class="inline-flex min-h-10 min-w-[6.8rem] shrink-0 items-center justify-center gap-2 rounded-full bg-[#e4b43d] px-4 text-xs font-black whitespace-nowrap text-[#14352d] shadow-[0_10px_22px_rgba(196,152,63,0.24)] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
 								onclick={() => addProductToCart(edit)}
 							>
 								<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -737,7 +737,7 @@
 							<button
 								type="button"
 								disabled={isOutOfStock(item)}
-								class="inline-flex min-h-9 w-full min-w-0 shrink-0 items-center justify-center gap-1 rounded-full bg-[#e4b43d] px-2 text-[0.62rem] font-black text-[#14352d] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:w-auto sm:min-w-[6.8rem] sm:gap-2 sm:px-4 sm:text-xs"
+								class="inline-flex min-h-9 w-full min-w-0 shrink-0 items-center justify-center gap-1 rounded-full bg-[#e4b43d] px-2 text-[0.62rem] font-black whitespace-nowrap text-[#14352d] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:w-auto sm:min-w-[6.8rem] sm:gap-2 sm:px-4 sm:text-xs"
 								onclick={() => addProductToCart(item)}
 							>
 								<svg

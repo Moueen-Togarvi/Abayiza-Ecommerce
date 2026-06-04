@@ -131,7 +131,7 @@
 
 							<button
 								type="button"
-								class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+								class="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
 								onclick={() => addToCart(item)}
 							>
 								Add to Cart
