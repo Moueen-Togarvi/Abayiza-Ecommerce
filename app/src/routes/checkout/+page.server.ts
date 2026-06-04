@@ -49,7 +49,7 @@ const createOrderNumber = async () => {
 };
 
 export const actions: Actions = {
-	placeOrder: async ({ request }) => {
+	placeOrder: async ({ request, url }) => {
 		const data = await request.formData();
 
 		let cartItems: CheckoutCartItem[];
@@ -69,7 +69,9 @@ export const actions: Actions = {
 				color: item.color ? String(item.color) : null,
 				size: item.size ? String(item.size) : null
 			}))
-			.filter((item) => item.name && Number.isFinite(item.price) && item.price >= 0 && item.quantity > 0);
+			.filter(
+				(item) => item.name && Number.isFinite(item.price) && item.price >= 0 && item.quantity > 0
+			);
 
 		if (normalizedItems.length === 0) {
 			return fail(400, { error: 'Your cart is empty. Add a product before placing an order.' });
@@ -88,7 +90,8 @@ export const actions: Actions = {
 
 		if (!email || !firstName || !lastName || !addressLine1 || !city || !postalCode || !phone) {
 			return fail(400, {
-				error: 'Please complete all required fields: email, address, city, postal code, and mobile number.'
+				error:
+					'Please complete all required fields: email, address, city, postal code, and mobile number.'
 			});
 		}
 
@@ -113,7 +116,9 @@ export const actions: Actions = {
 
 			const variant =
 				product.variants.find((candidate) => candidate.id === item.variantId) ||
-				product.variants.find((candidate) => candidate.color === item.color && candidate.size === item.size) ||
+				product.variants.find(
+					(candidate) => candidate.color === item.color && candidate.size === item.size
+				) ||
 				product.variants.find((candidate) => candidate.stockCount > 0) ||
 				product.variants[0];
 
@@ -205,7 +210,9 @@ export const actions: Actions = {
 		} catch (error) {
 			const message = error instanceof Error ? error.message : '';
 			if (message.startsWith('OUT_OF_STOCK:')) {
-				return fail(409, { error: `${message.replace('OUT_OF_STOCK:', '')} is out of stock. Please remove it from cart.` });
+				return fail(409, {
+					error: `${message.replace('OUT_OF_STOCK:', '')} is out of stock. Please remove it from cart.`
+				});
 			}
 
 			return fail(500, { error: 'Order could not be placed. Please try again.' });
@@ -221,6 +228,7 @@ export const actions: Actions = {
 			discountTotal,
 			paymentMethod,
 			shippingAddress,
+			siteUrl: url.origin,
 			items: validatedItems.map((item) => ({
 				productName: item.name,
 				variantColor: item.color,

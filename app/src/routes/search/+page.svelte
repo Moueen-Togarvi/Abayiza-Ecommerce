@@ -1,4 +1,5 @@
 <script lang="ts">
+	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
 	let { data } = $props();
@@ -78,7 +79,9 @@
 	{:else if results.length === 0}
 		<div class="py-16 text-center">
 			<h2 class="mb-3 font-serif text-xl text-black">No results for "{query}"</h2>
-			<p class="mb-8 font-light text-gray-500">Try a different search term or browse all products.</p>
+			<p class="mb-8 font-light text-gray-500">
+				Try a different search term or browse all products.
+			</p>
 			<a
 				href="/shop"
 				class="inline-block bg-black px-10 py-4 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold"
@@ -97,8 +100,12 @@
 			<div class="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4">
 				{#each results as product}
 					<div class="group">
-						<a href={`/shop/${product.slug}`} class="block">
-							<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
+						<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
+							<a
+								href={`/shop/${product.slug}`}
+								class="block h-full"
+								aria-label={`View ${product.name}`}
+							>
 								<img
 									src={productImage(product)}
 									alt={product.name}
@@ -111,10 +118,17 @@
 										Out of Stock
 									</span>
 								{/if}
-							</div>
-							<p class="mb-1 text-xs font-light tracking-widest text-gray-400 uppercase">
-								{product.collections?.[0]?.name || 'Abayiza'}
-							</p>
+							</a>
+							<WishlistButton
+								{product}
+								class="absolute right-3 bottom-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/86 text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.16)] backdrop-blur transition-colors hover:bg-[#e4b43d]"
+								iconClass="h-4 w-4"
+							/>
+						</div>
+						<p class="mb-1 text-xs font-light tracking-widest text-gray-400 uppercase">
+							{product.collections?.[0]?.name || 'Abayiza'}
+						</p>
+						<a href={`/shop/${product.slug}`} class="block">
 							<h3 class="mb-1 font-serif text-sm leading-snug transition-colors hover:text-gold">
 								{product.name}
 							</h3>

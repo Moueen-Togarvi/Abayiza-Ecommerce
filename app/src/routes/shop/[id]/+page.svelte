@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { cart } from '$lib/client/cart.svelte';
+	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
 	let { data } = $props();
@@ -82,6 +84,13 @@
 			color: selectedColor,
 			size: selectedSize
 		});
+	}
+
+	function buyNow() {
+		if (selectedVariantOutOfStock) return;
+
+		addToCart();
+		goto('/checkout');
 	}
 </script>
 
@@ -273,14 +282,37 @@
 					</button>
 				</div>
 
-				<button
-					type="button"
-					disabled={selectedVariantOutOfStock}
-					class="flex h-14 flex-grow items-center justify-center space-x-2 bg-black text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-					onclick={addToCart}
-				>
-					<span>{selectedVariantOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
-				</button>
+				<div class="grid flex-1 gap-3 sm:grid-cols-[1fr_1fr_auto]">
+					<button
+						type="button"
+						disabled={selectedVariantOutOfStock}
+						class="flex h-14 items-center justify-center gap-2 bg-black px-4 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+						onclick={addToCart}
+					>
+						<span>{selectedVariantOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
+					</button>
+					<button
+						type="button"
+						disabled={selectedVariantOutOfStock}
+						class="flex h-14 items-center justify-center gap-2 bg-[#e4b43d] px-4 text-sm font-bold tracking-widest text-[#14352d] uppercase transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+						onclick={buyNow}
+					>
+						<span>{selectedVariantOutOfStock ? 'Unavailable' : 'Buy Now'}</span>
+						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.8"
+								d="M5 12h14M13 6l6 6-6 6"
+							/>
+						</svg>
+					</button>
+					<WishlistButton
+						{product}
+						class="flex h-14 w-full items-center justify-center border border-gray-300 bg-white text-black transition-colors hover:border-gold hover:bg-gold sm:w-14"
+						iconClass="h-5 w-5"
+					/>
+				</div>
 			</div>
 
 			<div class="mb-10 flex items-start space-x-4 border border-gray-100 bg-gray-50 p-4">
@@ -376,21 +408,44 @@
 
 			<div class="grid grid-cols-2 gap-6 md:grid-cols-4">
 				{#each relatedProducts as item}
-					<a href={`/shop/${item.slug}`} class="group">
+					<div class="group">
 						<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
-							<img
-								src={productImage(item)}
-								alt={item.name}
-								class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+							<a href={`/shop/${item.slug}`} class="block h-full" aria-label={`View ${item.name}`}>
+								<img
+									src={productImage(item)}
+									alt={item.name}
+									class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+								/>
+							</a>
+							<WishlistButton
+								product={item}
+								class="absolute right-3 bottom-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/86 text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.16)] backdrop-blur transition-colors hover:bg-[#e4b43d]"
+								iconClass="h-4 w-4"
 							/>
+							<a
+								href={`/shop/${item.slug}`}
+								class="absolute right-14 bottom-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/86 text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.16)] backdrop-blur transition-colors hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+								aria-label={`Open ${item.name} details`}
+							>
+								<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="1.8"
+										d="M7 17L17 7M9 7h8v8"
+									/>
+								</svg>
+							</a>
 						</div>
-						<h3 class="mb-1 font-serif text-sm transition-colors group-hover:text-gold">
-							{item.name}
-						</h3>
-						<p class="text-xs font-medium text-gray-500">
-							{formatMoney(item.salePrice || item.price)}
-						</p>
-					</a>
+						<a href={`/shop/${item.slug}`} class="block">
+							<h3 class="mb-1 font-serif text-sm transition-colors group-hover:text-gold">
+								{item.name}
+							</h3>
+							<p class="text-xs font-medium text-gray-500">
+								{formatMoney(item.salePrice || item.price)}
+							</p>
+						</a>
+					</div>
 				{/each}
 			</div>
 		</div>

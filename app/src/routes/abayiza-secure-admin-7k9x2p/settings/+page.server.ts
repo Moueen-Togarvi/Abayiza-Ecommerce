@@ -6,7 +6,9 @@ import type { Actions, PageServerLoad } from './$types';
 const getText = (data: FormData, key: string, fallback = '') =>
 	String(data.get(key) ?? fallback).trim();
 
-const isEmail = (value: string) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+const emailAddress = (value: string) => value.match(/<([^>]+)>/)?.[1] || value;
+const isEmail = (value: string) =>
+	!value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress(value).trim());
 
 const readSettingsForm = (data: FormData) => ({
 	store_name: getText(data, 'store_name'),

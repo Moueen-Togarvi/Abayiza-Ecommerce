@@ -24,7 +24,8 @@
 			CANCELLED: 'bg-red-100 text-red-800 ring-red-200'
 		})[status] || 'bg-gray-100 text-gray-800 ring-gray-200';
 
-	const actionDisabled = (status: string) => order.status === status || order.status === 'DELIVERED' || order.status === 'CANCELLED';
+	const actionDisabled = (status: string) =>
+		order.status === status || order.status === 'DELIVERED' || order.status === 'CANCELLED';
 	const backHref = $derived(
 		order.status === 'DELIVERED'
 			? '/abayiza-secure-admin-7k9x2p/orders/completed'
@@ -43,23 +44,40 @@
 		<div class="grid gap-0 lg:grid-cols-[17rem_1fr]">
 			<div class="relative min-h-64 bg-gray-100">
 				{#if order.items?.[0]?.image}
-					<img src={order.items[0].image} alt={order.items[0].productName} class="absolute inset-0 h-full w-full object-cover" />
+					<img
+						src={order.items[0].image}
+						alt={order.items[0].productName}
+						class="absolute inset-0 h-full w-full object-cover"
+					/>
 				{:else}
-					<div class="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-400">No image</div>
+					<div
+						class="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-400"
+					>
+						No image
+					</div>
 				{/if}
-				<div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"></div>
+				<div
+					class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"
+				></div>
 				<a
 					href={backHref}
 					class="absolute top-4 left-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-sm hover:bg-white"
 					aria-label="Back to orders"
 				>
 					<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M10 19l-7-7m0 0l7-7m-7 7h18"
+						/>
 					</svg>
 				</a>
 				<div class="absolute right-4 bottom-4 left-4">
 					<p class="text-xs font-black tracking-[0.16em] text-white/75 uppercase">Primary item</p>
-					<h2 class="mt-1 font-serif text-xl leading-tight text-white">{order.items?.[0]?.productName || 'Abayiza order'}</h2>
+					<h2 class="mt-1 font-serif text-xl leading-tight text-white">
+						{order.items?.[0]?.productName || 'Abayiza order'}
+					</h2>
 				</div>
 			</div>
 
@@ -67,16 +85,23 @@
 				<div class="flex flex-col justify-between gap-5 xl:flex-row xl:items-start">
 					<div>
 						<div class="flex flex-wrap items-center gap-3">
-							<span class={`inline-flex items-center rounded-full px-3 py-1 text-xs font-black ring-1 ${statusClass(order.status)}`}>
+							<span
+								class={`inline-flex items-center rounded-full px-3 py-1 text-xs font-black ring-1 ${statusClass(order.status)}`}
+							>
 								{statusLabel(order.status)}
 							</span>
 							<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-600">
 								Cash on Delivery
 							</span>
 						</div>
-						<h1 class="mt-4 text-3xl font-black tracking-tight text-gray-950">{order.orderNumber}</h1>
+						<h1 class="mt-4 text-3xl font-black tracking-tight text-gray-950">
+							{order.orderNumber}
+						</h1>
 						<p class="mt-2 text-sm text-gray-500">
-							Placed {new Date(order.createdAt).toLocaleString()} / {order.items.length} item{order.items.length === 1 ? '' : 's'}
+							Placed {new Date(order.createdAt).toLocaleString()} / {order.items.length} item{order
+								.items.length === 1
+								? ''
+								: 's'}
 						</p>
 					</div>
 
@@ -123,11 +148,15 @@
 					</div>
 					<div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
 						<p class="text-xs font-bold text-gray-500 uppercase">Mobile</p>
-						<p class="mt-2 truncate text-sm font-black text-gray-950">{order.customerPhone || '-'}</p>
+						<p class="mt-2 truncate text-sm font-black text-gray-950">
+							{order.customerPhone || '-'}
+						</p>
 					</div>
 					<div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
 						<p class="text-xs font-bold text-gray-500 uppercase">City</p>
-						<p class="mt-2 truncate text-sm font-black text-gray-950">{order.customerCity || '-'}</p>
+						<p class="mt-2 truncate text-sm font-black text-gray-950">
+							{order.customerCity || '-'}
+						</p>
 					</div>
 				</div>
 			</div>
@@ -145,7 +174,9 @@
 			<section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
 				<div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
 					<div>
-						<p class="text-xs font-black tracking-[0.16em] text-gray-400 uppercase">Ordered abayas</p>
+						<p class="text-xs font-black tracking-[0.16em] text-gray-400 uppercase">
+							Ordered abayas
+						</p>
 						<h3 class="mt-1 text-lg font-black text-gray-950">Items in this order</h3>
 					</div>
 					<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-600">
@@ -156,27 +187,45 @@
 				<div class="divide-y divide-gray-100">
 					{#each order.items as item}
 						<div class="grid gap-4 p-5 md:grid-cols-[7.5rem_1fr_auto] md:items-center">
-							<div class="h-36 overflow-hidden rounded-xl border border-gray-100 bg-gray-100 md:h-32">
+							<div
+								class="h-36 overflow-hidden rounded-xl border border-gray-100 bg-gray-100 md:h-32"
+							>
 								{#if item.image}
-									<img src={item.image} alt={item.productName} class="h-full w-full object-cover object-center" />
+									<img
+										src={item.image}
+										alt={item.productName}
+										class="h-full w-full object-cover object-center"
+									/>
 								{:else}
-									<div class="flex h-full items-center justify-center text-xs font-bold text-gray-400">No image</div>
+									<div
+										class="flex h-full items-center justify-center text-xs font-bold text-gray-400"
+									>
+										No image
+									</div>
 								{/if}
 							</div>
 							<div class="min-w-0">
 								<p class="font-serif text-xl leading-tight text-gray-950">{item.productName}</p>
 								<div class="mt-3 flex flex-wrap gap-2">
 									{#if item.variantColor}
-										<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-700">{item.variantColor}</span>
+										<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-700"
+											>{item.variantColor}</span
+										>
 									{/if}
 									{#if item.variantSize}
-										<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-700">{item.variantSize}</span>
+										<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-700"
+											>{item.variantSize}</span
+										>
 									{/if}
-									<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-700">Qty {item.quantity}</span>
+									<span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-700"
+										>Qty {item.quantity}</span
+									>
 								</div>
 							</div>
 							<div class="text-left md:text-right">
-								<p class="text-sm font-semibold text-gray-500">{formatMoney(item.priceAtPurchase)} each</p>
+								<p class="text-sm font-semibold text-gray-500">
+									{formatMoney(item.priceAtPurchase)} each
+								</p>
 								<p class="mt-1 text-xl font-black text-gray-950">{formatMoney(item.lineTotal)}</p>
 							</div>
 						</div>
@@ -201,10 +250,9 @@
 					<div class="flex justify-between text-gray-600">
 						<span>Shipping</span><span>{formatMoney(order.shippingCost)}</span>
 					</div>
-					<div class="flex justify-between text-gray-600">
-						<span>Discount</span><span>{formatMoney(order.discountTotal)}</span>
-					</div>
-					<div class="flex justify-between border-t border-gray-100 pt-4 text-lg font-black text-gray-950">
+					<div
+						class="flex justify-between border-t border-gray-100 pt-4 text-lg font-black text-gray-950"
+					>
 						<span>Total due</span><span>{formatMoney(order.totalAmount)}</span>
 					</div>
 				</div>
@@ -218,7 +266,9 @@
 				<div class="mt-5 space-y-3 text-sm text-gray-600">
 					<div>
 						<p class="text-xs font-bold text-gray-400 uppercase">Email</p>
-						<p class="mt-1 break-all font-medium text-gray-900">{order.customerEmail || 'No email saved'}</p>
+						<p class="mt-1 font-medium break-all text-gray-900">
+							{order.customerEmail || 'No email saved'}
+						</p>
 					</div>
 					<div>
 						<p class="text-xs font-bold text-gray-400 uppercase">Mobile number</p>
@@ -232,30 +282,45 @@
 				<div class="mt-4 space-y-3 text-sm">
 					<div>
 						<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Name</p>
-						<p class="mt-1 font-black text-gray-950">{address.firstName || '-'} {address.lastName || ''}</p>
+						<p class="mt-1 font-black text-gray-950">
+							{address.firstName || '-'}
+							{address.lastName || ''}
+						</p>
 					</div>
 					<div>
-						<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Address</p>
+						<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+							Address
+						</p>
 						<p class="mt-1 leading-6 text-gray-800">{address.addressLine1 || '-'}</p>
-						{#if address.addressLine2}<p class="leading-6 text-gray-800">{address.addressLine2}</p>{/if}
+						{#if address.addressLine2}<p class="leading-6 text-gray-800">
+								{address.addressLine2}
+							</p>{/if}
 					</div>
 					<div class="grid grid-cols-2 gap-3">
 						<div>
-							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">City</p>
+							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+								City
+							</p>
 							<p class="mt-1 font-medium text-gray-900">{address.city || '-'}</p>
 						</div>
 						<div>
-							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Postal Code</p>
+							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+								Postal Code
+							</p>
 							<p class="mt-1 font-medium text-gray-900">{address.postalCode || '-'}</p>
 						</div>
 					</div>
 					<div class="grid grid-cols-2 gap-3">
 						<div>
-							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Country</p>
+							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+								Country
+							</p>
 							<p class="mt-1 font-medium text-gray-900">{address.country || '-'}</p>
 						</div>
 						<div>
-							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Mobile</p>
+							<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+								Mobile
+							</p>
 							<p class="mt-1 font-medium text-gray-900">{address.phone || '-'}</p>
 						</div>
 					</div>
@@ -277,7 +342,9 @@
 					</div>
 					<div class="flex items-center justify-between">
 						<span>Updated</span>
-						<span class="font-medium text-gray-950">{new Date(order.updatedAt).toLocaleDateString()}</span>
+						<span class="font-medium text-gray-950"
+							>{new Date(order.updatedAt).toLocaleDateString()}</span
+						>
 					</div>
 				</div>
 			</section>
@@ -300,12 +367,18 @@
 					onclick={() => (showCancelModal = false)}
 				>
 					<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M6 18L18 6M6 6l12 12"
+						/>
 					</svg>
 				</button>
 			</div>
 			<p class="mt-4 text-sm leading-6 text-gray-600">
-				Order {order.orderNumber} will move from active orders to cancelled orders. This action can be reviewed later from the cancelled orders page.
+				Order {order.orderNumber} will move from active orders to cancelled orders. This action can be
+				reviewed later from the cancelled orders page.
 			</p>
 			<div class="mt-6 flex justify-end gap-3">
 				<button

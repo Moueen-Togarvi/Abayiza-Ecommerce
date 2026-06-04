@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
+	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
 	let { data } = $props();
@@ -13,7 +14,6 @@
 		(data.filterOptions || { categories: [], colors: [], sizes: [] }) as Record<string, any>
 	);
 	let visiblePages = $derived(buildVisiblePages(pagination.page, pagination.totalPages));
-	let showFilters = $state(false);
 	let searchQuery = $state('');
 	let selectedCategory = $state('');
 	let selectedColor = $state('');
@@ -149,13 +149,6 @@
 				<p class="text-sm font-bold text-[#596c62]">
 					Showing {products.length} of {pagination.total} matching products
 				</p>
-				<button
-					type="button"
-					class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-[#fbf9f2] px-4 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase md:hidden"
-					onclick={() => (showFilters = !showFilters)}
-				>
-					Filters
-				</button>
 			</div>
 			<p class="text-sm font-bold text-[#596c62]">
 				Page {pagination.page} of {pagination.totalPages} · {pagination.pageSize} per page
@@ -163,7 +156,7 @@
 		</div>
 
 		<div class="flex flex-col gap-8 md:flex-row md:items-start">
-			<aside class="{showFilters ? 'block' : 'hidden'} w-full shrink-0 md:block md:w-72 lg:w-80">
+			<aside class="w-full shrink-0 md:block md:w-72 lg:w-80">
 				<form
 					method="GET"
 					action={section.href}
@@ -334,9 +327,7 @@
 
 			<div class="min-w-0 flex-1">
 				{#if products.length}
-					<div
-						class="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-					>
+					<div class="grid auto-rows-fr grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
 						{#each products as item}
 							<article
 								class="group flex h-full flex-col overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1"
@@ -369,59 +360,63 @@
 									/>
 								</a>
 
-								<div class="flex flex-1 flex-col p-4">
-									<div class="mb-3 flex items-start justify-between gap-3">
-										<div class="min-h-[3.25rem] min-w-0">
+								<div class="flex flex-1 flex-col p-3 sm:p-4">
+									<div class="mb-3 flex items-start justify-between gap-2 sm:gap-3">
+										<div class="min-h-[2.9rem] min-w-0 sm:min-h-[3.25rem]">
 											<a
 												href={productHref(item)}
-												class="block font-serif text-lg leading-tight text-[#14352d] transition-colors hover:text-[#b58b2b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+												class="line-clamp-2 block font-serif text-[0.82rem] leading-tight text-[#14352d] transition-colors hover:text-[#b58b2b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:text-lg"
 											>
 												{item.name}
 											</a>
-											<p class="mt-2 text-xs font-bold tracking-[0.08em] text-[#596c62] uppercase">
+											<p
+												class="mt-2 text-[0.58rem] font-bold tracking-[0.08em] text-[#596c62] uppercase sm:text-xs"
+											>
 												{primaryVariant(item)?.color || productCategory(item)}
 											</p>
 										</div>
 										<div class="shrink-0 text-right">
-											<p class="text-base font-black whitespace-nowrap text-[#14352d]">
+											<p class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-base">
 												{formatMoney(item.salePrice || item.price)}
 											</p>
 											{#if item.salePrice}
-												<p class="text-xs font-bold whitespace-nowrap text-red-600 line-through">
+												<p
+													class="text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs"
+												>
 													{formatMoney(item.price)}
 												</p>
 											{/if}
 										</div>
 									</div>
 
-									<div class="mb-5 flex flex-wrap gap-2">
+									<div class="mb-4 flex flex-wrap gap-1 sm:mb-5 sm:gap-2">
 										<span
-											class="inline-flex min-h-6 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-2.5 text-center text-[0.66rem] font-bold text-[#14352d]"
+											class="inline-flex min-h-5 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-1.5 text-center text-[0.52rem] font-bold text-[#14352d] sm:min-h-6 sm:px-2.5 sm:text-[0.66rem]"
 										>
 											{productCategory(item)}
 										</span>
 										{#if primaryVariant(item)?.size}
 											<span
-												class="inline-flex min-h-6 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-2.5 text-center text-[0.66rem] font-bold text-[#14352d]"
+												class="inline-flex min-h-5 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-1.5 text-center text-[0.52rem] font-bold text-[#14352d] sm:min-h-6 sm:px-2.5 sm:text-[0.66rem]"
 											>
 												{primaryVariant(item)?.size}
 											</span>
 										{/if}
 									</div>
 
-									<div class="mt-auto flex items-center gap-2">
+									<div class="mt-auto grid grid-cols-[1fr_auto_auto] items-center gap-1.5 sm:gap-2">
 										<button
 											type="button"
 											disabled={isOutOfStock(item)}
-											class="inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+											class="inline-flex min-h-9 flex-1 items-center justify-center rounded-full bg-[#14352d] px-2 text-xs font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:px-4 sm:text-sm"
 											onclick={() => addProductToCart(item)}
 										>
 											{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
 										</button>
 										<a
 											href={productHref(item)}
-											class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
-											aria-label={`View ${item.name}`}
+											class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:h-10 sm:w-10"
+											aria-label={`Open ${item.name} details`}
 										>
 											<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 												<path
@@ -432,6 +427,10 @@
 												/>
 											</svg>
 										</a>
+										<WishlistButton
+											product={item}
+											class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:h-10 sm:w-10"
+										/>
 									</div>
 								</div>
 							</article>

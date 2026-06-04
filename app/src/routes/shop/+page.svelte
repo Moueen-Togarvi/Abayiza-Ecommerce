@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
+	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
 	type Pagination = {
@@ -38,7 +39,6 @@
 		buildVisiblePages(Number(pagination.page), Number(pagination.totalPages))
 	);
 	let isGridView = $state(true);
-	let showFilters = $state(false);
 	let searchQuery = $state('');
 	let selectedCategory = $state('');
 	let selectedColor = $state('');
@@ -155,13 +155,6 @@
 				<p class="text-sm font-bold text-[#596c62]">
 					Showing {products.length} of {pagination.total} matching products
 				</p>
-				<button
-					type="button"
-					class="inline-flex min-h-10 items-center justify-center rounded-full border border-[#14352d]/12 bg-[#fbf9f2] px-4 text-xs font-black tracking-[0.12em] text-[#14352d] uppercase md:hidden"
-					onclick={() => (showFilters = !showFilters)}
-				>
-					Filters
-				</button>
 			</div>
 
 			<div class="flex flex-wrap items-center justify-between gap-4 md:justify-end">
@@ -209,7 +202,7 @@
 		</div>
 
 		<div class="flex flex-col gap-8 md:flex-row md:items-start">
-			<aside class="{showFilters ? 'block' : 'hidden'} w-full shrink-0 md:block md:w-72 lg:w-80">
+			<aside class="w-full shrink-0 md:block md:w-72 lg:w-80">
 				<form
 					method="GET"
 					action="/shop"
@@ -382,7 +375,7 @@
 				{#if products.length}
 					<div
 						class="grid {isGridView
-							? 'auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+							? 'auto-rows-fr grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4'
 							: 'grid-cols-1 gap-6'}"
 					>
 						{#each products as item}
@@ -421,25 +414,29 @@
 									/>
 								</a>
 
-								<div class="flex flex-1 flex-col p-4">
-									<div class="mb-3 flex items-start justify-between gap-3">
+								<div class="flex flex-1 flex-col p-3 sm:p-4">
+									<div class="mb-3 flex items-start justify-between gap-2 sm:gap-3">
 										<div class="min-h-[2.65rem] min-w-0">
 											<a
 												href={`/shop/${item.slug}`}
-												class="block overflow-hidden font-serif text-sm leading-tight font-semibold text-ellipsis whitespace-nowrap text-[#14352d] transition-colors hover:text-[#b58b2b]"
+												class="line-clamp-2 block font-serif text-[0.82rem] leading-tight font-semibold text-[#14352d] transition-colors hover:text-[#b58b2b] sm:text-sm"
 											>
 												{item.name}
 											</a>
-											<p class="mt-2 text-xs font-bold tracking-[0.08em] text-[#596c62] uppercase">
+											<p
+												class="mt-2 text-[0.58rem] font-bold tracking-[0.08em] text-[#596c62] uppercase sm:text-xs"
+											>
 												{primaryVariant(item)?.color || 'Signature edit'}
 											</p>
 										</div>
 										<div class="shrink-0 text-right">
-											<p class="text-base font-black whitespace-nowrap text-[#14352d]">
+											<p class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-base">
 												{formatMoney(item.salePrice || item.price)}
 											</p>
 											{#if item.salePrice}
-												<p class="text-xs font-bold whitespace-nowrap text-red-600 line-through">
+												<p
+													class="text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs"
+												>
 													{formatMoney(item.price)}
 												</p>
 											{/if}
@@ -452,29 +449,33 @@
 										</p>
 									{/if}
 
-									<div class="mt-auto flex items-center gap-2">
+									<div class="mt-auto grid grid-cols-[1fr_auto_auto] items-center gap-1.5 sm:gap-2">
 										<button
 											type="button"
 											disabled={isOutOfStock(item)}
-											class="inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-[#14352d] px-4 text-sm font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+											class="inline-flex min-h-9 flex-1 items-center justify-center rounded-full bg-[#14352d] px-2 text-xs font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:px-4 sm:text-sm"
 											onclick={() => addProductToCart(item)}
 										>
 											{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
 										</button>
-										<button
-											type="button"
-											class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d]"
-											aria-label={`Add ${item.name} to wishlist`}
+										<a
+											href={`/shop/${item.slug}`}
+											class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:h-10 sm:w-10"
+											aria-label={`Open ${item.name} details`}
 										>
 											<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													stroke-width="1.7"
-													d="M12 20.25l-1.45-1.32C5.4 14.36 2 11.28 2 7.5A4.5 4.5 0 016.5 3c1.74 0 3.41.81 4.5 2.09A5.96 5.96 0 0115.5 3 4.5 4.5 0 0120 7.5c0 3.78-3.4 6.86-8.55 11.43L12 20.25z"
+													stroke-width="1.8"
+													d="M7 17L17 7M9 7h8v8"
 												/>
 											</svg>
-										</button>
+										</a>
+										<WishlistButton
+											product={item}
+											class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] sm:h-10 sm:w-10"
+										/>
 									</div>
 								</div>
 							</article>

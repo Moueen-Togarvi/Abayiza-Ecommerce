@@ -326,7 +326,10 @@
 			<section id="notifications" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
 				<div class="mb-5">
 					<h2 class="text-lg font-black text-gray-950">Notifications</h2>
-					<p class="mt-1 text-sm text-gray-500">These work with the server Resend API key.</p>
+					<p class="mt-1 text-sm text-gray-500">
+						Order emails use the server Resend API key. Admin emails include a direct order detail
+						link.
+					</p>
 				</div>
 
 				<div class="grid gap-4 md:grid-cols-2">
@@ -350,7 +353,7 @@
 						<input
 							id="resend_from_email"
 							name="resend_from_email"
-							type="email"
+							type="text"
 							value={settings.resend_from_email}
 							class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
 							placeholder="Abayiza <orders@abayiza.com>"
