@@ -89,7 +89,7 @@ const fallbackProductSeed: StorefrontProduct[] = [
 		images: [
 			{
 				id: 'fallback-image-haya-1',
-				url: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+				url: '/abaya11.png',
 				altText: 'Haya Everyday Abaya',
 				displayOrder: 0
 			}

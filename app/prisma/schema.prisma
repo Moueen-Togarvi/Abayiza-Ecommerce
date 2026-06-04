@@ -71,12 +71,13 @@ model Product {
 
   isActive Boolean @default(true)
 
-  variants     ProductVariant[]
-  images       ProductImage[]
-  collections  Collection[]     @relation("ProductToCollection")
-  wishlistedBy User[]           @relation("UserWishlist")
-  reviews      Review[]
-  orderItems   OrderItem[]
+  variants           ProductVariant[]
+  images             ProductImage[]
+  collections        Collection[]               @relation("ProductToCollection")
+  wishlistedBy       User[]                     @relation("UserWishlist")
+  reviews            Review[]
+  orderItems         OrderItem[]
+  storefrontSections StorefrontSectionProduct[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -213,4 +214,20 @@ model StoreSetting {
   value       String   @db.Text
   description String?
   updatedAt   DateTime @updatedAt
+}
+
+model StorefrontSectionProduct {
+  id           String  @id @default(uuid())
+  pageKey      String
+  sectionKey   String
+  productId    String
+  product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  displayOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([pageKey, sectionKey, productId])
+  @@index([pageKey, sectionKey, displayOrder])
+  @@index([productId])
 }

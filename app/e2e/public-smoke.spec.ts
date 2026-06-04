@@ -12,6 +12,23 @@ test.describe('public storefront smoke', () => {
 		await expect(page.getByRole('heading', { name: /Signature Collections/ })).toBeVisible();
 	});
 
+	test('renders a paginated homepage section page', async ({ page }) => {
+		await page.goto('/sections/new-arrivals?page=1');
+
+		await expect(page).toHaveTitle(/New Arrivals \| Abayiza/);
+		await expect(page.getByRole('heading', { level: 1, name: 'New Arrivals' })).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Back Home' })).toHaveAttribute('href', '/');
+		await expect(page.getByText(/Page 1 of/)).toBeVisible();
+	});
+
+	test('protects the admin storefront route', async ({ page }) => {
+		await page.goto('/abayiza-secure-admin-7k9x2p/storefront');
+
+		await expect(page).toHaveURL(/\/abayiza-secure-admin-7k9x2p\/login\?redirectTo=.*storefront/);
+		await expect(page).toHaveTitle(/Admin Login \| Abayiza/);
+		await expect(page.getByRole('heading', { name: 'Sign in to Abayiza' })).toBeVisible();
+	});
+
 	test('shows the contact page and key support controls', async ({ page }) => {
 		await page.goto('/contact');
 

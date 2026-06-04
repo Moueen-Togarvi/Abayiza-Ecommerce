@@ -26,7 +26,10 @@
 	}
 
 	function primaryVariant(item: any) {
-		return item.variants?.find((variant: any) => Number(variant.stockCount || 0) > 0) || item.variants?.[0];
+		return (
+			item.variants?.find((variant: any) => Number(variant.stockCount || 0) > 0) ||
+			item.variants?.[0]
+		);
 	}
 
 	function isOutOfStock(item: any) {
@@ -212,9 +215,9 @@
 						>
 							<a
 								href={`/shop/${item.slug}`}
-								class="relative block overflow-hidden bg-[#e4eee9] {isGridView
-									? 'aspect-[4/5]'
-									: 'aspect-[4/5] sm:w-64 sm:shrink-0'}"
+								class="relative block aspect-[4/3] overflow-hidden bg-[#e4eee9] {isGridView
+									? ''
+									: 'sm:w-64 sm:shrink-0'}"
 								aria-label={`View ${item.name}`}
 							>
 								{#if item.salePrice}
@@ -234,16 +237,18 @@
 								<img
 									src={productImage(item)}
 									alt={item.name}
-									class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
+									width="1200"
+									height="900"
+									class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
 								/>
 							</a>
 
 							<div class="flex flex-1 flex-col p-4">
 								<div class="mb-3 flex items-start justify-between gap-3">
-									<div class="min-h-[3.25rem] min-w-0">
+									<div class="min-h-[2.65rem] min-w-0">
 										<a
 											href={`/shop/${item.slug}`}
-											class="block font-serif text-lg leading-tight text-[#14352d] transition-colors hover:text-[#b58b2b]"
+											class="block overflow-hidden font-serif text-sm leading-tight font-semibold text-ellipsis whitespace-nowrap text-[#14352d] transition-colors hover:text-[#b58b2b]"
 										>
 											{item.name}
 										</a>
@@ -252,11 +257,11 @@
 										</p>
 									</div>
 									<div class="shrink-0 text-right">
-										<p class="whitespace-nowrap text-base font-black text-[#14352d]">
+										<p class="text-base font-black whitespace-nowrap text-[#14352d]">
 											{formatMoney(item.salePrice || item.price)}
 										</p>
 										{#if item.salePrice}
-											<p class="whitespace-nowrap text-xs font-bold text-red-600 line-through">
+											<p class="text-xs font-bold whitespace-nowrap text-red-600 line-through">
 												{formatMoney(item.price)}
 											</p>
 										{/if}
@@ -298,7 +303,9 @@
 					{/each}
 				</div>
 
-				<div class="mt-14 border-t border-[#14352d]/10 pt-8 text-center text-sm font-bold text-[#596c62]">
+				<div
+					class="mt-14 border-t border-[#14352d]/10 pt-8 text-center text-sm font-bold text-[#596c62]"
+				>
 					Showing all products from the database.
 				</div>
 			</div>

@@ -11,7 +11,8 @@ const hashPassword = (password) => {
 	return `scrypt$${salt}$${hash}`;
 };
 
-const adminPassword = process.env.ADMIN_SEED_PASSWORD || `Abayiza-${randomBytes(6).toString('base64url')}`;
+const adminPassword =
+	process.env.ADMIN_SEED_PASSWORD || `Abayiza-${randomBytes(6).toString('base64url')}`;
 
 const categories = [
 	{
@@ -33,7 +34,7 @@ const products = [
 		fabricDetails: 'Nida blend, relaxed fit, easy daily care.',
 		price: '7200',
 		salePrice: null,
-		images: [image('/ChatGPT Image May 25, 2026, 06_25_42 PM.png')],
+		images: ['/abaya11.png'],
 		collections: ['nida-essentials'],
 		variants: [
 			{ color: 'Black', size: 'S (52)', sku: 'ABY-HAYA-BLK-S', stockCount: 8 },

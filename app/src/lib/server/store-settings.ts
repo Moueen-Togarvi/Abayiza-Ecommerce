@@ -24,8 +24,10 @@ export const defaultStoreSettings: SettingValues = {
 
 export const defaultStorefrontSettings: SettingValues = {
 	hero_eyebrow: 'New Season Edit',
-	hero_headline_phrases: 'Premium Abayas\nLuxury Abayas\nNida Essentials\nModest Layers\nEid Sale Abayiza',
-	hero_subheading: 'Clean Nida silhouettes with soft movement, refined finishing, and everyday grace.',
+	hero_headline_phrases:
+		'Premium Abayas\nLuxury Abayas\nNida Essentials\nModest Layers\nEid Sale Abayiza',
+	hero_subheading:
+		'Clean Nida silhouettes with soft movement, refined finishing, and everyday grace.',
 	hero_primary_label: 'Shop Collection',
 	hero_primary_href: '/shop',
 	hero_secondary_label: 'View Lookbook',
@@ -126,9 +128,7 @@ const heroPhrase = (value: string) => {
 	return `${words.slice(0, midpoint).join(' ')}\n${words.slice(midpoint).join(' ')}`;
 };
 
-export const getPublicStorefrontSettings = async () => {
-	const settings = await getSettings(defaultStorefrontSettings);
-
+export const publicStorefrontSettingsFromValues = (settings: SettingValues) => {
 	return {
 		heroEyebrow: settings.hero_eyebrow,
 		heroHeadlinePhrases: toLines(settings.hero_headline_phrases).map(heroPhrase),
@@ -148,4 +148,10 @@ export const getPublicStorefrontSettings = async () => {
 		showMostLoved: toBoolean(settings.show_most_loved),
 		showInventory: toBoolean(settings.show_inventory)
 	};
+};
+
+export const getPublicStorefrontSettings = async () => {
+	const settings = await getSettings(defaultStorefrontSettings);
+
+	return publicStorefrontSettingsFromValues(settings);
 };

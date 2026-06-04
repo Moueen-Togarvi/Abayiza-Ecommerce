@@ -1,87 +1,88 @@
+<script lang="ts">
+	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
+</script>
+
 <svelte:head>
-	<title>Our Story | Abayiza</title>
+	<title>About Abayiza | Our Story</title>
+	<meta
+		name="description"
+		content="The story of Abayiza, started by university friends Chand Baloch and Mubahsir Ali after their first abaya ad video went viral."
+	/>
 </svelte:head>
 
-<!-- Hero Section -->
-<section class="relative h-[70vh] w-full flex items-center justify-center overflow-hidden">
-	<div class="absolute inset-0 bg-black/40 z-10"></div>
-	<img 
-		src="https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?q=80&w=2000&auto=format&fit=crop" 
-		alt="Abayiza Craftsmanship" 
-		class="absolute inset-0 w-full h-full object-cover object-center"
+<section
+	class="relative isolate -mt-[4.25rem] overflow-hidden bg-[#14352d] text-white md:-mt-[4.75rem]"
+>
+	<img
+		src="/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png"
+		alt="Abayiza abaya editorial"
+		width="1670"
+		height="941"
+		class="absolute inset-0 -z-30 h-full w-full object-cover object-center"
+		fetchpriority="high"
 	/>
-	<div class="relative z-20 text-center px-4 max-w-3xl mx-auto">
-		<h1 class="text-4xl md:text-5xl lg:text-6xl text-white font-serif tracking-widest uppercase mb-6">Our Story</h1>
-		<p class="text-white/90 text-lg font-light">Redefining modest fashion through the lens of modern luxury.</p>
-	</div>
-</section>
+	<div class="absolute inset-0 -z-20 bg-[#10261f]/50"></div>
+	<div
+		class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#fbf9f2] via-[#fbf9f2]/20 to-transparent"
+	></div>
 
-<!-- Introduction -->
-<section class="py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto text-center">
-	<h2 class="text-sm font-medium tracking-widest uppercase text-gold mb-6">The Genesis</h2>
-	<h3 class="text-3xl md:text-4xl font-serif leading-relaxed text-black mb-8">
-		"Abayiza was born from a simple belief: modesty should never compromise on elegance."
-	</h3>
-	<p class="text-gray-600 font-light text-lg leading-relaxed mb-8">
-		Founded in 2026, Abayiza emerged to fill a gap in the luxury modest fashion market. We noticed that women were often forced to choose between premium quality and modest silhouettes. Our mission became clear—to craft abayas that empower women with quiet confidence, utilizing the finest fabrics and impeccable tailoring.
-	</p>
-	<div class="w-16 h-[1px] bg-black/20 mx-auto"></div>
-</section>
-
-<!-- Values Image Grid -->
-<section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-		<div class="relative h-[500px] group overflow-hidden">
-			<img src="https://images.unsplash.com/photo-1627589255655-b40b8a3f8737?q=80&w=800&auto=format&fit=crop" alt="Premium Fabric" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-			<div class="absolute inset-0 bg-black/20"></div>
-			<div class="absolute bottom-10 left-10">
-				<h4 class="text-white text-2xl font-serif tracking-wide mb-2">Uncompromising Quality</h4>
-				<p class="text-white/80 font-light max-w-xs">We source only the finest Korean Nida and Japanese silks, ensuring every piece drapes beautifully and lasts a lifetime.</p>
-			</div>
-		</div>
-		<div class="relative h-[500px] group overflow-hidden">
-			<img src="https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=800&auto=format&fit=crop" alt="Craftsmanship" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-			<div class="absolute inset-0 bg-black/20"></div>
-			<div class="absolute bottom-10 left-10">
-				<h4 class="text-white text-2xl font-serif tracking-wide mb-2">Artisan Craftsmanship</h4>
-				<p class="text-white/80 font-light max-w-xs">Every abaya is handstitched by master tailors. We believe in slow fashion, where attention to detail is paramount.</p>
+	<div
+		class="mx-auto flex min-h-[min(680px,82svh)] max-w-7xl items-end px-4 pt-28 pb-10 sm:px-6 md:pt-32 lg:px-8"
+	>
+		<div class="max-w-3xl">
+			<p class="mb-4 text-xs font-black tracking-[0.22em] text-[#d7c08f] uppercase">Our Story</p>
+			<h1 class="font-serif text-4xl leading-[0.96] uppercase sm:text-6xl md:text-7xl">
+				<AbayizaWordmark class="text-white" />
+			</h1>
+			<p class="mt-6 max-w-2xl text-base leading-7 font-medium text-white/86 sm:text-lg">
+				Premium abayas for women who want modesty to feel intentional, graceful, and quietly
+				luxurious.
+			</p>
+			<div class="mt-8 flex flex-wrap gap-3">
+				<a
+					href="/shop"
+					class="inline-flex min-h-12 items-center justify-center rounded-full bg-[#c8ff46] px-6 text-sm font-black text-[#14352d] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+				>
+					Shop Abayas
+				</a>
+				<a
+					href="/contact"
+					class="inline-flex min-h-12 items-center justify-center rounded-full border border-white/42 bg-white/12 px-6 text-sm font-black text-white backdrop-blur-md transition-colors hover:bg-white hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+				>
+					Talk to Us
+				</a>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- Founder Note -->
-<section class="py-24 bg-cream mt-12">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-		<div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
-			<div class="w-full md:w-5/12">
-				<div class="relative h-[600px] p-4 bg-white shadow-xl">
-					<img 
-						src="https://images.unsplash.com/photo-1617251137884-f135eccf6942?q=80&w=800&auto=format&fit=crop" 
-						alt="Aesthetic Abaya" 
-						class="w-full h-full object-cover"
-					/>
-				</div>
-			</div>
-			<div class="w-full md:w-7/12 flex flex-col items-start">
-				<h2 class="text-3xl font-serif tracking-widest uppercase text-black mb-8">A Note on Elegance</h2>
-				<div class="space-y-6 text-gray-600 font-light text-lg leading-relaxed">
-					<p>
-						When I started Abayiza, I wanted to create more than just clothing. I wanted to design an experience—a feeling of luxury that you step into every day.
-					</p>
-					<p>
-						In a world that often demands we compromise our values for style, Abayiza stands as a testament that true elegance is found in modesty. Our designs are intentionally minimalist, allowing the quality of the fabric and the precision of the cut to speak for themselves.
-					</p>
-					<p>
-						Thank you for joining us on this journey. We are honored to be part of your wardrobe.
-					</p>
-				</div>
-				<div class="mt-10">
-					<!-- Signature placeholder -->
-					<div class="font-serif italic text-3xl text-black">A. Togarvi</div>
-					<p class="text-xs tracking-widest uppercase text-gray-500 mt-2">Founder & Creative Director</p>
-				</div>
-			</div>
+<section class="bg-[#fbf9f2] px-4 py-16 text-[#14352d] sm:px-6 lg:px-8">
+	<div class="mx-auto max-w-4xl">
+		<p class="mb-4 text-xs font-black tracking-[0.2em] text-[#b58b2b] uppercase">
+			How Abayiza Started
+		</p>
+		<h2 class="font-serif text-3xl leading-tight uppercase sm:text-5xl">
+			From two university friends to a growing abaya brand.
+		</h2>
+
+		<div class="mt-8 space-y-6 text-base leading-8 font-medium text-[#596c62] sm:text-lg">
+			<p>
+				Abayiza started with two friends,
+				<strong class="font-black text-[#14352d]">Chand Baloch</strong> and
+				<strong class="font-black text-[#14352d]">Mubahsir Ali</strong>. During university, they
+				would often talk about their future and plan the kind of business they wanted to build after
+				graduation.
+			</p>
+			<p>
+				After graduating, they decided to begin with abayas: a modest fashion idea they believed
+				could become something meaningful. They started small, prepared their first pieces, and
+				uploaded their first video as an ad.
+			</p>
+			<p>
+				That first video went viral. Orders and attention started coming in, and from that moment
+				the brand began to grow. What started as a plan between two university friends became
+				<strong class="font-black text-[#14352d]"> Abayiza</strong>.
+			</p>
 		</div>
 	</div>
 </section>
