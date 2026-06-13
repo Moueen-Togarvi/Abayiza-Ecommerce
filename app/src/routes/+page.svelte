@@ -84,10 +84,15 @@
 		);
 	}
 
-	let signatureCollectionsSection = $derived(homeSection('signature-collections', 3));
+	let signatureCollectionsSection = $derived(homeSection('signature-collections', 4));
 	let newArrivalsSection = $derived(homeSection('new-arrivals', 4));
 	let mostLovedSection = $derived(homeSection('most-loved', 8));
-	let curatedEdits = $derived((signatureCollectionsSection.products || []) as Array<any>);
+	let curatedEdits = $derived(
+		(signatureCollectionsSection.products?.length >= 4 
+			? signatureCollectionsSection.products 
+			: products.slice(0, 4)
+		).slice(0, 4) as Array<any>
+	);
 	let newArrivals = $derived((newArrivalsSection.products || []) as Array<any>);
 	let bestsellers = $derived((mostLovedSection.products || []) as Array<any>);
 	let bestsellerRows = $derived([
@@ -464,7 +469,7 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-3 lg:grid-cols-3 xl:max-w-4xl xl:mx-auto">
+		<div class="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:max-w-7xl xl:mx-auto">
 			{#each curatedEdits as edit}
 				<div
 					class="group flex h-full w-full flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_48px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.14)]"
@@ -859,7 +864,7 @@
 					<div class="product-loop__track">
 						{#each [...row, ...row] as item, itemIndex}
 							<div
-								class={`product-loop__item group relative min-w-0 sm:w-[18rem] sm:shrink-0 lg:w-[19rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
+								class={`product-loop__item group relative min-w-0 sm:w-[17.5rem] sm:shrink-0 lg:w-[18.25rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
 							>
 								<div class="relative">
 									<a
