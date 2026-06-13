@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { cart } from '$lib/client/cart.svelte';
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
-	import WishlistButton from '$lib/components/WishlistButton.svelte';
+
 	import { formatMoney } from '$lib/shared/money';
 	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, absoluteUrl } from '$lib/shared/seo';
 
@@ -148,6 +148,7 @@
 			...((item.collections || []).map((collection: any) => collection.name) as string[])
 		]
 			.filter(Boolean)
+			.filter((tag) => typeof tag === 'string' && tag.toLowerCase() !== 'default')
 			.slice(0, 3);
 	}
 
@@ -463,14 +464,14 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+		<div class="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-3 lg:grid-cols-3 xl:max-w-4xl xl:mx-auto">
 			{#each curatedEdits as edit}
 				<div
-					class="group mx-auto flex h-full w-full max-w-[24rem] flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_48px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.14)]"
+					class="group flex h-full w-full flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_48px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.14)]"
 				>
 					<a
 						href={productHref(edit)}
-						class="relative block aspect-[4/3] overflow-hidden bg-[#e4eee9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+						class="relative block aspect-[3/4] overflow-hidden bg-[#e4eee9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 						aria-label={`View ${edit.name}`}
 					>
 						<img
@@ -488,70 +489,56 @@
 							</span>
 						{/if}
 					</a>
-					<span class="flex flex-1 flex-col px-4 pt-3 pb-3">
-						<span class="text-[0.68rem] font-bold tracking-[0.18em] text-[#8a7444] uppercase">
+					<span class="relative flex flex-1 flex-col p-4">
+						<!-- Cart icon at top-right of text area -->
+						<button
+							type="button"
+							disabled={isOutOfStock(edit)}
+							onclick={() => addProductToCart(edit)}
+							class="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_6px_16px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
+							aria-label="Add to cart"
+						>
+							<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+							</svg>
+						</button>
+						<span class="pr-10 text-[0.65rem] font-bold tracking-[0.18em] text-[#8a7444] uppercase">
 							{productCategory(edit)}
 						</span>
 						<a
 							href={productHref(edit)}
-							class="mt-2 block font-serif text-[1.1rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+							class="mt-1.5 block font-serif text-[1rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 						>
 							{edit.name}
 						</a>
-						<span class="mt-2 flex flex-wrap gap-2">
+						<span class="mt-2 flex flex-row flex-nowrap overflow-hidden gap-1.5">
 							{#each productTags(edit) as tag}
 								<span
-									class="inline-flex min-h-6 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-2.5 text-center text-[0.66rem] font-bold text-[#14352d]"
+									class="inline-flex min-h-[1.2rem] shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-2 whitespace-nowrap text-center text-[0.55rem] font-bold text-[#14352d]"
 								>
 									{tag}
 								</span>
 							{/each}
 						</span>
-						<span class="mt-2 block text-xs leading-4 font-medium text-[#596c62]">
-							{edit.description}
-						</span>
-						<span class="mt-auto flex items-center justify-between gap-3 pt-3">
+						<span class="mt-auto flex items-center justify-between gap-3 pt-4">
 							<span class="min-w-0">
-								<span class="block">
-									<span class="block text-lg font-black whitespace-nowrap text-[#c0983f]">
-										{formatMoney(edit.salePrice || edit.price)}
-									</span>
-									{#if edit.salePrice}
-										<span
-											class="mt-1 block text-xs font-bold whitespace-nowrap text-red-600 line-through"
-										>
-											{formatMoney(edit.price)}
-										</span>
-									{/if}
+								<span class="block text-base font-black whitespace-nowrap text-[#c0983f]">
+									{formatMoney(edit.salePrice || edit.price)}
 								</span>
-								<span class="mt-1 block text-xs font-semibold text-[#596c62]">Free delivery</span>
+								{#if edit.salePrice}
+									<span class="mt-0.5 block text-[0.7rem] font-bold whitespace-nowrap text-red-600 line-through">
+										{formatMoney(edit.price)}
+									</span>
+								{/if}
+								<span class="mt-0.5 block text-[0.68rem] font-semibold text-[#596c62]">Free delivery</span>
 							</span>
-							<button
-								type="button"
-								disabled={isOutOfStock(edit)}
-								class="inline-flex min-h-10 min-w-[6.8rem] shrink-0 items-center justify-center gap-2 rounded-full bg-[#e4b43d] px-4 text-xs font-black whitespace-nowrap text-[#14352d] shadow-[0_10px_22px_rgba(196,152,63,0.24)] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-								onclick={() => addProductToCart(edit)}
+							<a
+								href={productHref(edit)}
+								class="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full bg-[#14352d] px-4 text-[0.7rem] font-black whitespace-nowrap text-white shadow-[0_8px_20px_rgba(20,53,45,0.22)] transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 							>
-								<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
-									/>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M10 21h.01M18 21h.01"
-									/>
-								</svg>
-								{isOutOfStock(edit) ? 'Out of Stock' : 'Add to Cart'}
-							</button>
-							<WishlistButton
-								product={edit}
-								class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-white text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d]"
-							/>
+								Buy Now
+							</a>
 						</span>
 					</span>
 				</div>
@@ -634,7 +621,7 @@
 				>
 					<a
 						href={productHref(item)}
-						class="relative block aspect-[4/3] overflow-hidden bg-[#e4eee9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+						class="relative block aspect-[4/5] overflow-hidden bg-[#e4eee9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 						aria-label={`View ${item.name}`}
 					>
 						<img
@@ -644,125 +631,73 @@
 							height="900"
 							class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
 						/>
-						<span
-							class="absolute top-3 left-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/82 text-[#14352d] shadow-[0_10px_20px_rgba(20,53,45,0.12)] backdrop-blur-md"
-						>
-							<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M15 19l-7-7 7-7"
-								/>
-							</svg>
-						</span>
-						<span
-							class="absolute top-0 right-0 inline-flex h-14 w-14 items-center justify-center rounded-bl-md bg-white text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.12)]"
-						>
-							<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="1.9"
-									d="M6 7h15l-1.5 8.25H8.25L6 4.5H3"
-								/>
-								<circle cx="9" cy="19" r="1.2" fill="currentColor"></circle>
-								<circle cx="18" cy="19" r="1.2" fill="currentColor"></circle>
-							</svg>
-						</span>
-						<span
-							class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/72 px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.1em] text-[#14352d] uppercase backdrop-blur-md"
-						>
-							{productCategory(item)}
-						</span>
 						{#if isOutOfStock(item)}
 							<span
-								class="absolute top-3 left-14 inline-flex min-h-7 items-center justify-center rounded-full bg-red-600 px-3 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
+								class="absolute top-3 left-3 inline-flex min-h-7 items-center justify-center rounded-full bg-red-600 px-3 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
 							>
 								Out of Stock
 							</span>
 						{/if}
 					</a>
 
-					<span class="flex flex-1 flex-col px-2.5 pt-2.5 pb-3 sm:px-4 sm:pt-3">
-						<span
-							class="flex min-h-[3rem] items-start justify-between gap-2 sm:min-h-[3.2rem] sm:gap-3"
-						>
-							<span class="min-w-0">
-								<a
-									href={productHref(item)}
-									class="line-clamp-2 block font-serif text-[0.82rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:text-[1.05rem]"
-								>
-									{item.name}
-								</a>
-								<span
-									class="mt-1 block text-[0.58rem] font-bold tracking-[0.08em] text-[#8a7444] uppercase sm:text-[0.68rem] sm:tracking-[0.12em]"
-								>
-									{primaryVariant(item)?.color || productCategory(item)}
-								</span>
-							</span>
-							<WishlistButton
-								product={item}
-								class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#e4b43d] text-white shadow-[0_10px_22px_rgba(196,152,63,0.24)] transition-colors hover:bg-[#14352d] sm:h-8 sm:w-8"
-								savedClass="bg-[#14352d] text-white"
-								iconClass="h-3 w-3 sm:h-3.5 sm:w-3.5"
-							/>
-						</span>
+					<span class="relative flex flex-1 flex-col px-2.5 pt-2.5 pb-2.5 sm:px-3">
+					<!-- Cart icon at top-right of text area -->
+					<button
+						type="button"
+						disabled={isOutOfStock(item)}
+						onclick={() => addProductToCart(item)}
+						class="absolute top-2.5 right-2.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_4px_12px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:h-8 sm:w-8"
+						aria-label="Add to cart"
+					>
+						<svg class="h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+						</svg>
+					</button>
 
-						<span class="mt-1.5 flex flex-wrap gap-1 sm:mt-2 sm:gap-2">
-							{#each productTags(item) as spec}
-								<span
-									class="inline-flex min-h-5 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-1.5 text-center text-[0.52rem] font-bold text-[#14352d] sm:min-h-6 sm:px-2.5 sm:text-[0.66rem]"
-								>
-									{spec}
-								</span>
-							{/each}
-						</span>
-
-						<span
-							class="mt-auto grid gap-2 pt-2 sm:flex sm:items-center sm:justify-between sm:gap-3 sm:pt-3"
+					<span class="pr-9 sm:pr-10">
+						<a
+							href={productHref(item)}
+							class="line-clamp-2 block font-serif text-[0.82rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:text-[1rem]"
 						>
-							<span class="min-w-0">
-								<span class="block text-sm font-black whitespace-nowrap text-[#14352d] sm:text-lg">
-									{formatMoney(item.salePrice || item.price)}
-								</span>
-								{#if item.salePrice}
-									<span
-										class="mt-1 block text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs"
-									>
-										{formatMoney(item.price)}
-									</span>
-								{/if}
-							</span>
-							<button
-								type="button"
-								disabled={isOutOfStock(item)}
-								class="inline-flex min-h-9 w-full min-w-0 shrink-0 items-center justify-center gap-1 rounded-full bg-[#e4b43d] px-2 text-[0.62rem] font-black whitespace-nowrap text-[#14352d] transition-colors hover:bg-[#14352d] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:w-auto sm:min-w-[6.8rem] sm:gap-2 sm:px-4 sm:text-xs"
-								onclick={() => addProductToCart(item)}
-							>
-								<svg
-									class="h-3 w-3 sm:h-3.5 sm:w-3.5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
-									/>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M10 21h.01M18 21h.01"
-									/>
-								</svg>
-								{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
-							</button>
+							{item.name}
+						</a>
+						<span
+							class="mt-0.5 block text-[0.58rem] font-bold tracking-[0.08em] text-[#8a7444] uppercase sm:text-[0.65rem] sm:tracking-[0.12em]"
+						>
+							{primaryVariant(item)?.color || productCategory(item)}
 						</span>
 					</span>
+
+					<span class="mt-1.5 flex flex-row flex-nowrap overflow-hidden gap-1 sm:gap-1.5">
+						{#each productTags(item) as spec}
+							<span
+								class="inline-flex min-h-[1.1rem] shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-1.5 whitespace-nowrap text-center text-[0.48rem] font-bold text-[#14352d] sm:min-h-[1.2rem] sm:px-2 sm:text-[0.55rem]"
+							>
+								{spec}
+							</span>
+						{/each}
+					</span>
+
+					<span class="mt-auto flex items-center justify-between gap-2 pt-2">
+						<span class="min-w-0">
+							<span class="block text-sm font-black whitespace-nowrap text-[#14352d]">
+								{formatMoney(item.salePrice || item.price)}
+							</span>
+							{#if item.salePrice}
+								<span class="mt-0.5 block text-[0.6rem] font-bold whitespace-nowrap text-red-600 line-through">
+									{formatMoney(item.price)}
+								</span>
+							{/if}
+						</span>
+						<a
+							href={productHref(item)}
+							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
+						>
+							Buy Now
+						</a>
+					</span>
+				</span>
 				</div>
 			{/each}
 		</div>
@@ -929,7 +864,7 @@
 								<div class="relative">
 									<a
 										href={productHref(item)}
-										class="relative block aspect-[4/3] overflow-hidden rounded-md bg-[#dfe9e4] ring-1 ring-[#14352d]/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+										class="relative block aspect-[3/4] overflow-hidden rounded-md bg-[#dfe9e4] ring-1 ring-[#14352d]/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
 										aria-label={`View ${item.name}`}
 									>
 										<img
@@ -939,11 +874,6 @@
 											height="900"
 											class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
 										/>
-										<span
-											class="absolute top-2 left-2 inline-flex min-h-6 max-w-[6.5rem] items-center justify-center truncate rounded-full bg-white/82 px-2 text-[0.5rem] font-black tracking-[0.1em] text-[#14352d] uppercase shadow-[0_10px_20px_rgba(20,53,45,0.10)] backdrop-blur-md sm:top-3 sm:left-3 sm:min-h-8 sm:max-w-none sm:px-3 sm:text-[0.62rem] sm:tracking-[0.12em]"
-										>
-											{productCategory(item)}
-										</span>
 										{#if isOutOfStock(item)}
 											<span
 												class="absolute top-2 right-2 inline-flex min-h-6 items-center justify-center rounded-full bg-red-600 px-2 text-[0.5rem] font-black tracking-[0.1em] text-white uppercase shadow-[0_10px_20px_rgba(20,53,45,0.10)] sm:top-3 sm:right-3 sm:min-h-8 sm:px-3 sm:text-[0.62rem] sm:tracking-[0.12em]"
@@ -952,30 +882,44 @@
 											</span>
 										{/if}
 									</a>
-									<WishlistButton
-										product={item}
-										class="absolute right-2 bottom-2 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/86 text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.16)] backdrop-blur transition-colors hover:bg-[#e4b43d] sm:right-3 sm:bottom-3"
-										iconClass="h-4 w-4"
-									/>
+									<button
+										type="button"
+										disabled={isOutOfStock(item)}
+										onclick={() => addProductToCart(item)}
+										class="absolute top-2 right-2 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_6px_16px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:top-3 sm:right-3 sm:h-9 sm:w-9"
+										aria-label="Add to cart"
+									>
+										<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+										</svg>
+									</button>
 								</div>
-
-								<div class="pt-2 sm:pt-4">
+								<div class="flex flex-1 flex-col pt-1 sm:pt-2">
 									<a
 										href={productHref(item)}
-										class="line-clamp-2 block min-h-[2.15rem] font-serif text-sm leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:min-h-0 sm:text-lg"
+										class="line-clamp-1 block font-serif text-sm leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:text-base"
 									>
 										{item.name}
 									</a>
 
-									<div class="mt-1.5 flex flex-wrap items-baseline gap-1.5 sm:mt-2 sm:gap-2">
-										<span class="text-sm font-black text-[#14352d] sm:text-lg">
-											{formatMoney(item.salePrice || item.price)}
-										</span>
-										{#if item.salePrice}
-											<span class="text-[0.65rem] font-bold text-red-600 line-through sm:text-sm">
-												{formatMoney(item.price)}
+									<div class="mt-auto flex items-center justify-between gap-2 pt-1 sm:pt-2">
+										<div class="flex flex-wrap items-baseline gap-1">
+											<span class="text-sm font-black text-[#14352d]">
+												{formatMoney(item.salePrice || item.price)}
 											</span>
-										{/if}
+											{#if item.salePrice}
+												<span class="text-[0.62rem] font-bold text-red-600 line-through">
+													{formatMoney(item.price)}
+												</span>
+											{/if}
+										</div>
+										<a
+											href={productHref(item)}
+											class="inline-flex min-h-7 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.6rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-8 sm:px-4 sm:text-[0.65rem]"
+										>
+											Buy Now
+										</a>
 									</div>
 								</div>
 							</div>

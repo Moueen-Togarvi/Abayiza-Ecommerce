@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
-	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
 	import { SITE_NAME } from '$lib/shared/seo';
 
@@ -388,7 +387,7 @@
 				{#if products.length}
 					<div
 						class="grid {isGridView
-							? 'auto-rows-fr grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4'
+							? 'auto-rows-fr grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3'
 							: 'grid-cols-1 gap-6'}"
 					>
 						{#each products as item}
@@ -399,7 +398,7 @@
 							>
 								<a
 									href={`/shop/${item.slug}`}
-									class="relative block aspect-[4/3] overflow-hidden bg-[#e4eee9] {isGridView
+									class="relative block aspect-[3/4] overflow-hidden bg-[#e4eee9] {isGridView
 										? ''
 										: 'sm:w-64 sm:shrink-0'}"
 									aria-label={`View ${item.name}`}
@@ -427,70 +426,58 @@
 									/>
 								</a>
 
-								<div class="flex flex-1 flex-col p-3 sm:p-4">
-									<div class="mb-3 flex items-start justify-between gap-2 sm:gap-3">
-										<div class="min-h-[2.65rem] min-w-0">
-											<a
-												href={`/shop/${item.slug}`}
-												class="line-clamp-2 block font-serif text-[0.82rem] leading-tight font-semibold text-[#14352d] transition-colors hover:text-[#b58b2b] sm:text-sm"
-											>
-												{item.name}
-											</a>
-											<p
-												class="mt-2 text-[0.58rem] font-bold tracking-[0.08em] text-[#596c62] uppercase sm:text-xs"
-											>
-												{primaryVariant(item)?.color || 'Signature edit'}
-											</p>
-										</div>
-										<div class="shrink-0 text-right">
-											<p class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-base">
-												{formatMoney(item.salePrice || item.price)}
-											</p>
-											{#if item.salePrice}
-												<p
-													class="text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs"
-												>
-													{formatMoney(item.price)}
-												</p>
-											{/if}
-										</div>
+								<div class="relative flex flex-1 flex-col p-3 sm:p-4">
+									<!-- Cart icon at top-right of text area -->
+									<button
+										type="button"
+										disabled={isOutOfStock(item)}
+										onclick={() => addProductToCart(item)}
+										class="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_4px_12px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:h-9 sm:w-9"
+										aria-label="Add to cart"
+									>
+										<svg class="h-4 w-4 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+										</svg>
+									</button>
+
+									<div class="pr-10">
+										<a
+											href={`/shop/${item.slug}`}
+											class="line-clamp-2 block font-serif text-[0.82rem] leading-tight font-semibold text-[#14352d] transition-colors hover:text-[#b58b2b] sm:text-sm"
+										>
+											{item.name}
+										</a>
+										<p
+											class="mt-1 text-[0.58rem] font-bold tracking-[0.08em] text-[#596c62] uppercase sm:text-[0.65rem] sm:tracking-[0.1em]"
+										>
+											{primaryVariant(item)?.color || 'Signature edit'}
+										</p>
 									</div>
 
 									{#if !isGridView}
-										<p class="mb-5 max-w-2xl text-sm leading-6 font-medium text-[#596c62]">
+										<p class="mt-3 mb-4 max-w-2xl text-sm leading-6 font-medium text-[#596c62]">
 											{item.description}
 										</p>
 									{/if}
 
-									<div
-										class="mt-auto grid grid-cols-[minmax(5.4rem,1fr)_auto_auto] items-center gap-1 sm:gap-2"
-									>
-										<button
-											type="button"
-											disabled={isOutOfStock(item)}
-											class="inline-flex min-h-9 flex-1 items-center justify-center rounded-full bg-[#14352d] px-2 text-[0.68rem] leading-none font-bold whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 sm:min-h-10 sm:px-4 sm:text-sm"
-											onclick={() => addProductToCart(item)}
-										>
-											{isOutOfStock(item) ? 'Out of Stock' : 'Add to Cart'}
-										</button>
+									<div class="mt-auto flex items-center justify-between gap-2 pt-3 sm:pt-4">
+										<div class="min-w-0">
+											<p class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-[0.95rem]">
+												{formatMoney(item.salePrice || item.price)}
+											</p>
+											{#if item.salePrice}
+												<p class="mt-0.5 text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs">
+													{formatMoney(item.price)}
+												</p>
+											{/if}
+										</div>
 										<a
 											href={`/shop/${item.slug}`}
-											class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:h-10 sm:w-10"
-											aria-label={`Open ${item.name} details`}
+											class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
 										>
-											<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													stroke-width="1.8"
-													d="M7 17L17 7M9 7h8v8"
-												/>
-											</svg>
+											Buy Now
 										</a>
-										<WishlistButton
-											product={item}
-											class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#fbf9f2] text-[#14352d] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] sm:h-10 sm:w-10"
-										/>
 									</div>
 								</div>
 							</article>

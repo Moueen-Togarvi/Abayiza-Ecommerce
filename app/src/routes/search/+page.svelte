@@ -1,5 +1,4 @@
 <script lang="ts">
-	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
 	let { data } = $props();
@@ -119,11 +118,6 @@
 									</span>
 								{/if}
 							</a>
-							<WishlistButton
-								{product}
-								class="absolute right-3 bottom-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/86 text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.16)] backdrop-blur transition-colors hover:bg-[#e4b43d]"
-								iconClass="h-4 w-4"
-							/>
 						</div>
 						<p class="mb-1 text-xs font-light tracking-widest text-gray-400 uppercase">
 							{product.collections?.[0]?.name || 'Abayiza'}
@@ -133,6 +127,12 @@
 								{product.name}
 							</h3>
 							<p class="text-sm font-medium">{formatMoney(product.salePrice || product.price)}</p>
+						</a>
+						<a
+							href={`/shop/${product.slug}`}
+							class="mt-2 inline-flex min-h-8 w-full items-center justify-center rounded-full bg-[#14352d] px-3 text-xs font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+						>
+							Buy Now
 						</a>
 					</div>
 				{/each}
