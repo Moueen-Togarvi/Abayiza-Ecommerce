@@ -44,7 +44,43 @@ export const defaultStorefrontSettings: SettingValues = {
 	show_new_arrivals: 'true',
 	show_promise: 'true',
 	show_most_loved: 'true',
-	show_inventory: 'true'
+	show_inventory: 'true',
+
+	// Slide 1
+	slide1_title: 'Premium Nida Essentials',
+	slide1_tagline: 'EVERYDAY COMFORT',
+	slide1_description: 'Double-stitched durability and flowy silhouettes in authentic premium Nida fabric. Styled for standard modest daily wear.',
+	slide1_link: '/shop?category=nida-essentials',
+	slide1_image: '/abaya_banner_nida.png',
+	slide1_promo: '40% OFF',
+
+	// Slide 2
+	slide2_title: 'Luxury Occasion Wear',
+	slide2_tagline: 'ELEGANT LAYERS',
+	slide2_description: 'Featuring intricate hand-stitched beadwork and premium drapes on soft premium flowy georgette edits.',
+	slide2_link: '/shop?category=occasion',
+	slide2_image: '/abaya_banner_occasion.png',
+	slide2_promo: '50% OFF',
+
+	// Slide 3
+	slide3_title: 'Eid Signature Edit',
+	slide3_tagline: 'LIMITED EMBROIDERY',
+	slide3_description: 'Sophisticated dark cuts with delicate gold-lace details, designed to leave a quiet, modest presence.',
+	slide3_link: '/shop?category=eid-edit',
+	slide3_image: '/abaya_banner_eid.png',
+	slide3_promo: '30% OFF',
+
+	// Flash Sale
+	flash_sale_enabled: 'true',
+	flash_sale_title: 'FLASH SALE',
+	flash_sale_subtitle: 'Ends Soon!',
+	flash_sale_description: 'UP TO 70% OFF SELECTED ITEMS',
+	flash_sale_image: '/abaya_banner_occasion.png',
+	flash_sale_hours: '2',
+	flash_sale_minutes: '14',
+	flash_sale_seconds: '30',
+	flash_sale_cta_label: 'Shop The Sale',
+	flash_sale_cta_link: '/shop?on-sale=true'
 };
 
 const descriptions: Record<string, string> = {
@@ -83,7 +119,39 @@ const descriptions: Record<string, string> = {
 	show_new_arrivals: 'Home new arrivals visibility',
 	show_promise: 'Home promise section visibility',
 	show_most_loved: 'Home most loved visibility',
-	show_inventory: 'Home inventory section visibility'
+	show_inventory: 'Home inventory section visibility',
+
+	slide1_title: 'Slide 1 Title',
+	slide1_tagline: 'Slide 1 Tagline',
+	slide1_description: 'Slide 1 Description',
+	slide1_link: 'Slide 1 Link URL',
+	slide1_image: 'Slide 1 Image URL',
+	slide1_promo: 'Slide 1 Promo Badge',
+
+	slide2_title: 'Slide 2 Title',
+	slide2_tagline: 'Slide 2 Tagline',
+	slide2_description: 'Slide 2 Description',
+	slide2_link: 'Slide 2 Link URL',
+	slide2_image: 'Slide 2 Image URL',
+	slide2_promo: 'Slide 2 Promo Badge',
+
+	slide3_title: 'Slide 3 Title',
+	slide3_tagline: 'Slide 3 Tagline',
+	slide3_description: 'Slide 3 Description',
+	slide3_link: 'Slide 3 Link URL',
+	slide3_image: 'Slide 3 Image URL',
+	slide3_promo: 'Slide 3 Promo Badge',
+
+	flash_sale_enabled: 'Flash Sale Visibility',
+	flash_sale_title: 'Flash Sale Title',
+	flash_sale_subtitle: 'Flash Sale Cursive Subtitle',
+	flash_sale_description: 'Flash Sale Offer Description',
+	flash_sale_image: 'Flash Sale Model Image URL',
+	flash_sale_hours: 'Flash Sale Timer Hours',
+	flash_sale_minutes: 'Flash Sale Timer Minutes',
+	flash_sale_seconds: 'Flash Sale Timer Seconds',
+	flash_sale_cta_label: 'Flash Sale Button Text',
+	flash_sale_cta_link: 'Flash Sale Button URL'
 };
 
 export const getSettings = async (defaults: SettingValues) => {
@@ -150,7 +218,41 @@ export const publicStorefrontSettingsFromValues = (settings: SettingValues) => {
 		showNewArrivals: toBoolean(settings.show_new_arrivals),
 		showPromise: toBoolean(settings.show_promise),
 		showMostLoved: toBoolean(settings.show_most_loved),
-		showInventory: toBoolean(settings.show_inventory)
+		showInventory: toBoolean(settings.show_inventory),
+
+		// Sliding Banner items
+		slide1Title: settings.slide1_title,
+		slide1Tagline: settings.slide1_tagline,
+		slide1Description: settings.slide1_description,
+		slide1Link: settings.slide1_link,
+		slide1Image: settings.slide1_image,
+		slide1Promo: settings.slide1_promo,
+
+		slide2Title: settings.slide2_title,
+		slide2Tagline: settings.slide2_tagline,
+		slide2Description: settings.slide2_description,
+		slide2Link: settings.slide2_link,
+		slide2Image: settings.slide2_image,
+		slide2Promo: settings.slide2_promo,
+
+		slide3Title: settings.slide3_title,
+		slide3Tagline: settings.slide3_tagline,
+		slide3Description: settings.slide3_description,
+		slide3Link: settings.slide3_link,
+		slide3Image: settings.slide3_image,
+		slide3Promo: settings.slide3_promo,
+
+		// Flash Sale
+		flashSaleEnabled: toBoolean(settings.flash_sale_enabled),
+		flashSaleTitle: settings.flash_sale_title,
+		flashSaleSubtitle: settings.flash_sale_subtitle,
+		flashSaleDescription: settings.flash_sale_description,
+		flashSaleImage: settings.flash_sale_image,
+		flashSaleHours: Number(settings.flash_sale_hours) || 2,
+		flashSaleMinutes: Number(settings.flash_sale_minutes) || 14,
+		flashSaleSeconds: Number(settings.flash_sale_seconds) || 30,
+		flashSaleCtaLabel: settings.flash_sale_cta_label,
+		flashSaleCtaLink: settings.flash_sale_cta_link
 	};
 };
 

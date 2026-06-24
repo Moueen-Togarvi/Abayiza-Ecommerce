@@ -3,6 +3,9 @@
 	import { onMount } from 'svelte';
 	import { cart } from '$lib/client/cart.svelte';
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
+	import AbayaSlidingBanner from '$lib/components/AbayaSlidingBanner.svelte';
+	import ProOfferGrid from '$lib/components/ProOfferGrid.svelte';
+	import FlashSaleTimerBanner from '$lib/components/FlashSaleTimerBanner.svelte';
 
 	import { formatMoney } from '$lib/shared/money';
 	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, absoluteUrl } from '$lib/shared/seo';
@@ -449,6 +452,8 @@
 	</section>
 {/if}
 
+
+
 <!-- Featured Collections -->
 <section class="border-t border-[#14352d]/8 bg-[#fbf9f2] px-4 py-16 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-6xl">
@@ -563,51 +568,8 @@
 	</div>
 </section>
 
-<!-- Brand Story Strip -->
-<section class="border-y border-[#14352d]/8 bg-cream px-4 py-14 sm:px-6 lg:px-8">
-	<div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-[0.88fr_1.12fr] md:items-center">
-		<div class="aspect-[4/3] overflow-hidden rounded-md bg-[#e4eee9] md:max-h-[360px]">
-			<img
-				src="/abaya11.png"
-				alt="Midnight layered abaya in a warm archway"
-				class="h-full w-full object-cover object-center"
-			/>
-		</div>
-
-		<div class="max-w-2xl md:pl-6">
-			<p class="mb-3 text-xs font-bold tracking-[0.18em] text-[#8a7444] uppercase">Our Ethos</p>
-			<h2 class="font-serif text-3xl leading-tight text-[#14352d] uppercase sm:text-4xl">
-				Designed for Quiet Presence
-			</h2>
-			<p class="mt-5 max-w-xl text-base leading-7 font-medium text-[#596c62]">
-				Every <AbayizaWordmark class="text-[0.78em] text-[#14352d]" /> piece is shaped around fluid movement,
-				refined finishing, and modest silhouettes that feel composed from morning plans to evening gatherings.
-			</p>
-
-			<div class="mt-8 grid grid-cols-3 gap-3 border-y border-[#14352d]/10 py-5">
-				<div>
-					<p class="text-sm font-black text-[#14352d]">Nida</p>
-					<p class="mt-1 text-xs font-semibold text-[#596c62]">Soft drape</p>
-				</div>
-				<div>
-					<p class="text-sm font-black text-[#14352d]">Finish</p>
-					<p class="mt-1 text-xs font-semibold text-[#596c62]">Clean seams</p>
-				</div>
-				<div>
-					<p class="text-sm font-black text-[#14352d]">Fit</p>
-					<p class="mt-1 text-xs font-semibold text-[#596c62]">Easy layers</p>
-				</div>
-			</div>
-
-			<a
-				href="/about"
-				class="mt-7 inline-flex min-h-11 items-center justify-center rounded-full bg-[#14352d] px-6 text-sm font-bold text-white shadow-[0_14px_30px_rgba(20,53,45,0.18)] transition-colors hover:bg-[#c5a880] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
-			>
-				Read Our Story
-			</a>
-		</div>
-	</div>
-</section>
+<!-- Abaya Low-Height Sliding Banner -->
+<AbayaSlidingBanner settings={storefrontSettings} />
 
 <!-- New Arrivals (Horizontal Scroll / Grid) -->
 <section class="bg-cream px-4 py-16 sm:px-6 lg:px-8">
@@ -720,119 +682,10 @@
 	</div>
 </section>
 
-<!-- Trust / Quality Highlights -->
-<section class="bg-[#14352d] px-4 py-12 text-[#fffaf0] sm:px-6 lg:px-8">
-	<div class="mx-auto max-w-7xl">
-		<div
-			class="flex flex-col gap-4 border-b border-white/12 pb-7 md:flex-row md:items-end md:justify-between"
-		>
-			<div>
-				<p class="mb-3 text-[0.68rem] font-black tracking-[0.2em] text-[#e4b43d] uppercase">
-					<AbayizaWordmark class="text-[0.92em]" /> Promise
-				</p>
-				<h2 class="font-serif text-3xl leading-tight uppercase sm:text-4xl">
-					Crafted For Quiet Luxury
-				</h2>
-			</div>
-			<p class="max-w-md text-sm leading-6 font-medium text-white/70">
-				Every piece is designed around fabric quality, careful finishing, reliable delivery, and
-				easy aftercare.
-			</p>
-		</div>
-
-		<div
-			class="grid gap-px overflow-hidden rounded-md border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4"
-		>
-			<div class="bg-[#173f35] p-6 transition-colors hover:bg-[#1c4a3f]">
-				<div class="mb-7 flex items-center justify-between">
-					<span class="text-xs font-black tracking-[0.16em] text-[#e4b43d]">01</span>
-					<span
-						class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d]"
-					>
-						<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="1.6"
-								d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-							/>
-						</svg>
-					</span>
-				</div>
-				<h4 class="font-serif text-lg tracking-[0.12em] uppercase">Premium Nida</h4>
-				<p class="mt-3 text-sm leading-6 text-white/68">
-					Soft drape fabrics selected for everyday polish.
-				</p>
-			</div>
-
-			<div class="bg-[#173f35] p-6 transition-colors hover:bg-[#1c4a3f]">
-				<div class="mb-7 flex items-center justify-between">
-					<span class="text-xs font-black tracking-[0.16em] text-[#e4b43d]">02</span>
-					<span
-						class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d]"
-					>
-						<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="1.6"
-								d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
-							/>
-						</svg>
-					</span>
-				</div>
-				<h4 class="font-serif text-lg tracking-[0.12em] uppercase">Handstitched</h4>
-				<p class="mt-3 text-sm leading-6 text-white/68">
-					Finishing details checked by hand before dispatch.
-				</p>
-			</div>
-
-			<div class="bg-[#173f35] p-6 transition-colors hover:bg-[#1c4a3f]">
-				<div class="mb-7 flex items-center justify-between">
-					<span class="text-xs font-black tracking-[0.16em] text-[#e4b43d]">03</span>
-					<span
-						class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d]"
-					>
-						<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="1.6"
-								d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
-					</span>
-				</div>
-				<h4 class="font-serif text-lg tracking-[0.12em] uppercase">Ships Worldwide</h4>
-				<p class="mt-3 text-sm leading-6 text-white/68">
-					Tracked delivery with reliable global partners.
-				</p>
-			</div>
-
-			<div class="bg-[#173f35] p-6 transition-colors hover:bg-[#1c4a3f]">
-				<div class="mb-7 flex items-center justify-between">
-					<span class="text-xs font-black tracking-[0.16em] text-[#e4b43d]">04</span>
-					<span
-						class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d]"
-					>
-						<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="1.6"
-								d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-							/>
-						</svg>
-					</span>
-				</div>
-				<h4 class="font-serif text-lg tracking-[0.12em] uppercase">Easy Returns</h4>
-				<p class="mt-3 text-sm leading-6 text-white/68">
-					A simple 14-day return window for peace of mind.
-				</p>
-			</div>
-		</div>
-	</div>
-</section>
+{#if storefrontSettings.flashSaleEnabled}
+	<!-- Flash Sale Timer Offer Banner -->
+	<FlashSaleTimerBanner settings={storefrontSettings} />
+{/if}
 
 <!-- Bestsellers -->
 <section class="overflow-hidden bg-cream py-14">
@@ -946,6 +799,9 @@
 		{/if}
 	</div>
 </section>
+
+<!-- Special Promo Offers Section -->
+<ProOfferGrid {products} onAddToCart={addProductToCart} />
 
 {#if reviewPhotos.length}
 	<!-- Review Photos -->
