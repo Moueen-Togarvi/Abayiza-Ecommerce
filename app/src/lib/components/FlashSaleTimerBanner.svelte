@@ -36,7 +36,7 @@
 
 <section class="relative border-y border-[#14352d]/8 overflow-hidden bg-[#fbf9f2]">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="relative h-[280px] sm:h-[360px] md:h-[420px] w-full overflow-hidden rounded-2xl my-6 border border-[#e4b43d]/20 bg-[#14352d] shadow-[0_20px_50px_rgba(20,53,45,0.15)] flex items-stretch justify-between">
+		<div class="relative h-[530px] sm:h-[360px] md:h-[420px] w-full overflow-hidden rounded-2xl my-6 border border-[#e4b43d]/20 bg-[#14352d] shadow-[0_20px_50px_rgba(20,53,45,0.15)] flex flex-col sm:flex-row items-stretch justify-between">
 			
 			<!-- Fine Lines Grid Overlay (Subtle) -->
 			<div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
@@ -45,10 +45,10 @@
 			<div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 rounded-full bg-[#e4b43d]/10 blur-[90px] pointer-events-none"></div>
 
 			<!-- Left Section: Model in Abaya (using transparent generated asset) -->
-			<div class="relative w-[38%] sm:w-[42%] h-full shrink-0 flex items-end justify-start overflow-hidden pl-4 sm:pl-12 z-10">
+			<div class="relative w-full sm:w-[38%] md:w-[42%] h-[180px] sm:h-full shrink-0 flex items-end justify-center sm:justify-start overflow-hidden px-4 sm:pl-12 z-10">
 				<!-- Concentric background circles framing the model -->
-				<div class="absolute left-[-20px] top-1/2 -translate-y-1/2 w-[240px] h-[240px] sm:w-[360px] sm:h-[360px] rounded-full bg-[#e4b43d]/8 pointer-events-none"></div>
-				<div class="absolute left-[10px] top-1/2 -translate-y-1/2 w-[180px] h-[180px] sm:w-[280px] sm:h-[280px] rounded-full bg-[#fffaf0]/5 pointer-events-none border border-white/10"></div>
+				<div class="absolute left-1/2 -translate-x-1/2 sm:left-[-20px] top-1/2 -translate-y-1/2 w-[200px] h-[200px] sm:w-[360px] sm:h-[360px] rounded-full bg-[#e4b43d]/8 pointer-events-none"></div>
+				<div class="absolute left-1/2 -translate-x-1/2 sm:left-[10px] top-1/2 -translate-y-1/2 w-[160px] h-[160px] sm:w-[280px] sm:h-[280px] rounded-full bg-[#fffaf0]/5 pointer-events-none"></div>
 
 				<!-- Sparkle accent -->
 				<svg class="absolute top-12 left-1/2 h-4 w-4 text-[#e4b43d] opacity-30 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
@@ -64,7 +64,7 @@
 			</div>
 
 			<!-- Right Section: Offer Info & Countdown -->
-			<div class="flex-grow flex flex-col justify-center items-center text-center px-4 sm:px-12 md:px-16 z-10 relative">
+			<div class="flex-grow flex flex-col justify-center items-center text-center py-6 px-4 sm:py-0 sm:px-12 md:px-16 z-10 relative">
 				
 				<!-- Badge -->
 				<div class="flex items-center justify-center gap-1.5 mb-2.5 sm:mb-4">
@@ -75,17 +75,17 @@
 
 				<!-- Title Ribbon -->
 				<div class="relative my-1 inline-block self-center">
-					<h3 class="font-serif text-[1.3rem] sm:text-3xl md:text-4xl lg:text-[2.2rem] font-black uppercase tracking-wide px-5 py-2.5 bg-[#e4b43d] text-[#14352d] shadow-lg rounded rotate-[-1.5deg]">
+					<h3 class="font-serif text-[1.05rem] xs:text-[1.2rem] sm:text-3xl md:text-4xl lg:text-[2.2rem] font-black uppercase tracking-wide px-3 py-1.5 sm:px-5 sm:py-2.5 bg-[#e4b43d] text-[#14352d] shadow-lg rounded rotate-[-1.5deg]">
 						{settings.flashSaleTitle || 'FLASH SALE'}
 					</h3>
 					<!-- Cursive overlapping text -->
-					<span class="absolute -bottom-2.5 -right-3 sm:-right-6 font-serif italic text-lg sm:text-2xl md:text-3xl text-[#fffaf0] drop-shadow-md select-none rotate-[2.5deg]">
+					<span class="absolute -bottom-2 -right-2 sm:-right-6 font-serif italic text-sm sm:text-2xl md:text-3xl text-[#fffaf0] drop-shadow-md select-none rotate-[2.5deg]">
 						{settings.flashSaleSubtitle || 'Ends Soon!'}
 					</span>
 				</div>
 
 				<!-- Promo details description -->
-				<p class="mt-4 sm:mt-6 text-[0.7rem] sm:text-xs md:text-[0.85rem] font-black tracking-[0.25em] text-[#fffaf0]/80 uppercase text-center w-full">
+				<p class="mt-3 sm:mt-6 text-[0.62rem] sm:text-xs md:text-[0.85rem] font-black tracking-[0.15em] sm:tracking-[0.25em] text-[#fffaf0]/80 uppercase text-center w-full">
 					{settings.flashSaleDescription || 'UP TO 70% OFF SELECTED ITEMS'}
 				</p>
 

@@ -44,13 +44,13 @@
 				
 				<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center z-10 w-full">
 					<!-- Left Half: Content & Actions (5 cols) -->
-					<div class="md:col-span-5 flex flex-col justify-center space-y-4">
+					<div class="order-2 md:order-1 md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left justify-center space-y-4">
 						<div>
 							<p class="text-[0.62rem] sm:text-[0.72rem] font-black tracking-[0.16em] text-[#7b6a3d] uppercase">New Arrival Offer</p>
 							<h3 class="font-serif text-xl sm:text-2xl text-[#14352d] uppercase mt-0.5 leading-tight">{spotlightProduct.name}</h3>
 						</div>
 
-						<div class="flex items-baseline gap-2">
+						<div class="flex items-baseline justify-center md:justify-start gap-2">
 							<span class="text-2xl font-black text-[#14352d]">
 								{spotlightProduct.salePrice ? formatMoney(spotlightProduct.salePrice) : formatMoney(spotlightProduct.price * 0.7)}
 							</span>
@@ -60,9 +60,9 @@
 						</div>
 
 						<!-- Color Selector -->
-						<div>
+						<div class="w-full flex flex-col items-center md:items-start">
 							<span class="block text-[0.62rem] font-bold tracking-wider text-[#596c62] uppercase mb-1.5 font-sans">Color: <span class="text-[#14352d] font-bold">{selectedColor}</span></span>
-							<div class="flex gap-2">
+							<div class="flex justify-center md:justify-start gap-2">
 								{#each ['Midnight', 'Sage', 'Mocha'] as color}
 									<button
 										onclick={() => selectedColor = color}
@@ -79,9 +79,9 @@
 						</div>
 
 						<!-- Size Selector -->
-						<div>
+						<div class="w-full flex flex-col items-center md:items-start">
 							<span class="block text-[0.62rem] font-bold tracking-wider text-[#596c62] uppercase mb-1.5 font-sans">Size: <span class="text-[#14352d] font-bold">{selectedSize}</span></span>
-							<div class="flex gap-1.5">
+							<div class="flex justify-center md:justify-start gap-1.5">
 								{#each ['S (52)', 'M (54)', 'L (56)'] as size}
 									<button
 										onclick={() => selectedSize = size}
@@ -94,7 +94,7 @@
 						</div>
 
 						<!-- CTA Button -->
-						<div class="pt-2">
+						<div class="pt-2 w-full">
 							<button
 								onclick={handleSpotlightAddToCart}
 								class="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-full bg-[#14352d] px-5 text-[0.72rem] font-black uppercase text-white shadow-md transition-all duration-300 hover:bg-[#e4b43d] hover:text-[#14352d] hover:-translate-y-0.5"
@@ -108,7 +108,7 @@
 					</div>
 
 					<!-- Right Half: Big Image & Circular Spotlight (7 cols) -->
-					<div class="md:col-span-7 relative flex justify-center items-center h-[310px] md:h-[400px] overflow-visible">
+					<div class="order-1 md:order-2 md:col-span-7 relative flex justify-center items-center h-[310px] md:h-[400px] overflow-visible">
 						<!-- Big Circular Background -->
 						<div class="absolute w-[240px] h-[240px] md:w-[300px] md:h-[300px] rounded-full bg-gradient-to-b from-[#e8eedc] via-[#ecdac8]/60 to-[#fffaf0] shadow-[inset_0_4px_30px_rgba(20,53,45,0.06)] flex items-center justify-center">
 							<div class="w-[88%] h-[88%] rounded-full border border-[#14352d]/6 border-dashed"></div>

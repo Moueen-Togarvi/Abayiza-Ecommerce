@@ -118,11 +118,11 @@
 	onmouseleave={() => sliderHovered = false}
 >
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="relative h-[280px] sm:h-[360px] md:h-[420px] w-full overflow-hidden rounded-2xl my-6 border border-[#14352d]/10 shadow-[0_20px_50px_rgba(20,53,45,0.05)]">
+		<div class="relative h-[480px] sm:h-[360px] md:h-[420px] w-full overflow-hidden rounded-2xl my-6 border border-[#14352d]/10 shadow-[0_20px_50px_rgba(20,53,45,0.05)]">
 			{#each sliderItems as item, index}
 				<!-- GPU Accelerated Horizontal sliding container -->
 				<div
-					class="absolute inset-0 flex items-stretch justify-between rounded-2xl overflow-hidden transition-transform duration-[800ms] ease-in-out {item.bgClass}"
+					class="absolute inset-0 flex flex-col sm:flex-row items-stretch justify-between rounded-2xl overflow-hidden transition-transform duration-[800ms] ease-in-out {item.bgClass}"
 					style="transform: translateX({(index - activeSlide) * 100}%);"
 				>
 					<!-- Dotted Grid Accents -->
@@ -139,12 +139,12 @@
 
 					<!-- Big concentric background circles framing the Model -->
 					<div class="absolute -right-20 top-1/2 -translate-y-1/2 w-[360px] h-[360px] sm:w-[480px] sm:h-[480px] rounded-full bg-[#e4b43d]/10 z-0 pointer-events-none"></div>
-					<div class="absolute -right-10 top-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] rounded-full bg-white/20 z-0 pointer-events-none border border-white/40"></div>
+					<div class="absolute -right-10 top-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] rounded-full bg-white/20 z-0 pointer-events-none {index === 2 ? '' : 'border border-white/40'}"></div>
 
-					<!-- Left Section: Content (Expanded width to 72% to eliminate center empty space) -->
-					<div class="flex-1 flex flex-col justify-center pl-8 pr-4 sm:pl-16 sm:pr-8 md:pl-20 md:pr-12 z-10 max-w-[72%] relative">
+					<!-- Left Section: Content -->
+					<div class="flex-1 w-full sm:max-w-[72%] flex flex-col justify-center items-center text-center sm:items-start sm:text-left pt-8 pb-4 px-6 sm:py-0 sm:pl-16 sm:pr-8 md:pl-20 md:pr-12 z-10 relative">
 						<!-- Small Top Badge with slide-up transition -->
-						<div class="flex items-center gap-2 mb-2 sm:mb-4 transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} delay-[100ms]">
+						<div class="flex items-center justify-center sm:justify-start gap-2 mb-2 sm:mb-4 transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} delay-[100ms]">
 							<span class="inline-flex rounded-full bg-[#14352d]/8 px-3.5 py-1.5 text-[0.58rem] sm:text-[0.68rem] font-black tracking-[0.1em] text-[#14352d] uppercase border border-[#14352d]/10">
 								{item.badge}
 							</span>
@@ -153,30 +153,30 @@
 							</span>
 						</div>
 
-						<!-- Skewed Main Title Ribbon (Enlarged size) -->
-						<div class="relative my-2 inline-block self-start transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[200ms]">
-							<h3 class="font-serif text-[1.4rem] sm:text-4xl md:text-5xl lg:text-[2.6rem] font-black uppercase tracking-wide px-5 py-2.5 rotate-[-1.5deg] shadow-lg rounded {item.ribbonBg} {item.ribbonText}">
+						<!-- Skewed Main Title Ribbon -->
+						<div class="relative my-2 inline-block self-center sm:self-start transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[200ms]">
+							<h3 class="font-serif text-[1.05rem] sm:text-4xl md:text-5xl lg:text-[2.6rem] font-black uppercase tracking-wide px-3 py-1.5 sm:px-5 sm:py-2.5 rotate-[-1.5deg] shadow-lg rounded {item.ribbonBg} {item.ribbonText}">
 								{item.title}
 							</h3>
 						</div>
 
-						<!-- Description (Enlarged text size & max-width to fill center empty space) -->
-						<p class="mt-3.5 sm:mt-5 text-[0.75rem] sm:text-sm md:text-[0.95rem] font-medium {item.descColor} max-w-xl leading-relaxed transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[300ms]">
+						<!-- Description -->
+						<p class="mt-2.5 sm:mt-5 text-[0.68rem] sm:text-sm md:text-[0.95rem] font-medium {item.descColor} max-w-xl mx-auto sm:mx-0 leading-relaxed line-clamp-2 sm:line-clamp-none transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[300ms]">
 							{item.description}
 						</p>
 
-						<!-- Promo Discount Badge & CTA (Slide up together) -->
-						<div class="mt-5 sm:mt-8 flex items-center gap-5 transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[400ms]">
+						<!-- Promo Discount Badge & CTA -->
+						<div class="mt-4 sm:mt-8 flex items-center justify-center sm:justify-start gap-3 sm:gap-5 transition-all duration-700 ease-out transform {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[400ms]">
 							<!-- Save Box -->
-							<div class="border-2 border-dashed border-[#14352d]/30 rounded-xl p-2 sm:px-4 sm:py-2.5 flex flex-col items-center justify-center bg-white/60 backdrop-blur-sm shadow-md min-w-[80px] sm:min-w-[100px] rotate-[1.5deg]">
-								<span class="text-[0.55rem] font-bold text-[#596c62] uppercase tracking-wider leading-none">Save Up To</span>
-								<span class="text-sm sm:text-xl font-black text-[#14352d] mt-1.5 leading-none">{item.promoBadge}</span>
+							<div class="border-2 border-dashed border-[#14352d]/30 rounded-xl p-1.5 sm:px-4 sm:py-2.5 flex flex-col items-center justify-center bg-white/60 backdrop-blur-sm shadow-md min-w-[70px] sm:min-w-[100px] rotate-[1.5deg]">
+								<span class="text-[0.48rem] sm:text-[0.55rem] font-bold text-[#596c62] uppercase tracking-wider leading-none">Save Up To</span>
+								<span class="text-xs sm:text-xl font-black text-[#14352d] mt-1.5 leading-none">{item.promoBadge}</span>
 							</div>
 
 							<!-- Shop Button -->
 							<a
 								href={item.link}
-								class="inline-flex min-h-9 sm:min-h-12 items-center justify-center gap-2 rounded-full bg-[#14352d] px-5 sm:px-8 text-[0.65rem] sm:text-[0.78rem] font-black uppercase text-white shadow-lg transition-all duration-300 hover:bg-[#e4b43d] hover:text-[#14352d] hover:-translate-y-0.5 hover:shadow-xl"
+								class="inline-flex min-h-8 sm:min-h-12 items-center justify-center gap-2 rounded-full bg-[#14352d] px-4 sm:px-8 text-[0.58rem] sm:text-[0.78rem] font-black uppercase text-white shadow-lg transition-all duration-300 hover:bg-[#e4b43d] hover:text-[#14352d] hover:-translate-y-0.5 hover:shadow-xl"
 							>
 								Shop Now
 								<svg class="h-3.5 w-3.5 sm:h-4.5 sm:w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,7 +187,7 @@
 					</div>
 
 					<!-- Right Section: Cropped Model Image Overlapping Circle -->
-					<div class="relative w-[36%] sm:w-[40%] h-full shrink-0 z-10 flex items-end justify-end overflow-hidden">
+					<div class="relative w-full sm:w-[36%] md:w-[40%] h-[180px] sm:h-full shrink-0 z-10 flex items-end justify-center sm:justify-end overflow-hidden">
 						<!-- Diagonal brush fade -->
 						<div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-transparent to-transparent z-10 hidden sm:block" 
 							style="background-image: linear-gradient(to right, {index === 0 ? '#f4f7f5' : index === 1 ? '#fff9f0' : '#14352d'} 0%, transparent 100%);">
