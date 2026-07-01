@@ -18,7 +18,9 @@
 	let colors = $derived(
 		Array.from(
 			new Set<string>(
-				(product.variants || []).map((variant: any) => String(variant.color || '')).filter(c => c && c.toLowerCase() !== 'default')
+				(product.variants || [])
+					.map((variant: any) => String(variant.color || ''))
+					.filter((c) => c && c.toLowerCase() !== 'default')
 			)
 		)
 	);
@@ -28,7 +30,10 @@
 		(product.variants || [])
 			.filter((variant: any) => !selectedColor || variant.color === selectedColor)
 			.map((variant: any) => variant.size)
-			.filter((size: string, index: number, list: string[]) => size && size.toLowerCase() !== 'default' && list.indexOf(size) === index)
+			.filter(
+				(size: string, index: number, list: string[]) =>
+					size && size.toLowerCase() !== 'default' && list.indexOf(size) === index
+			)
 	);
 	let selectedVariant = $derived(
 		(product.variants || []).find(
