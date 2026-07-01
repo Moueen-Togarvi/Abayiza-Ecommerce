@@ -48,9 +48,7 @@ const signParams = (params: Record<string, string | number>) => {
 		.map((key) => `${key}=${params[key]}`)
 		.join('&');
 
-	return createHash('sha1')
-		.update(`${payload}${apiSecret()}`)
-		.digest('hex');
+	return createHash('sha1').update(`${payload}${apiSecret()}`).digest('hex');
 };
 
 export const uploadImageToCloudinary = async (file: UploadFile, folder: string) => {

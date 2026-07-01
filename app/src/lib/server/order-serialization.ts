@@ -1,10 +1,9 @@
 const toNumber = (value: unknown) => Number(value ?? 0);
 
 export const getShippingAddress = (order: any) =>
-	(order.shippingAddress && typeof order.shippingAddress === 'object' ? order.shippingAddress : {}) as Record<
-		string,
-		unknown
-	>;
+	(order.shippingAddress && typeof order.shippingAddress === 'object'
+		? order.shippingAddress
+		: {}) as Record<string, unknown>;
 
 export const getOrderCustomerName = (order: any) => {
 	const address = getShippingAddress(order);
@@ -81,17 +80,35 @@ export const orderMatchesFilters = (
 ) => {
 	const serialized = serializeOrder(order);
 	const normalized = {
-		email: String(filters.email || '').trim().toLowerCase(),
-		phone: String(filters.phone || '').trim().toLowerCase(),
-		name: String(filters.name || '').trim().toLowerCase(),
-		city: String(filters.city || '').trim().toLowerCase()
+		email: String(filters.email || '')
+			.trim()
+			.toLowerCase(),
+		phone: String(filters.phone || '')
+			.trim()
+			.toLowerCase(),
+		name: String(filters.name || '')
+			.trim()
+			.toLowerCase(),
+		city: String(filters.city || '')
+			.trim()
+			.toLowerCase()
 	};
 
 	if (filters.date && serialized.createdAt?.slice(0, 10) !== filters.date) return false;
-	if (normalized.email && !String(serialized.customerEmail).toLowerCase().includes(normalized.email)) return false;
-	if (normalized.phone && !String(serialized.customerPhone).toLowerCase().includes(normalized.phone)) return false;
-	if (normalized.name && !String(serialized.customerName).toLowerCase().includes(normalized.name)) return false;
-	if (normalized.city && !String(serialized.customerCity).toLowerCase().includes(normalized.city)) return false;
+	if (
+		normalized.email &&
+		!String(serialized.customerEmail).toLowerCase().includes(normalized.email)
+	)
+		return false;
+	if (
+		normalized.phone &&
+		!String(serialized.customerPhone).toLowerCase().includes(normalized.phone)
+	)
+		return false;
+	if (normalized.name && !String(serialized.customerName).toLowerCase().includes(normalized.name))
+		return false;
+	if (normalized.city && !String(serialized.customerCity).toLowerCase().includes(normalized.city))
+		return false;
 
 	return true;
 };

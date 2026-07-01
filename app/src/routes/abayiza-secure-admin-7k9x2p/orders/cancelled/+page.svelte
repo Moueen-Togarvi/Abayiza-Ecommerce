@@ -65,7 +65,10 @@
 				class="rounded-md border-gray-300 text-sm focus:border-[#000] focus:ring-[#000]"
 			/>
 			<div class="flex gap-2">
-				<button type="submit" class="flex-1 rounded-md bg-[#000] px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+				<button
+					type="submit"
+					class="flex-1 rounded-md bg-[#000] px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+				>
 					Filter
 				</button>
 				<a
@@ -82,35 +85,63 @@
 		<table class="min-w-full divide-y divide-gray-200">
 			<thead class="bg-red-50">
 				<tr>
-					<th scope="col" class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase">Order</th>
-					<th scope="col" class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase">Cancelled</th>
-					<th scope="col" class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase">Customer</th>
-					<th scope="col" class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase">Phone / City</th>
-					<th scope="col" class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase">Items</th>
-					<th scope="col" class="px-6 py-3 text-right text-xs font-medium tracking-wider text-red-700 uppercase">Total</th>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase"
+						>Order</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase"
+						>Cancelled</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase"
+						>Customer</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase"
+						>Phone / City</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium tracking-wider text-red-700 uppercase"
+						>Items</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-right text-xs font-medium tracking-wider text-red-700 uppercase"
+						>Total</th
+					>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-200 bg-white">
 				{#each orders as order}
-					<tr class="cursor-pointer hover:bg-red-50/45" onclick={() => window.location.href = `/abayiza-secure-admin-7k9x2p/orders/${order.id}`}>
-						<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-red-700">
+					<tr
+						class="cursor-pointer hover:bg-red-50/45"
+						onclick={() =>
+							(window.location.href = `/abayiza-secure-admin-7k9x2p/orders/${order.id}`)}
+					>
+						<td class="px-6 py-4 text-sm font-medium whitespace-nowrap text-red-700">
 							{order.orderNumber}
 						</td>
-						<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+						<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
 							{new Date(order.updatedAt).toLocaleDateString()}
 						</td>
-						<td class="whitespace-nowrap px-6 py-4">
+						<td class="px-6 py-4 whitespace-nowrap">
 							<div class="text-sm font-medium text-gray-900">{order.customerName}</div>
 							<div class="text-xs text-gray-500">{order.customerEmail || '-'}</div>
 						</td>
-						<td class="whitespace-nowrap px-6 py-4">
+						<td class="px-6 py-4 whitespace-nowrap">
 							<div class="text-sm text-gray-700">{order.customerPhone || '-'}</div>
 							<div class="text-xs text-gray-500">{order.customerCity || '-'}</div>
 						</td>
-						<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+						<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
 							{order.items.length} item{order.items.length === 1 ? '' : 's'}
 						</td>
-						<td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-gray-900">
+						<td class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap text-gray-900">
 							{formatMoney(order.totalAmount)}
 						</td>
 					</tr>

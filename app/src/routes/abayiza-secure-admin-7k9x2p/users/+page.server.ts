@@ -146,7 +146,8 @@ export const actions: Actions = {
 		const id = getText(data, 'id');
 
 		if (!id) return fail(400, { error: 'User was not found.' });
-		if (id === locals.adminUser?.id) return fail(400, { error: 'You cannot delete your own account.' });
+		if (id === locals.adminUser?.id)
+			return fail(400, { error: 'You cannot delete your own account.' });
 
 		try {
 			await prisma.user.delete({ where: { id } });

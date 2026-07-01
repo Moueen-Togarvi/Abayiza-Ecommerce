@@ -90,11 +90,17 @@
 					</div>
 					<button
 						type="button"
-						class="absolute top-1.5 right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-black/75 text-white opacity-90 transition-opacity hover:bg-red-600 group-hover:opacity-100"
+						class="absolute top-1.5 right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-black/75 text-white opacity-90 transition-opacity group-hover:opacity-100 hover:bg-red-600"
 						aria-label={`Remove ${image.file.name}`}
 						onclick={() => removePendingImage(image.id)}
 					>
-						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+						<svg
+							class="h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							aria-hidden="true"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -103,7 +109,10 @@
 							/>
 						</svg>
 					</button>
-					<p class="truncate px-2 py-1.5 text-[11px] font-medium text-gray-600" title={image.file.name}>
+					<p
+						class="truncate px-2 py-1.5 text-[11px] font-medium text-gray-600"
+						title={image.file.name}
+					>
 						{image.file.name}
 					</p>
 				</div>

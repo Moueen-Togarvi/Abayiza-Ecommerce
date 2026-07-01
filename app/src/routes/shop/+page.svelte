@@ -17,8 +17,12 @@
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
 	let collections = $derived((data.collections || []) as Array<any>);
-	let colors = $derived((data.colors || []) as string[]);
-	let sizes = $derived((data.sizes || []) as string[]);
+	let colors = $derived(
+		((data.colors || []) as string[]).filter((c) => c && c.toLowerCase() !== 'default')
+	);
+	let sizes = $derived(
+		((data.sizes || []) as string[]).filter((s) => s && s.toLowerCase() !== 'default')
+	);
 	let pagination = $derived(
 		(data.pagination || {
 			page: 1,
@@ -117,6 +121,22 @@
 		return Array.from(
 			new Set([1, currentPage - 1, currentPage, currentPage + 1, totalPages])
 		).filter((page) => page >= 1 && page <= totalPages);
+	}
+
+	import { goto } from '$app/navigation';
+	function updateFilter() {
+		const params = new URLSearchParams();
+		if (searchQuery) params.set('q', searchQuery);
+		if (selectedCategory) params.set('category', selectedCategory);
+		if (selectedColor) params.set('color', selectedColor);
+		if (selectedSize) params.set('size', selectedSize);
+		goto(`/shop?${params.toString()}`, { keepFocus: true, noScroll: true });
+	}
+
+	let searchTimer: any;
+	function handleSearchInput() {
+		clearTimeout(searchTimer);
+		searchTimer = setTimeout(updateFilter, 400);
 	}
 </script>
 
@@ -245,6 +265,7 @@
 								name="q"
 								type="search"
 								bind:value={searchQuery}
+								oninput={handleSearchInput}
 								placeholder="Search by name, color..."
 								class="h-9 w-full rounded-md border-[#14352d]/15 bg-[#fbf9f2] text-xs font-semibold text-[#14352d] placeholder:text-[#596c62]/70 focus:border-[#14352d] focus:ring-[#14352d]"
 							/>
@@ -266,6 +287,7 @@
 										name="category"
 										value=""
 										bind:group={selectedCategory}
+										onchange={updateFilter}
 									/>
 								</label>
 								{#each collections as collection}
@@ -282,6 +304,7 @@
 											name="category"
 											value={collection.slug}
 											bind:group={selectedCategory}
+											onchange={updateFilter}
 										/>
 									</label>
 								{/each}
@@ -308,6 +331,7 @@
 										name="color"
 										value=""
 										bind:group={selectedColor}
+										onchange={updateFilter}
 									/>
 								</label>
 								{#each colors as color}
@@ -329,6 +353,7 @@
 											name="color"
 											value={color}
 											bind:group={selectedColor}
+											onchange={updateFilter}
 										/>
 									</label>
 								{/each}
@@ -351,6 +376,7 @@
 										name="size"
 										value=""
 										bind:group={selectedSize}
+										onchange={updateFilter}
 									/>
 								</label>
 								{#each sizes as size}
@@ -367,19 +393,13 @@
 											name="size"
 											value={size}
 											bind:group={selectedSize}
+											onchange={updateFilter}
 										/>
 									</label>
 								{/each}
 							</div>
 						</div>
 					</div>
-
-					<button
-						type="submit"
-						class="mt-4 inline-flex min-h-9 w-full items-center justify-center rounded-full bg-[#14352d] px-4 text-xs font-black tracking-[0.1em] text-white uppercase transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
-					>
-						Apply Filters
-					</button>
 				</form>
 			</aside>
 
@@ -435,9 +455,24 @@
 										class="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_4px_12px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:h-9 sm:w-9"
 										aria-label="Add to cart"
 									>
-										<svg class="h-4 w-4 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+										<svg
+											class="h-4 w-4 sm:h-4 sm:w-4"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
+											/>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M10 21h.01M18 21h.01"
+											/>
 										</svg>
 									</button>
 
@@ -451,7 +486,10 @@
 										<p
 											class="mt-1 text-[0.58rem] font-bold tracking-[0.08em] text-[#596c62] uppercase sm:text-[0.65rem] sm:tracking-[0.1em]"
 										>
-											{primaryVariant(item)?.color || 'Signature edit'}
+											{primaryVariant(item)?.color &&
+											primaryVariant(item)?.color?.toLowerCase() !== 'default'
+												? primaryVariant(item)?.color
+												: 'Signature edit'}
 										</p>
 									</div>
 
@@ -463,11 +501,15 @@
 
 									<div class="mt-auto flex items-center justify-between gap-2 pt-3 sm:pt-4">
 										<div class="min-w-0">
-											<p class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-[0.95rem]">
+											<p
+												class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-[0.95rem]"
+											>
 												{formatMoney(item.salePrice || item.price)}
 											</p>
 											{#if item.salePrice}
-												<p class="mt-0.5 text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs">
+												<p
+													class="mt-0.5 text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs"
+												>
 													{formatMoney(item.price)}
 												</p>
 											{/if}

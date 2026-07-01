@@ -26,8 +26,12 @@ const serializeOrder = (order: any) => ({
 export const actions: Actions = {
 	track: async ({ request }) => {
 		const data = await request.formData();
-		const orderNumber = String(data.get('orderNumber') ?? '').trim().replace(/^#/, '');
-		const email = String(data.get('email') ?? '').trim().toLowerCase();
+		const orderNumber = String(data.get('orderNumber') ?? '')
+			.trim()
+			.replace(/^#/, '');
+		const email = String(data.get('email') ?? '')
+			.trim()
+			.toLowerCase();
 
 		if (!orderNumber || !email) {
 			return fail(400, {
@@ -41,10 +45,7 @@ export const actions: Actions = {
 				AND: [
 					{ OR: [{ orderNumber }, { id: orderNumber }] },
 					{
-						OR: [
-							{ guestEmail: email },
-							{ user: { email } }
-						]
+						OR: [{ guestEmail: email }, { user: { email } }]
 					}
 				]
 			},

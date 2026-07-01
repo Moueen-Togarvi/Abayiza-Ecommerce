@@ -8,18 +8,26 @@
 </svelte:head>
 
 <div class="flex min-h-screen items-center justify-center bg-white px-4 py-12">
-	<div class="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-[0_24px_80px_rgba(0,0,0,0.08)]">
+	<div
+		class="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-[0_24px_80px_rgba(0,0,0,0.08)]"
+	>
 		<div class="mb-8 text-center">
-			<div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-black font-serif text-xl font-bold text-white">
+			<div
+				class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-black font-serif text-xl font-bold text-white"
+			>
 				A
 			</div>
 			<p class="text-xs font-black tracking-[0.18em] text-blue-600 uppercase">Secure Admin</p>
 			<h1 class="mt-2 text-2xl font-black text-gray-950">Sign in to Abayiza</h1>
-			<p class="mt-2 text-sm text-gray-500">Protected with scrypt password hashing and signed sessions.</p>
+			<p class="mt-2 text-sm text-gray-500">
+				Protected with scrypt password hashing and signed sessions.
+			</p>
 		</div>
 
 		{#if form?.error}
-			<div class="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+			<div
+				class="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700"
+			>
 				{form.error}
 			</div>
 		{/if}
@@ -59,14 +67,32 @@
 						onclick={() => (showPassword = !showPassword)}
 					>
 						{#if showPassword}
-							<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20C7 20 2.73 16.89 1 12a18.45 18.45 0 0 1 5.06-6.94" />
-								<path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c5 0 9.27 3.11 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+							<svg
+								class="h-4 w-4"
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+							>
+								<path
+									d="M17.94 17.94A10.07 10.07 0 0 1 12 20C7 20 2.73 16.89 1 12a18.45 18.45 0 0 1 5.06-6.94"
+								/>
+								<path
+									d="M9.9 4.24A9.12 9.12 0 0 1 12 4c5 0 9.27 3.11 11 8a18.5 18.5 0 0 1-2.16 3.19"
+								/>
 								<path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
 								<path d="m1 1 22 22" />
 							</svg>
 						{:else}
-							<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<svg
+								class="h-4 w-4"
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+							>
 								<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z" />
 								<circle cx="12" cy="12" r="3" />
 							</svg>

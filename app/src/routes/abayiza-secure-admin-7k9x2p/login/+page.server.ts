@@ -18,9 +18,13 @@ export const load: PageServerLoad = async ({ url }) => ({
 export const actions: Actions = {
 	login: async ({ request, cookies, url }) => {
 		const data = await request.formData();
-		const email = String(data.get('email') || '').trim().toLowerCase();
+		const email = String(data.get('email') || '')
+			.trim()
+			.toLowerCase();
 		const password = String(data.get('password') || '');
-		const redirectTo = String(data.get('redirectTo') || url.searchParams.get('redirectTo') || '/abayiza-secure-admin-7k9x2p');
+		const redirectTo = String(
+			data.get('redirectTo') || url.searchParams.get('redirectTo') || '/abayiza-secure-admin-7k9x2p'
+		);
 
 		if (!email || !password) {
 			return fail(400, { error: 'Email and password are required.', email, redirectTo });
@@ -48,6 +52,11 @@ export const actions: Actions = {
 		);
 		setAdminFlash(cookies, 'Logged in successfully.');
 
-		throw redirect(303, redirectTo.startsWith('/abayiza-secure-admin-7k9x2p') ? redirectTo : '/abayiza-secure-admin-7k9x2p');
+		throw redirect(
+			303,
+			redirectTo.startsWith('/abayiza-secure-admin-7k9x2p')
+				? redirectTo
+				: '/abayiza-secure-admin-7k9x2p'
+		);
 	}
 };

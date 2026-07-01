@@ -6,6 +6,7 @@
 	import AbayaSlidingBanner from '$lib/components/AbayaSlidingBanner.svelte';
 	import ProOfferGrid from '$lib/components/ProOfferGrid.svelte';
 	import FlashSaleTimerBanner from '$lib/components/FlashSaleTimerBanner.svelte';
+	import CategoryCircleCards from '$lib/components/CategoryCircleCards.svelte';
 
 	import { formatMoney } from '$lib/shared/money';
 	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, absoluteUrl } from '$lib/shared/seo';
@@ -91,8 +92,8 @@
 	let newArrivalsSection = $derived(homeSection('new-arrivals', 4));
 	let mostLovedSection = $derived(homeSection('most-loved', 8));
 	let curatedEdits = $derived(
-		(signatureCollectionsSection.products?.length >= 4 
-			? signatureCollectionsSection.products 
+		(signatureCollectionsSection.products?.length >= 4
+			? signatureCollectionsSection.products
 			: products.slice(0, 4)
 		).slice(0, 4) as Array<any>
 	);
@@ -452,7 +453,8 @@
 	</section>
 {/if}
 
-
+<!-- Categories -->
+<CategoryCircleCards {collections} />
 
 <!-- Featured Collections -->
 <section class="border-t border-[#14352d]/8 bg-[#fbf9f2] px-4 py-16 sm:px-6 lg:px-8">
@@ -474,7 +476,9 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:max-w-7xl xl:mx-auto">
+		<div
+			class="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 xl:mx-auto xl:max-w-7xl"
+		>
 			{#each curatedEdits as edit}
 				<div
 					class="group flex h-full w-full flex-col overflow-hidden rounded-md bg-[#fffaf0] shadow-[0_18px_48px_rgba(20,53,45,0.10)] ring-1 ring-[#14352d]/8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(20,53,45,0.14)]"
@@ -493,59 +497,85 @@
 						/>
 						{#if isOutOfStock(edit)}
 							<span
-								class="absolute top-3 right-3 inline-flex min-h-7 items-center justify-center rounded-full bg-red-600 px-3 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
+								class="absolute top-2 right-2 inline-flex min-h-6 items-center justify-center rounded-full bg-red-600 px-2 text-[0.5rem] font-black tracking-[0.12em] text-white uppercase sm:top-3 sm:right-3 sm:min-h-7 sm:px-3 sm:text-[0.62rem]"
 							>
 								Out of Stock
 							</span>
 						{/if}
 					</a>
-					<span class="relative flex flex-1 flex-col p-4">
+					<span class="relative flex flex-1 flex-col p-2.5 sm:p-4">
 						<!-- Cart icon at top-right of text area -->
 						<button
 							type="button"
 							disabled={isOutOfStock(edit)}
 							onclick={() => addProductToCart(edit)}
-							class="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_6px_16px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
+							class="absolute top-2.5 right-2.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_6px_16px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:top-3 sm:right-3 sm:h-8 sm:w-8"
 							aria-label="Add to cart"
 						>
-							<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+							<svg
+								class="h-3 w-3 sm:h-3.5 sm:w-3.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
+								/>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M10 21h.01M18 21h.01"
+								/>
 							</svg>
 						</button>
-						<span class="pr-10 text-[0.65rem] font-bold tracking-[0.18em] text-[#8a7444] uppercase">
+						<span
+							class="pr-8 text-[0.55rem] font-bold tracking-[0.18em] text-[#8a7444] uppercase sm:pr-10 sm:text-[0.65rem]"
+						>
 							{productCategory(edit)}
 						</span>
 						<a
 							href={productHref(edit)}
-							class="mt-1.5 block font-serif text-[1rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+							class="mt-1 block font-serif text-[0.85rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:mt-1.5 sm:text-[1rem]"
 						>
 							{edit.name}
 						</a>
-						<span class="mt-2 flex flex-row flex-nowrap overflow-hidden gap-1.5">
+						<span class="mt-1.5 flex flex-row flex-nowrap gap-1 overflow-hidden sm:mt-2 sm:gap-1.5">
 							{#each productTags(edit) as tag}
 								<span
-									class="inline-flex min-h-[1.2rem] shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-2 whitespace-nowrap text-center text-[0.55rem] font-bold text-[#14352d]"
+									class="inline-flex min-h-[1.1rem] shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-1.5 text-center text-[0.5rem] font-bold whitespace-nowrap text-[#14352d] sm:min-h-[1.2rem] sm:px-2 sm:text-[0.55rem]"
 								>
 									{tag}
 								</span>
 							{/each}
 						</span>
-						<span class="mt-auto flex items-center justify-between gap-3 pt-4">
+						<span
+							class="mt-auto flex flex-col items-start gap-2 pt-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pt-4"
+						>
 							<span class="min-w-0">
-								<span class="block text-base font-black whitespace-nowrap text-[#c0983f]">
+								<span
+									class="block text-sm font-black whitespace-nowrap text-[#c0983f] sm:text-base"
+								>
 									{formatMoney(edit.salePrice || edit.price)}
 								</span>
 								{#if edit.salePrice}
-									<span class="mt-0.5 block text-[0.7rem] font-bold whitespace-nowrap text-red-600 line-through">
+									<span
+										class="mt-0.5 block text-[0.65rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-[0.7rem]"
+									>
 										{formatMoney(edit.price)}
 									</span>
 								{/if}
-								<span class="mt-0.5 block text-[0.68rem] font-semibold text-[#596c62]">Free delivery</span>
+								<span
+									class="mt-0.5 block text-[0.55rem] font-semibold text-[#596c62] sm:text-[0.68rem]"
+									>Free delivery</span
+								>
 							</span>
 							<a
 								href={productHref(edit)}
-								class="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full bg-[#14352d] px-4 text-[0.7rem] font-black whitespace-nowrap text-white shadow-[0_8px_20px_rgba(20,53,45,0.22)] transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
+								class="inline-flex min-h-7 w-full items-center justify-center gap-1.5 rounded-full bg-[#14352d] px-3 text-[0.6rem] font-black whitespace-nowrap text-white shadow-[0_8px_20px_rgba(20,53,45,0.22)] transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:min-h-9 sm:w-auto sm:px-4 sm:text-[0.7rem]"
 							>
 								Buy Now
 							</a>
@@ -608,63 +638,83 @@
 					</a>
 
 					<span class="relative flex flex-1 flex-col px-2.5 pt-2.5 pb-2.5 sm:px-3">
-					<!-- Cart icon at top-right of text area -->
-					<button
-						type="button"
-						disabled={isOutOfStock(item)}
-						onclick={() => addProductToCart(item)}
-						class="absolute top-2.5 right-2.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_4px_12px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:h-8 sm:w-8"
-						aria-label="Add to cart"
-					>
-						<svg class="h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
-						</svg>
-					</button>
-
-					<span class="pr-9 sm:pr-10">
-						<a
-							href={productHref(item)}
-							class="line-clamp-2 block font-serif text-[0.82rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:text-[1rem]"
+						<!-- Cart icon at top-right of text area -->
+						<button
+							type="button"
+							disabled={isOutOfStock(item)}
+							onclick={() => addProductToCart(item)}
+							class="absolute top-2.5 right-2.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_4px_12px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:h-8 sm:w-8"
+							aria-label="Add to cart"
 						>
-							{item.name}
-						</a>
-						<span
-							class="mt-0.5 block text-[0.58rem] font-bold tracking-[0.08em] text-[#8a7444] uppercase sm:text-[0.65rem] sm:tracking-[0.12em]"
-						>
-							{primaryVariant(item)?.color || productCategory(item)}
-						</span>
-					</span>
-
-					<span class="mt-1.5 flex flex-row flex-nowrap overflow-hidden gap-1 sm:gap-1.5">
-						{#each productTags(item) as spec}
-							<span
-								class="inline-flex min-h-[1.1rem] shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-1.5 whitespace-nowrap text-center text-[0.48rem] font-bold text-[#14352d] sm:min-h-[1.2rem] sm:px-2 sm:text-[0.55rem]"
+							<svg
+								class="h-3 w-3 sm:h-3.5 sm:w-3.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
 							>
-								{spec}
-							</span>
-						{/each}
-					</span>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
+								/>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M10 21h.01M18 21h.01"
+								/>
+							</svg>
+						</button>
 
-					<span class="mt-auto flex items-center justify-between gap-2 pt-2">
-						<span class="min-w-0">
-							<span class="block text-sm font-black whitespace-nowrap text-[#14352d]">
-								{formatMoney(item.salePrice || item.price)}
+						<span class="pr-9 sm:pr-10">
+							<a
+								href={productHref(item)}
+								class="line-clamp-2 block font-serif text-[0.82rem] leading-tight text-[#14352d] transition-colors hover:text-[#c0983f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:text-[1rem]"
+							>
+								{item.name}
+							</a>
+							<span
+								class="mt-0.5 block text-[0.58rem] font-bold tracking-[0.08em] text-[#8a7444] uppercase sm:text-[0.65rem] sm:tracking-[0.12em]"
+							>
+								{primaryVariant(item)?.color &&
+								primaryVariant(item)?.color?.toLowerCase() !== 'default'
+									? primaryVariant(item)?.color
+									: productCategory(item)}
 							</span>
-							{#if item.salePrice}
-								<span class="mt-0.5 block text-[0.6rem] font-bold whitespace-nowrap text-red-600 line-through">
-									{formatMoney(item.price)}
+
+							<span class="mt-1.5 flex flex-row flex-nowrap gap-1 overflow-hidden sm:gap-1.5">
+								{#each productTags(item) as spec}
+									<span
+										class="inline-flex min-h-[1.1rem] shrink-0 items-center justify-center rounded-full border border-[#14352d]/10 bg-[#f5f0e5] px-1.5 text-center text-[0.48rem] font-bold whitespace-nowrap text-[#14352d] sm:min-h-[1.2rem] sm:px-2 sm:text-[0.55rem]"
+									>
+										{spec}
+									</span>
+								{/each}
+							</span>
+
+							<span class="mt-auto flex items-center justify-between gap-2 pt-2">
+								<span class="min-w-0">
+									<span class="block text-sm font-black whitespace-nowrap text-[#14352d]">
+										{formatMoney(item.salePrice || item.price)}
+									</span>
+									{#if item.salePrice}
+										<span
+											class="mt-0.5 block text-[0.6rem] font-bold whitespace-nowrap text-red-600 line-through"
+										>
+											{formatMoney(item.price)}
+										</span>
+									{/if}
 								</span>
-							{/if}
+								<a
+									href={productHref(item)}
+									class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
+								>
+									Buy Now
+								</a>
+							</span>
 						</span>
-						<a
-							href={productHref(item)}
-							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
-						>
-							Buy Now
-						</a>
 					</span>
-				</span>
 				</div>
 			{/each}
 		</div>
@@ -748,8 +798,18 @@
 										aria-label="Add to cart"
 									>
 										<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
+											/>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M10 21h.01M18 21h.01"
+											/>
 										</svg>
 									</button>
 								</div>

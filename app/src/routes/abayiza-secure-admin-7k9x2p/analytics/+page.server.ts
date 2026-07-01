@@ -12,7 +12,10 @@ export const load: PageServerLoad = async () => {
 		prisma.orderItem.findMany()
 	]);
 
-	const revenue = orders.reduce((total: number, order: any) => total + Number(order.totalAmount), 0);
+	const revenue = orders.reduce(
+		(total: number, order: any) => total + Number(order.totalAmount),
+		0
+	);
 	const averageOrderValue = orders.length ? revenue / orders.length : 0;
 	const productMap = new Map<string, { name: string; units: number; revenue: number }>();
 
@@ -36,7 +39,9 @@ export const load: PageServerLoad = async () => {
 			products,
 			categories
 		},
-		topProducts: Array.from(productMap.values()).sort((a, b) => b.revenue - a.revenue).slice(0, 6),
+		topProducts: Array.from(productMap.values())
+			.sort((a, b) => b.revenue - a.revenue)
+			.slice(0, 6),
 		recentOrders: orders.slice(0, 8).map((order: any) => ({
 			id: order.id,
 			orderNumber: order.orderNumber,

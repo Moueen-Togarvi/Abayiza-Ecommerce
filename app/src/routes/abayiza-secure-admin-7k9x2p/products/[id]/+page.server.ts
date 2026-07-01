@@ -122,7 +122,9 @@ export const actions: Actions = {
 				}))
 			});
 		} catch (e) {
-			return fail(500, { error: 'Failed to update product. Check duplicate SKU values or image files.' });
+			return fail(500, {
+				error: 'Failed to update product. Check duplicate SKU values or image files.'
+			});
 		}
 
 		setAdminFlash(cookies, 'Product updated successfully.');

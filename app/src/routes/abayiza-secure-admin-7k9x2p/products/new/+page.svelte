@@ -193,8 +193,9 @@
 							<div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
 								<div class="grid gap-3 md:grid-cols-[9rem_1fr_7rem_1fr_auto] md:items-end">
 									<div>
-										<label for={`variant-type-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-											>Variant Type</label
+										<label
+											for={`variant-type-${variant.id}`}
+											class="mb-1 block text-xs font-medium text-gray-600">Variant Type</label
 										>
 										<select
 											id={`variant-type-${variant.id}`}
@@ -209,8 +210,9 @@
 
 									{#if variant.type === 'size'}
 										<div>
-											<label for={`variant-size-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-												>Size</label
+											<label
+												for={`variant-size-${variant.id}`}
+												class="mb-1 block text-xs font-medium text-gray-600">Size</label
 											>
 											<select
 												id={`variant-size-${variant.id}`}
@@ -226,8 +228,9 @@
 										</div>
 									{:else}
 										<div>
-											<label for={`variant-color-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-												>Colour</label
+											<label
+												for={`variant-color-${variant.id}`}
+												class="mb-1 block text-xs font-medium text-gray-600">Colour</label
 											>
 											<select
 												id={`variant-color-${variant.id}`}
@@ -244,8 +247,9 @@
 									{/if}
 
 									<div>
-										<label for={`variant-stock-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-											>Stock</label
+										<label
+											for={`variant-stock-${variant.id}`}
+											class="mb-1 block text-xs font-medium text-gray-600">Stock</label
 										>
 										<input
 											id={`variant-stock-${variant.id}`}
@@ -257,8 +261,9 @@
 										/>
 									</div>
 									<div>
-										<label for={`variant-sku-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-											>SKU</label
+										<label
+											for={`variant-sku-${variant.id}`}
+											class="mb-1 block text-xs font-medium text-gray-600">SKU</label
 										>
 										<input
 											id={`variant-sku-${variant.id}`}
@@ -284,7 +289,8 @@
 										{#each colors as color}
 											<button
 												type="button"
-												class="h-6 w-6 rounded-full border border-gray-300 ring-offset-2 transition {variant.color === color.name
+												class="h-6 w-6 rounded-full border border-gray-300 ring-offset-2 transition {variant.color ===
+												color.name
 													? 'ring-2 ring-[#000]'
 													: ''}"
 												style={`background-color: ${color.hex}`}

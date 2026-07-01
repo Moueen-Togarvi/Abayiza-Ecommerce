@@ -29,6 +29,8 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	return {
 		filters,
-		orders: orders.filter((order) => orderMatchesFilters(order, filters)).map((order) => serializeOrder(order))
+		orders: orders
+			.filter((order) => orderMatchesFilters(order, filters))
+			.map((order) => serializeOrder(order))
 	};
 };

@@ -20,12 +20,7 @@
 	</div>
 
 	<div class="mb-8 grid grid-cols-2 gap-5 lg:grid-cols-4">
-		{#each [
-			{ label: 'Total Revenue', value: formatMoney(data.kpis.revenue), color: 'orange' },
-			{ label: 'Total Orders', value: data.kpis.orders, color: 'blue' },
-			{ label: 'Customers', value: data.kpis.customers, color: 'red' },
-			{ label: 'Avg. Order Value', value: formatMoney(data.kpis.averageOrderValue), color: 'yellow' }
-		] as kpi}
+		{#each [{ label: 'Total Revenue', value: formatMoney(data.kpis.revenue), color: 'orange' }, { label: 'Total Orders', value: data.kpis.orders, color: 'blue' }, { label: 'Customers', value: data.kpis.customers, color: 'red' }, { label: 'Avg. Order Value', value: formatMoney(data.kpis.averageOrderValue), color: 'yellow' }] as kpi}
 			<div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
 				<p class="mb-2 text-xs font-medium tracking-wider text-gray-500 uppercase">{kpi.label}</p>
 				<p class="mb-1 text-2xl font-bold text-gray-900">{kpi.value}</p>
@@ -42,7 +37,12 @@
 			</div>
 			<div class="flex h-64 items-center justify-center rounded-b-lg bg-gray-50 p-6">
 				<div class="text-center">
-					<svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<svg
+						class="mx-auto h-12 w-12 text-gray-300"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -83,9 +83,18 @@
 				<table class="min-w-full divide-y divide-gray-200">
 					<thead class="bg-gray-50">
 						<tr>
-							<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Product</th>
-							<th class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">Units</th>
-							<th class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">Revenue</th>
+							<th
+								class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+								>Product</th
+							>
+							<th
+								class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase"
+								>Units</th
+							>
+							<th
+								class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase"
+								>Revenue</th
+							>
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200">
@@ -118,16 +127,26 @@
 				<table class="min-w-full divide-y divide-gray-200">
 					<thead class="bg-gray-50">
 						<tr>
-							<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Order</th>
-							<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Status</th>
-							<th class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">Total</th>
+							<th
+								class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+								>Order</th
+							>
+							<th
+								class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+								>Status</th
+							>
+							<th
+								class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase"
+								>Total</th
+							>
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200">
 						{#each data.recentOrders as order}
 							<tr class="hover:bg-gray-50">
 								<td class="px-6 py-3 text-sm font-medium text-blue-600">
-									<a href={`/abayiza-secure-admin-7k9x2p/orders/${order.id}`}>{order.orderNumber}</a>
+									<a href={`/abayiza-secure-admin-7k9x2p/orders/${order.id}`}>{order.orderNumber}</a
+									>
 								</td>
 								<td class="px-6 py-3 text-sm text-gray-500">{order.status}</td>
 								<td class="px-6 py-3 text-right text-sm font-medium text-gray-900">

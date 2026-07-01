@@ -407,9 +407,24 @@
 										class="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_4px_12px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:h-9 sm:w-9"
 										aria-label="Add to cart"
 									>
-										<svg class="h-4 w-4 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"/>
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h.01M18 21h.01"/>
+										<svg
+											class="h-4 w-4 sm:h-4 sm:w-4"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
+											/>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M10 21h.01M18 21h.01"
+											/>
 										</svg>
 									</button>
 
@@ -444,11 +459,15 @@
 
 									<div class="mt-auto flex items-center justify-between gap-2 pt-2 sm:pt-3">
 										<div class="min-w-0">
-											<p class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-[0.95rem]">
+											<p
+												class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-[0.95rem]"
+											>
 												{formatMoney(item.salePrice || item.price)}
 											</p>
 											{#if item.salePrice}
-												<p class="mt-0.5 text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs">
+												<p
+													class="mt-0.5 text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs"
+												>
 													{formatMoney(item.price)}
 												</p>
 											{/if}

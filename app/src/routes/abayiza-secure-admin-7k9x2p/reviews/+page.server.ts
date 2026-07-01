@@ -67,7 +67,10 @@ export const actions: Actions = {
 			data: { isVisible }
 		});
 
-		setAdminFlash(cookies, isVisible ? 'Review photo shown on storefront.' : 'Review photo hidden from storefront.');
+		setAdminFlash(
+			cookies,
+			isVisible ? 'Review photo shown on storefront.' : 'Review photo hidden from storefront.'
+		);
 		throw redirect(303, '/abayiza-secure-admin-7k9x2p/reviews');
 	},
 

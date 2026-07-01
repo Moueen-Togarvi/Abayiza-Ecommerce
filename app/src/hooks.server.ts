@@ -4,13 +4,18 @@ import { redirect, type Handle } from '@sveltejs/kit';
 export const handle: Handle = async ({ event, resolve }) => {
 	const pathname = event.url.pathname;
 	const isAdminRoute = pathname.startsWith('/abayiza-secure-admin-7k9x2p');
-	const isAdminAuthRoute = pathname === '/abayiza-secure-admin-7k9x2p/login' || pathname === '/abayiza-secure-admin-7k9x2p/logout';
+	const isAdminAuthRoute =
+		pathname === '/abayiza-secure-admin-7k9x2p/login' ||
+		pathname === '/abayiza-secure-admin-7k9x2p/logout';
 
 	if (isAdminRoute) {
 		event.locals.adminUser = await verifyAdminSessionToken(event.cookies.get(ADMIN_SESSION_COOKIE));
 
 		if (!event.locals.adminUser && !isAdminAuthRoute) {
-			throw redirect(303, `/abayiza-secure-admin-7k9x2p/login?redirectTo=${encodeURIComponent(pathname + event.url.search)}`);
+			throw redirect(
+				303,
+				`/abayiza-secure-admin-7k9x2p/login?redirectTo=${encodeURIComponent(pathname + event.url.search)}`
+			);
 		}
 
 		if (event.locals.adminUser && pathname === '/abayiza-secure-admin-7k9x2p/login') {

@@ -28,9 +28,19 @@
 <div class="min-h-screen bg-[#f6f5f1] px-4 py-14">
 	{#if order}
 		<div class="mx-auto max-w-5xl">
-			<div class="mx-auto mb-8 max-w-sm rounded-2xl bg-white p-7 text-center shadow-[0_24px_80px_rgba(20,53,45,0.10)]">
-				<div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#fbf9f2] text-[#e4b43d]">
-					<svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+			<div
+				class="mx-auto mb-8 max-w-sm rounded-2xl bg-white p-7 text-center shadow-[0_24px_80px_rgba(20,53,45,0.10)]"
+			>
+				<div
+					class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#fbf9f2] text-[#e4b43d]"
+				>
+					<svg
+						class="h-7 w-7"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						aria-hidden="true"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -43,8 +53,11 @@
 				<p class="mt-1 text-xs leading-5 text-gray-500">Your order has been placed successfully.</p>
 
 				<div class="relative my-6 border-t border-dashed border-gray-300">
-					<span class="absolute top-1/2 -left-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f6f5f1]"></span>
-					<span class="absolute top-1/2 -right-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f6f5f1]"></span>
+					<span class="absolute top-1/2 -left-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f6f5f1]"
+					></span>
+					<span
+						class="absolute top-1/2 -right-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f6f5f1]"
+					></span>
 				</div>
 
 				<div class="grid grid-cols-2 gap-5 text-left">
@@ -57,7 +70,9 @@
 						<p class="mt-1 text-sm font-black text-[#14352d]">{formatMoney(order.totalAmount)}</p>
 					</div>
 					<div class="col-span-2">
-						<p class="text-[0.65rem] font-bold tracking-[0.16em] text-gray-400 uppercase">Date & time</p>
+						<p class="text-[0.65rem] font-bold tracking-[0.16em] text-gray-400 uppercase">
+							Date & time
+						</p>
 						<p class="mt-1 text-sm font-black text-[#14352d]">{formatDateTime(order.createdAt)}</p>
 					</div>
 				</div>
@@ -67,7 +82,9 @@
 				<section class="rounded-2xl bg-white p-6 shadow-[0_20px_70px_rgba(20,53,45,0.08)]">
 					<div class="mb-5 flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
 						<div>
-							<p class="text-xs font-bold tracking-[0.16em] text-[#b58b2b] uppercase">Order details</p>
+							<p class="text-xs font-bold tracking-[0.16em] text-[#b58b2b] uppercase">
+								Order details
+							</p>
 							<h2 class="mt-1 font-serif text-2xl text-[#14352d]">Cash on Delivery</h2>
 						</div>
 						<span class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-800">
@@ -80,13 +97,18 @@
 							<div class="flex items-center gap-4 rounded-xl border border-gray-100 p-3">
 								<div class="h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-100">
 									{#if item.image}
-										<img src={item.image} alt={item.productName} class="h-full w-full object-cover" />
+										<img
+											src={item.image}
+											alt={item.productName}
+											class="h-full w-full object-cover"
+										/>
 									{/if}
 								</div>
 								<div class="min-w-0 flex-1">
 									<p class="font-medium text-[#14352d]">{item.productName}</p>
 									<p class="mt-1 text-xs text-gray-500">
-										{[item.variantColor, item.variantSize].filter(Boolean).join(' / ') || 'Abayiza'} x {item.quantity}
+										{[item.variantColor, item.variantSize].filter(Boolean).join(' / ') || 'Abayiza'} x
+										{item.quantity}
 									</p>
 								</div>
 								<p class="text-sm font-black text-[#14352d]">{formatMoney(item.lineTotal)}</p>
@@ -125,35 +147,56 @@
 					</section>
 
 					<section class="rounded-2xl bg-white p-6 shadow-[0_20px_70px_rgba(20,53,45,0.08)]">
-						<p class="text-xs font-bold tracking-[0.16em] text-[#b58b2b] uppercase">Shipping address</p>
+						<p class="text-xs font-bold tracking-[0.16em] text-[#b58b2b] uppercase">
+							Shipping address
+						</p>
 						<div class="mt-4 space-y-3 text-sm">
 							<div>
-								<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Name</p>
-								<p class="mt-1 font-medium text-[#14352d]">{address.firstName || '-'} {address.lastName || ''}</p>
+								<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+									Name
+								</p>
+								<p class="mt-1 font-medium text-[#14352d]">
+									{address.firstName || '-'}
+									{address.lastName || ''}
+								</p>
 							</div>
 							<div>
-								<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Address</p>
+								<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+									Address
+								</p>
 								<p class="mt-1 leading-6 text-gray-600">{address.addressLine1 || '-'}</p>
-								{#if address.addressLine2}<p class="leading-6 text-gray-600">{address.addressLine2}</p>{/if}
+								{#if address.addressLine2}<p class="leading-6 text-gray-600">
+										{address.addressLine2}
+									</p>{/if}
 							</div>
 							<div class="grid grid-cols-2 gap-3">
 								<div>
-									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">City</p>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+										City
+									</p>
 									<p class="mt-1 font-medium text-[#14352d]">{address.city || '-'}</p>
 								</div>
 								<div>
-									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Postal Code</p>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+										Postal Code
+									</p>
 									<p class="mt-1 font-medium text-[#14352d]">{address.postalCode || '-'}</p>
 								</div>
 							</div>
 							<div class="grid grid-cols-2 gap-3">
 								<div>
-									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Country</p>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+										Country
+									</p>
 									<p class="mt-1 font-medium text-[#14352d]">{address.country || '-'}</p>
 								</div>
 								<div>
-									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">Mobile</p>
-									<p class="mt-1 font-medium text-[#14352d]">{address.phone || order.customerPhone || '-'}</p>
+									<p class="text-[0.68rem] font-black tracking-[0.12em] text-gray-400 uppercase">
+										Mobile
+									</p>
+									<p class="mt-1 font-medium text-[#14352d]">
+										{address.phone || order.customerPhone || '-'}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -177,7 +220,9 @@
 			</div>
 		</div>
 	{:else}
-		<div class="mx-auto max-w-md rounded-2xl bg-white p-8 text-center shadow-[0_24px_80px_rgba(20,53,45,0.10)]">
+		<div
+			class="mx-auto max-w-md rounded-2xl bg-white p-8 text-center shadow-[0_24px_80px_rgba(20,53,45,0.10)]"
+		>
 			<h1 class="font-serif text-3xl text-[#14352d]">Order not found</h1>
 			<p class="mt-3 text-sm leading-6 text-gray-500">
 				Use the checkout flow again or contact support with your order number.

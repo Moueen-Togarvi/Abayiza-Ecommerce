@@ -17,7 +17,12 @@
 			class="rounded-md border border-gray-300 bg-white p-2 text-gray-500 shadow-sm hover:bg-gray-50"
 		>
 			<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M10 19l-7-7m0 0l7-7m-7 7h18"
+				/>
 			</svg>
 		</a>
 		<h1 class="text-2xl font-bold text-gray-900">{customerName}</h1>
@@ -26,11 +31,7 @@
 	<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 		<div class="space-y-6 lg:col-span-2">
 			<div class="grid grid-cols-3 gap-4">
-				{#each [
-					{ label: 'Total Spent', value: formatMoney(customer.totalSpent) },
-					{ label: 'Total Orders', value: customer.orders.length },
-					{ label: 'Avg. Order Value', value: formatMoney(customer.averageOrderValue) }
-				] as stat}
+				{#each [{ label: 'Total Spent', value: formatMoney(customer.totalSpent) }, { label: 'Total Orders', value: customer.orders.length }, { label: 'Avg. Order Value', value: formatMoney(customer.averageOrderValue) }] as stat}
 					<div class="rounded-lg border border-gray-200 bg-white p-4 text-center shadow-sm">
 						<p class="text-xl font-bold text-gray-900">{stat.value}</p>
 						<p class="mt-1 text-xs text-gray-500">{stat.label}</p>
@@ -44,7 +45,8 @@
 						<button
 							type="button"
 							onclick={() => (activeTab = tab)}
-							class="border-b-2 pt-2 pb-3 text-sm font-medium capitalize transition-colors {activeTab === tab
+							class="border-b-2 pt-2 pb-3 text-sm font-medium capitalize transition-colors {activeTab ===
+							tab
 								? 'border-[#000] text-[#000]'
 								: 'border-transparent text-gray-500 hover:text-gray-700'}"
 						>
@@ -58,23 +60,39 @@
 						<table class="min-w-full divide-y divide-gray-200">
 							<thead class="bg-gray-50">
 								<tr>
-									<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Order</th>
-									<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Date</th>
-									<th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Status</th>
-									<th class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">Total</th>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Order</th
+									>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Date</th
+									>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Status</th
+									>
+									<th
+										class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Total</th
+									>
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-gray-200 bg-white">
 								{#each customer.orders as order}
 									<tr class="hover:bg-gray-50">
 										<td class="px-6 py-4 text-sm font-medium text-blue-600">
-											<a href={`/abayiza-secure-admin-7k9x2p/orders/${order.id}`}>{order.orderNumber}</a>
+											<a href={`/abayiza-secure-admin-7k9x2p/orders/${order.id}`}
+												>{order.orderNumber}</a
+											>
 										</td>
 										<td class="px-6 py-4 text-sm text-gray-500">
 											{new Date(order.createdAt).toLocaleDateString()}
 										</td>
 										<td class="px-6 py-4">
-											<span class="rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+											<span
+												class="rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800"
+											>
 												{order.status}
 											</span>
 										</td>
@@ -103,7 +121,8 @@
 								<p class="text-sm leading-relaxed text-gray-700">
 									{address.addressLine1}<br />
 									{address.addressLine2 ? `${address.addressLine2}\n` : ''}{address.city},
-									{address.state} {address.postalCode}<br />
+									{address.state}
+									{address.postalCode}<br />
 									{address.country}<br />
 									{address.phone || ''}
 								</p>
@@ -130,7 +149,9 @@
 				</div>
 				<div class="space-y-4 p-6">
 					<div class="flex items-center gap-3">
-						<div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#000] font-serif text-lg font-bold text-white">
+						<div
+							class="flex h-12 w-12 items-center justify-center rounded-full bg-[#000] font-serif text-lg font-bold text-white"
+						>
 							{customerName.slice(0, 1).toUpperCase()}
 						</div>
 						<div>
@@ -140,7 +161,10 @@
 							</p>
 						</div>
 					</div>
-					<a href={`mailto:${customer.email}`} class="block text-sm text-gray-600 hover:text-[#000]">
+					<a
+						href={`mailto:${customer.email}`}
+						class="block text-sm text-gray-600 hover:text-[#000]"
+					>
 						{customer.email}
 					</a>
 					<p class="text-sm text-gray-500">Role: {customer.role}</p>

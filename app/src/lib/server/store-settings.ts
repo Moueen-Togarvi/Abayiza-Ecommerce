@@ -49,7 +49,8 @@ export const defaultStorefrontSettings: SettingValues = {
 	// Slide 1
 	slide1_title: 'Premium Nida Essentials',
 	slide1_tagline: 'EVERYDAY COMFORT',
-	slide1_description: 'Double-stitched durability and flowy silhouettes in authentic premium Nida fabric. Styled for standard modest daily wear.',
+	slide1_description:
+		'Double-stitched durability and flowy silhouettes in authentic premium Nida fabric. Styled for standard modest daily wear.',
 	slide1_link: '/shop?category=nida-essentials',
 	slide1_image: '/abaya_banner_nida.png',
 	slide1_promo: '40% OFF',
@@ -57,7 +58,8 @@ export const defaultStorefrontSettings: SettingValues = {
 	// Slide 2
 	slide2_title: 'Luxury Occasion Wear',
 	slide2_tagline: 'ELEGANT LAYERS',
-	slide2_description: 'Featuring intricate hand-stitched beadwork and premium drapes on soft premium flowy georgette edits.',
+	slide2_description:
+		'Featuring intricate hand-stitched beadwork and premium drapes on soft premium flowy georgette edits.',
 	slide2_link: '/shop?category=occasion',
 	slide2_image: '/abaya_banner_occasion.png',
 	slide2_promo: '50% OFF',
@@ -65,7 +67,8 @@ export const defaultStorefrontSettings: SettingValues = {
 	// Slide 3
 	slide3_title: 'Eid Signature Edit',
 	slide3_tagline: 'LIMITED EMBROIDERY',
-	slide3_description: 'Sophisticated dark cuts with delicate gold-lace details, designed to leave a quiet, modest presence.',
+	slide3_description:
+		'Sophisticated dark cuts with delicate gold-lace details, designed to leave a quiet, modest presence.',
 	slide3_link: '/shop?category=eid-edit',
 	slide3_image: '/abaya_banner_eid.png',
 	slide3_promo: '30% OFF',

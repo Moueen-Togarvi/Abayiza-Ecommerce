@@ -31,7 +31,9 @@
 					stockCount: variant.stockCount || 0,
 					sku: variant.sku || ''
 				}))
-			: [{ id: 1, type: 'size', size: 'S (52)', color: 'Black', stockCount: 0, sku: '' }]) as VariantRow[]
+			: [
+					{ id: 1, type: 'size', size: 'S (52)', color: 'Black', stockCount: 0, sku: '' }
+				]) as VariantRow[]
 	);
 
 	const sizes = ['XS (50)', 'S (52)', 'M (54)', 'L (56)', 'XL (58)', 'XXL (60)', 'S-XL', 'XS-L'];
@@ -48,10 +50,21 @@
 	];
 
 	const selectedCollectionIds = product.collections.map((collection: any) => collection.id);
-	const totalInventory = product.variants.reduce((total: number, variant: any) => total + Number(variant.stockCount || 0), 0);
-	const productStatus = !product.isActive ? 'DRAFT' : totalInventory <= 0 ? 'OUT_OF_STOCK' : 'ACTIVE';
+	const totalInventory = product.variants.reduce(
+		(total: number, variant: any) => total + Number(variant.stockCount || 0),
+		0
+	);
+	const productStatus = !product.isActive
+		? 'DRAFT'
+		: totalInventory <= 0
+			? 'OUT_OF_STOCK'
+			: 'ACTIVE';
 	const productStatusLabel =
-		productStatus === 'OUT_OF_STOCK' ? 'Out of Stock' : productStatus === 'DRAFT' ? 'Draft' : 'Active';
+		productStatus === 'OUT_OF_STOCK'
+			? 'Out of Stock'
+			: productStatus === 'DRAFT'
+				? 'Draft'
+				: 'Active';
 	const productStatusClass =
 		productStatus === 'OUT_OF_STOCK'
 			? 'bg-red-100 text-red-800'
@@ -168,7 +181,8 @@
 								name="description"
 								rows="5"
 								class="block w-full rounded-md border border-gray-300 p-3 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
-							>{product.description}</textarea>
+								>{product.description}</textarea
+							>
 						</div>
 					</div>
 				</div>
@@ -186,7 +200,9 @@
 											class="h-full w-full object-cover"
 										/>
 									</div>
-									<div class="flex items-center justify-between gap-3 border-t border-gray-200 px-3 py-2">
+									<div
+										class="flex items-center justify-between gap-3 border-t border-gray-200 px-3 py-2"
+									>
 										<span class="truncate text-xs font-medium text-gray-600">Current image</span>
 										<span class="inline-flex items-center gap-2 text-xs font-semibold text-red-600">
 											<input
@@ -202,7 +218,9 @@
 							{/each}
 						</div>
 					{:else}
-						<p class="mb-4 rounded-md border border-dashed border-gray-300 px-3 py-4 text-sm text-gray-500">
+						<p
+							class="mb-4 rounded-md border border-dashed border-gray-300 px-3 py-4 text-sm text-gray-500"
+						>
 							No images uploaded yet.
 						</p>
 					{/if}
@@ -280,8 +298,9 @@
 							<div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
 								<div class="grid gap-3 md:grid-cols-[9rem_1fr_7rem_1fr_auto] md:items-end">
 									<div>
-										<label for={`variant-type-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-											>Variant Type</label
+										<label
+											for={`variant-type-${variant.id}`}
+											class="mb-1 block text-xs font-medium text-gray-600">Variant Type</label
 										>
 										<select
 											id={`variant-type-${variant.id}`}
@@ -296,8 +315,9 @@
 
 									{#if variant.type === 'size'}
 										<div>
-											<label for={`variant-size-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-												>Size</label
+											<label
+												for={`variant-size-${variant.id}`}
+												class="mb-1 block text-xs font-medium text-gray-600">Size</label
 											>
 											<select
 												id={`variant-size-${variant.id}`}
@@ -313,8 +333,9 @@
 										</div>
 									{:else}
 										<div>
-											<label for={`variant-color-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-												>Colour</label
+											<label
+												for={`variant-color-${variant.id}`}
+												class="mb-1 block text-xs font-medium text-gray-600">Colour</label
 											>
 											<select
 												id={`variant-color-${variant.id}`}
@@ -331,8 +352,9 @@
 									{/if}
 
 									<div>
-										<label for={`variant-stock-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-											>Stock</label
+										<label
+											for={`variant-stock-${variant.id}`}
+											class="mb-1 block text-xs font-medium text-gray-600">Stock</label
 										>
 										<input
 											id={`variant-stock-${variant.id}`}
@@ -344,8 +366,9 @@
 										/>
 									</div>
 									<div>
-										<label for={`variant-sku-${variant.id}`} class="mb-1 block text-xs font-medium text-gray-600"
-											>SKU</label
+										<label
+											for={`variant-sku-${variant.id}`}
+											class="mb-1 block text-xs font-medium text-gray-600">SKU</label
 										>
 										<input
 											id={`variant-sku-${variant.id}`}
@@ -371,7 +394,8 @@
 										{#each colors as color}
 											<button
 												type="button"
-												class="h-6 w-6 rounded-full border border-gray-300 ring-offset-2 transition {variant.color === color.name
+												class="h-6 w-6 rounded-full border border-gray-300 ring-offset-2 transition {variant.color ===
+												color.name
 													? 'ring-2 ring-[#000]'
 													: ''}"
 												style={`background-color: ${color.hex}`}
@@ -395,7 +419,9 @@
 						class="mb-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
 					>
 						<option value="ACTIVE" selected={productStatus === 'ACTIVE'}>Active</option>
-						<option value="OUT_OF_STOCK" selected={productStatus === 'OUT_OF_STOCK'}>Out of Stock</option>
+						<option value="OUT_OF_STOCK" selected={productStatus === 'OUT_OF_STOCK'}
+							>Out of Stock</option
+						>
 						<option value="DRAFT" selected={productStatus === 'DRAFT'}>Draft</option>
 					</select>
 					<p class="text-xs leading-5 text-gray-500">
@@ -446,7 +472,9 @@
 	<div class="fixed inset-0 z-50 flex items-center justify-center bg-[#000]/50 p-4">
 		<div class="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
 			<div class="mb-4 flex items-center space-x-3">
-				<div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+				<div
+					class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-100"
+				>
 					<svg class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path
 							stroke-linecap="round"

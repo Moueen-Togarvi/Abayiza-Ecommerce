@@ -35,7 +35,8 @@
 			!postalCode.trim() ||
 			!phone.trim()
 		) {
-			checkoutError = 'Please fill all required fields: email, address, city, postal code, and mobile number.';
+			checkoutError =
+				'Please fill all required fields: email, address, city, postal code, and mobile number.';
 			step = 1;
 			return false;
 		}
@@ -79,15 +80,30 @@
 		<div class="w-full md:w-3/5">
 			<nav class="mb-10 flex items-center text-xs tracking-widest uppercase">
 				<a href="/cart" class="text-gray-400 hover:text-black">Cart</a>
-				<svg class="mx-2 h-3 w-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<svg
+					class="mx-2 h-3 w-3 text-gray-300"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 				</svg>
 				<span class={step >= 1 ? 'font-medium text-black' : 'text-gray-400'}>Information</span>
-				<svg class="mx-2 h-3 w-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<svg
+					class="mx-2 h-3 w-3 text-gray-300"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 				</svg>
 				<span class={step >= 2 ? 'font-medium text-black' : 'text-gray-400'}>Shipping</span>
-				<svg class="mx-2 h-3 w-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<svg
+					class="mx-2 h-3 w-3 text-gray-300"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 				</svg>
 				<span class={step >= 3 ? 'font-medium text-black' : 'text-gray-400'}>Payment</span>
@@ -108,7 +124,10 @@
 						</span>
 					</div>
 					<div class="mb-8">
-						<label for="checkout-email" class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase">
+						<label
+							for="checkout-email"
+							class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+						>
 							Email <span class="text-red-600">*</span>
 						</label>
 						<input
@@ -132,7 +151,10 @@
 					<h2 class="mb-4 font-serif text-xl">Shipping Address</h2>
 					<div class="mb-6 grid grid-cols-2 gap-4">
 						<div class="col-span-2 md:col-span-1">
-							<label for="checkout-first-name" class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase">
+							<label
+								for="checkout-first-name"
+								class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+							>
 								First name <span class="text-red-600">*</span>
 							</label>
 							<input
@@ -146,7 +168,10 @@
 							/>
 						</div>
 						<div class="col-span-2 md:col-span-1">
-							<label for="checkout-last-name" class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase">
+							<label
+								for="checkout-last-name"
+								class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+							>
 								Last name <span class="text-red-600">*</span>
 							</label>
 							<input
@@ -160,7 +185,10 @@
 							/>
 						</div>
 						<div class="col-span-2">
-							<label for="checkout-address" class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase">
+							<label
+								for="checkout-address"
+								class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+							>
 								Address <span class="text-red-600">*</span>
 							</label>
 							<input
@@ -181,7 +209,10 @@
 							class="col-span-2 rounded-none border-gray-300 p-3 text-sm focus:border-black focus:ring-black"
 						/>
 						<div class="col-span-2 md:col-span-1">
-							<label for="checkout-city" class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase">
+							<label
+								for="checkout-city"
+								class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+							>
 								City <span class="text-red-600">*</span>
 							</label>
 							<input
@@ -195,7 +226,10 @@
 							/>
 						</div>
 						<div class="col-span-2 md:col-span-1">
-							<label for="checkout-postal-code" class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase">
+							<label
+								for="checkout-postal-code"
+								class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+							>
 								Postal code <span class="text-red-600">*</span>
 							</label>
 							<input
@@ -209,7 +243,10 @@
 							/>
 						</div>
 						<div class="col-span-2">
-							<label for="checkout-phone" class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase">
+							<label
+								for="checkout-phone"
+								class="mb-1 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+							>
 								Mobile number <span class="text-red-600">*</span>
 							</label>
 							<input
@@ -227,7 +264,12 @@
 					<div class="flex items-center justify-between pt-4">
 						<a href="/cart" class="flex items-center text-sm text-gray-500 hover:text-black">
 							<svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M15 19l-7-7 7-7"
+								/>
 							</svg>
 							Return to cart
 						</a>
@@ -246,14 +288,22 @@
 						<div class="mb-3 flex justify-between border-b border-gray-100 pb-3">
 							<span class="text-gray-500">Contact</span>
 							<span>{email}</span>
-							<button type="button" class="text-xs text-gray-400 underline" onclick={() => (step = 1)}>
+							<button
+								type="button"
+								class="text-xs text-gray-400 underline"
+								onclick={() => (step = 1)}
+							>
 								Change
 							</button>
 						</div>
 						<div class="flex justify-between">
 							<span class="text-gray-500">Ship to</span>
 							<span class="mx-4 truncate text-right">{addressLine1}, {city}</span>
-							<button type="button" class="text-xs text-gray-400 underline" onclick={() => (step = 1)}>
+							<button
+								type="button"
+								class="text-xs text-gray-400 underline"
+								onclick={() => (step = 1)}
+							>
 								Change
 							</button>
 						</div>
@@ -288,9 +338,18 @@
 					</div>
 
 					<div class="flex items-center justify-between pt-4">
-						<button type="button" class="flex items-center text-sm text-gray-500 hover:text-black" onclick={() => (step = 1)}>
+						<button
+							type="button"
+							class="flex items-center text-sm text-gray-500 hover:text-black"
+							onclick={() => (step = 1)}
+						>
 							<svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M15 19l-7-7 7-7"
+								/>
 							</svg>
 							Return to information
 						</button>
@@ -317,11 +376,15 @@
 					<input type="hidden" name="shippingMethod" value={shippingMethod} />
 
 					<h2 class="mb-2 font-serif text-xl">Payment</h2>
-					<p class="mb-6 text-sm font-light text-gray-500">All transactions are secure and encrypted.</p>
+					<p class="mb-6 text-sm font-light text-gray-500">
+						All transactions are secure and encrypted.
+					</p>
 
 					<div class="mb-8 rounded-none border border-gray-200">
 						<div class="border-b border-gray-200">
-							<label class="flex cursor-pointer items-center justify-between bg-gray-50 p-4 hover:bg-gray-50">
+							<label
+								class="flex cursor-pointer items-center justify-between bg-gray-50 p-4 hover:bg-gray-50"
+							>
 								<div class="flex items-center">
 									<input
 										type="radio"
@@ -352,15 +415,26 @@
 							</label>
 						</div>
 
-						<div class="border-t border-gray-100 bg-white p-6 text-center text-sm font-light text-gray-500">
+						<div
+							class="border-t border-gray-100 bg-white p-6 text-center text-sm font-light text-gray-500"
+						>
 							Pay with cash upon delivery.
 						</div>
 					</div>
 
 					<div class="flex items-center justify-between pt-4">
-						<button type="button" class="flex items-center text-sm text-gray-500 hover:text-black" onclick={() => (step = 2)}>
+						<button
+							type="button"
+							class="flex items-center text-sm text-gray-500 hover:text-black"
+							onclick={() => (step = 2)}
+						>
 							<svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M15 19l-7-7 7-7"
+								/>
 							</svg>
 							Return to shipping
 						</button>
@@ -398,7 +472,9 @@
 								{[item.color, item.size].filter(Boolean).join(' / ')}
 							</p>
 						</div>
-						<span class="ml-4 text-right text-sm font-medium">{formatMoney(item.price * item.quantity)}</span>
+						<span class="ml-4 text-right text-sm font-medium"
+							>{formatMoney(item.price * item.quantity)}</span
+						>
 					</div>
 				{/each}
 			{/if}
@@ -424,7 +500,9 @@
 				</div>
 				<div class="flex justify-between">
 					<span class="text-gray-600">Shipping</span>
-					<span class="text-xs text-gray-500">{step >= 2 ? formatMoney(shippingTotal) : 'Calculated at next step'}</span>
+					<span class="text-xs text-gray-500"
+						>{step >= 2 ? formatMoney(shippingTotal) : 'Calculated at next step'}</span
+					>
 				</div>
 			</div>
 

@@ -40,7 +40,7 @@ export function createCart() {
 			return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 		},
 		addItem(newItem: CartItem) {
-			const existingIndex = items.findIndex(i => i.id === newItem.id);
+			const existingIndex = items.findIndex((i) => i.id === newItem.id);
 			if (existingIndex >= 0) {
 				items[existingIndex].quantity += newItem.quantity;
 			} else {
@@ -49,7 +49,7 @@ export function createCart() {
 			save();
 		},
 		removeItem(id: string) {
-			items = items.filter(item => item.id !== id);
+			items = items.filter((item) => item.id !== id);
 			save();
 		},
 		updateQuantity(id: string, quantity: number) {
@@ -57,7 +57,7 @@ export function createCart() {
 				this.removeItem(id);
 				return;
 			}
-			const existingIndex = items.findIndex(i => i.id === id);
+			const existingIndex = items.findIndex((i) => i.id === id);
 			if (existingIndex >= 0) {
 				items[existingIndex].quantity = quantity;
 			}

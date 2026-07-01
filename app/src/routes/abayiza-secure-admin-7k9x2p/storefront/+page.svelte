@@ -212,7 +212,9 @@
 					<p class="text-xs font-black tracking-[0.18em] text-blue-600 uppercase">
 						Promotions & Sliders
 					</p>
-					<h2 class="mt-1 text-xl font-black text-gray-950">Banner Sliders & Flash Sale Settings</h2>
+					<h2 class="mt-1 text-xl font-black text-gray-950">
+						Banner Sliders & Flash Sale Settings
+					</h2>
 					<p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
 						Edit slide content, model images, countdown timers, and discount tags for the homepage.
 					</p>
@@ -225,22 +227,26 @@
 				</button>
 			</div>
 
-			<div class="p-5 space-y-8">
+			<div class="space-y-8 p-5">
 				<!-- Sliding Banners Block -->
 				<div>
-					<h3 class="text-sm font-black tracking-[0.14em] text-gray-900 border-b border-gray-150 pb-2 mb-4 uppercase">
+					<h3
+						class="border-gray-150 mb-4 border-b pb-2 text-sm font-black tracking-[0.14em] text-gray-900 uppercase"
+					>
 						Homepage Hero Sliding Banners (Nida, Occasion, Eid Signature)
 					</h3>
-					
+
 					<div class="grid gap-6 md:grid-cols-3">
 						<!-- Slide 1 -->
-						<div class="rounded-xl border border-gray-200 bg-gray-50/50 p-4 space-y-3">
-							<span class="inline-flex items-center rounded-md bg-[#14352d]/10 px-2 py-1 text-xs font-bold text-[#14352d]">
+						<div class="space-y-3 rounded-xl border border-gray-200 bg-gray-50/50 p-4">
+							<span
+								class="inline-flex items-center rounded-md bg-[#14352d]/10 px-2 py-1 text-xs font-bold text-[#14352d]"
+							>
 								Slide 1: Nida Essentials
 							</span>
-							
+
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Title</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Title</label>
 								<input
 									type="text"
 									name="slide1_title"
@@ -250,7 +256,7 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tagline</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Tagline</label>
 								<input
 									type="text"
 									name="slide1_tagline"
@@ -260,16 +266,20 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Description</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
+									>Description</label
+								>
 								<textarea
 									name="slide1_description"
 									rows="3"
 									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								>{storefrontSettings.slide1_description || ''}</textarea>
+									>{storefrontSettings.slide1_description || ''}</textarea
+								>
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Promo Tag</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Promo Tag</label
+								>
 								<input
 									type="text"
 									name="slide1_promo"
@@ -279,7 +289,7 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Link URL</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Link URL</label>
 								<input
 									type="text"
 									name="slide1_link"
@@ -291,14 +301,18 @@
 							<div class="space-y-2">
 								<label class="block text-xs font-bold text-gray-700 uppercase">Slide Image</label>
 								{#if storefrontSettings.slide1_image}
-									<div class="relative h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100 mb-1">
+									<div
+										class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
+									>
 										<img
 											src={storefrontSettings.slide1_image}
 											alt="Slide 1 Preview"
 											class="h-full w-full object-contain"
 										/>
 									</div>
-									<label class="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs cursor-pointer mb-2">
+									<label
+										class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
+									>
 										<input
 											name="remove_slide1_image"
 											type="checkbox"
@@ -307,24 +321,30 @@
 										<span class="font-medium text-red-700">Remove current image</span>
 									</label>
 								{/if}
-								<input type="hidden" name="slide1_image" value={storefrontSettings.slide1_image || ''} />
+								<input
+									type="hidden"
+									name="slide1_image"
+									value={storefrontSettings.slide1_image || ''}
+								/>
 								<input
 									type="file"
 									name="slide1_image_file"
 									accept="image/*"
-									class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+									class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
 								/>
 							</div>
 						</div>
 
 						<!-- Slide 2 -->
-						<div class="rounded-xl border border-gray-200 bg-gray-50/50 p-4 space-y-3">
-							<span class="inline-flex items-center rounded-md bg-[#e4b43d]/15 px-2 py-1 text-xs font-bold text-[#b58b2b]">
+						<div class="space-y-3 rounded-xl border border-gray-200 bg-gray-50/50 p-4">
+							<span
+								class="inline-flex items-center rounded-md bg-[#e4b43d]/15 px-2 py-1 text-xs font-bold text-[#b58b2b]"
+							>
 								Slide 2: Occasion Wear
 							</span>
-							
+
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Title</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Title</label>
 								<input
 									type="text"
 									name="slide2_title"
@@ -334,7 +354,7 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tagline</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Tagline</label>
 								<input
 									type="text"
 									name="slide2_tagline"
@@ -344,16 +364,20 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Description</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
+									>Description</label
+								>
 								<textarea
 									name="slide2_description"
 									rows="3"
 									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								>{storefrontSettings.slide2_description || ''}</textarea>
+									>{storefrontSettings.slide2_description || ''}</textarea
+								>
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Promo Tag</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Promo Tag</label
+								>
 								<input
 									type="text"
 									name="slide2_promo"
@@ -363,7 +387,7 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Link URL</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Link URL</label>
 								<input
 									type="text"
 									name="slide2_link"
@@ -375,14 +399,18 @@
 							<div class="space-y-2">
 								<label class="block text-xs font-bold text-gray-700 uppercase">Slide Image</label>
 								{#if storefrontSettings.slide2_image}
-									<div class="relative h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100 mb-1">
+									<div
+										class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
+									>
 										<img
 											src={storefrontSettings.slide2_image}
 											alt="Slide 2 Preview"
 											class="h-full w-full object-contain"
 										/>
 									</div>
-									<label class="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs cursor-pointer mb-2">
+									<label
+										class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
+									>
 										<input
 											name="remove_slide2_image"
 											type="checkbox"
@@ -391,24 +419,30 @@
 										<span class="font-medium text-red-700">Remove current image</span>
 									</label>
 								{/if}
-								<input type="hidden" name="slide2_image" value={storefrontSettings.slide2_image || ''} />
+								<input
+									type="hidden"
+									name="slide2_image"
+									value={storefrontSettings.slide2_image || ''}
+								/>
 								<input
 									type="file"
 									name="slide2_image_file"
 									accept="image/*"
-									class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+									class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
 								/>
 							</div>
 						</div>
 
 						<!-- Slide 3 -->
-						<div class="rounded-xl border border-gray-200 bg-gray-50/50 p-4 space-y-3">
-							<span class="inline-flex items-center rounded-md bg-[#14352d]/10 px-2 py-1 text-xs font-bold text-[#14352d]">
+						<div class="space-y-3 rounded-xl border border-gray-200 bg-gray-50/50 p-4">
+							<span
+								class="inline-flex items-center rounded-md bg-[#14352d]/10 px-2 py-1 text-xs font-bold text-[#14352d]"
+							>
 								Slide 3: Eid Signature
 							</span>
-							
+
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Title</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Title</label>
 								<input
 									type="text"
 									name="slide3_title"
@@ -418,7 +452,7 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tagline</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Tagline</label>
 								<input
 									type="text"
 									name="slide3_tagline"
@@ -428,16 +462,20 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Description</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
+									>Description</label
+								>
 								<textarea
 									name="slide3_description"
 									rows="3"
 									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								>{storefrontSettings.slide3_description || ''}</textarea>
+									>{storefrontSettings.slide3_description || ''}</textarea
+								>
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Promo Tag</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Promo Tag</label
+								>
 								<input
 									type="text"
 									name="slide3_promo"
@@ -447,7 +485,7 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Link URL</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Link URL</label>
 								<input
 									type="text"
 									name="slide3_link"
@@ -459,14 +497,18 @@
 							<div class="space-y-2">
 								<label class="block text-xs font-bold text-gray-700 uppercase">Slide Image</label>
 								{#if storefrontSettings.slide3_image}
-									<div class="relative h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100 mb-1">
+									<div
+										class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
+									>
 										<img
 											src={storefrontSettings.slide3_image}
 											alt="Slide 3 Preview"
 											class="h-full w-full object-contain"
 										/>
 									</div>
-									<label class="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs cursor-pointer mb-2">
+									<label
+										class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
+									>
 										<input
 											name="remove_slide3_image"
 											type="checkbox"
@@ -475,12 +517,16 @@
 										<span class="font-medium text-red-700">Remove current image</span>
 									</label>
 								{/if}
-								<input type="hidden" name="slide3_image" value={storefrontSettings.slide3_image || ''} />
+								<input
+									type="hidden"
+									name="slide3_image"
+									value={storefrontSettings.slide3_image || ''}
+								/>
 								<input
 									type="file"
 									name="slide3_image_file"
 									accept="image/*"
-									class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+									class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
 								/>
 							</div>
 						</div>
@@ -489,11 +535,13 @@
 
 				<!-- Flash Sale Timer Banner Block -->
 				<div>
-					<h3 class="text-sm font-black tracking-[0.14em] text-gray-900 border-b border-gray-150 pb-2 mb-4 uppercase">
+					<h3
+						class="border-gray-150 mb-4 border-b pb-2 text-sm font-black tracking-[0.14em] text-gray-900 uppercase"
+					>
 						Flash Sale Timer Banner
 					</h3>
-					
-					<div class="rounded-xl border border-gray-200 bg-gray-50/50 p-5 space-y-4">
+
+					<div class="space-y-4 rounded-xl border border-gray-200 bg-gray-50/50 p-5">
 						<div class="flex items-center gap-3">
 							<input
 								id="flash_sale_enabled"
@@ -502,14 +550,17 @@
 								checked={storefrontSettings.flash_sale_enabled === 'true'}
 								class="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
 							/>
-							<label for="flash_sale_enabled" class="text-sm font-bold text-gray-900 uppercase cursor-pointer">
+							<label
+								for="flash_sale_enabled"
+								class="cursor-pointer text-sm font-bold text-gray-900 uppercase"
+							>
 								Enable Flash Sale Timer Section
 							</label>
 						</div>
 
 						<div class="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Title</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Title</label>
 								<input
 									type="text"
 									name="flash_sale_title"
@@ -519,7 +570,9 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Cursive Subtitle</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
+									>Cursive Subtitle</label
+								>
 								<input
 									type="text"
 									name="flash_sale_subtitle"
@@ -529,7 +582,9 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">Discount Tagline</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
+									>Discount Tagline</label
+								>
 								<input
 									type="text"
 									name="flash_sale_description"
@@ -541,14 +596,18 @@
 							<div class="space-y-2">
 								<label class="block text-xs font-bold text-gray-700 uppercase">Model Image</label>
 								{#if storefrontSettings.flash_sale_image}
-									<div class="relative h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100 mb-1">
+									<div
+										class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
+									>
 										<img
 											src={storefrontSettings.flash_sale_image}
 											alt="Flash Sale Preview"
 											class="h-full w-full object-contain"
 										/>
 									</div>
-									<label class="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs cursor-pointer mb-2">
+									<label
+										class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
+									>
 										<input
 											name="remove_flash_sale_image"
 											type="checkbox"
@@ -557,17 +616,23 @@
 										<span class="font-medium text-red-700">Remove current image</span>
 									</label>
 								{/if}
-								<input type="hidden" name="flash_sale_image" value={storefrontSettings.flash_sale_image || ''} />
+								<input
+									type="hidden"
+									name="flash_sale_image"
+									value={storefrontSettings.flash_sale_image || ''}
+								/>
 								<input
 									type="file"
 									name="flash_sale_image_file"
 									accept="image/*"
-									class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+									class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
 								/>
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">CTA Button Text</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
+									>CTA Button Text</label
+								>
 								<input
 									type="text"
 									name="flash_sale_cta_label"
@@ -577,7 +642,9 @@
 							</div>
 
 							<div>
-								<label class="block text-xs font-bold text-gray-700 uppercase mb-1">CTA Button URL</label>
+								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
+									>CTA Button URL</label
+								>
 								<input
 									type="text"
 									name="flash_sale_cta_link"
@@ -587,13 +654,15 @@
 							</div>
 						</div>
 
-						<div class="border-t border-gray-200 pt-4 space-y-3">
+						<div class="space-y-3 border-t border-gray-200 pt-4">
 							<span class="block text-xs font-bold text-gray-700 uppercase">
 								Sale Duration Countdown (Timer value relative to user visit session)
 							</span>
-							<div class="grid gap-4 grid-cols-3 max-w-sm">
+							<div class="grid max-w-sm grid-cols-3 gap-4">
 								<div>
-									<label class="block text-[0.65rem] font-bold text-gray-500 uppercase mb-1">Hours</label>
+									<label class="mb-1 block text-[0.65rem] font-bold text-gray-500 uppercase"
+										>Hours</label
+									>
 									<input
 										type="number"
 										name="flash_sale_hours"
@@ -604,7 +673,9 @@
 									/>
 								</div>
 								<div>
-									<label class="block text-[0.65rem] font-bold text-gray-500 uppercase mb-1">Minutes</label>
+									<label class="mb-1 block text-[0.65rem] font-bold text-gray-500 uppercase"
+										>Minutes</label
+									>
 									<input
 										type="number"
 										name="flash_sale_minutes"
@@ -615,7 +686,9 @@
 									/>
 								</div>
 								<div>
-									<label class="block text-[0.65rem] font-bold text-gray-500 uppercase mb-1">Seconds</label>
+									<label class="mb-1 block text-[0.65rem] font-bold text-gray-500 uppercase"
+										>Seconds</label
+									>
 									<input
 										type="number"
 										name="flash_sale_seconds"

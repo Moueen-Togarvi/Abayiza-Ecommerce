@@ -34,7 +34,12 @@
 			<div class="mb-5 flex items-center gap-3">
 				<div class="flex h-10 w-10 items-center justify-center rounded-md bg-blue-50 text-blue-600">
 					<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4-4 4 4m-4-4v9M20 12l-4-4-4 4m4-4v13" />
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 16l4-4 4 4m-4-4v9M20 12l-4-4-4 4m4-4v13"
+						/>
 					</svg>
 				</div>
 				<h2 class="text-lg font-semibold text-[#000]">Upload Photos</h2>
@@ -83,7 +88,11 @@
 					{#each reviewPhotos as photo}
 						<article class="overflow-hidden rounded-lg border border-[#000]/10 bg-white shadow-sm">
 							<div class="aspect-[4/5] bg-gray-100">
-								<img src={photo.url} alt="Customer review" class="h-full w-full object-cover object-center" />
+								<img
+									src={photo.url}
+									alt="Customer review"
+									class="h-full w-full object-cover object-center"
+								/>
 							</div>
 							<div class="space-y-3 p-4">
 								<div class="flex items-center justify-between gap-3">
@@ -92,7 +101,9 @@
 									>
 										{photo.isVisible ? 'Visible' : 'Hidden'}
 									</span>
-									<p class="text-xs font-semibold text-[#000]/45">Order #{photo.displayOrder + 1}</p>
+									<p class="text-xs font-semibold text-[#000]/45">
+										Order #{photo.displayOrder + 1}
+									</p>
 								</div>
 
 								<div class="flex flex-wrap gap-2">
