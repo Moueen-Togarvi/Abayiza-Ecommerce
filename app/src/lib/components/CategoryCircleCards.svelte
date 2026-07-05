@@ -25,7 +25,7 @@
 				>
 					{#each displayCollections as category}
 						<a
-							href={`/shop/${category.slug || category.id}`}
+							href={`/shop?category=${category.slug || category.id}`}
 							class="group flex w-[4.5rem] shrink-0 flex-col items-center gap-3 sm:w-[7.5rem]"
 						>
 							<div

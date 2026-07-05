@@ -20,7 +20,7 @@
 			new Set<string>(
 				(product.variants || [])
 					.map((variant: any) => String(variant.color || ''))
-					.filter((c) => c && c.toLowerCase() !== 'default')
+					.filter((c: string) => c && c.toLowerCase() !== 'default')
 			)
 		)
 	);
