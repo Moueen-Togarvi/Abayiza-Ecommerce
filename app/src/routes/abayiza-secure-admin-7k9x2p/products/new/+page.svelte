@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ImageFileQueue from '$lib/components/admin/ImageFileQueue.svelte';
+	import { Button, Card, Field, PageHeader, Select, TextInput, Textarea } from '$lib/components/admin/ui';
 
 	type VariantKind = 'size' | 'color';
 	type VariantRow = {
@@ -56,26 +57,10 @@
 </svelte:head>
 
 <div class="mx-auto max-w-5xl pb-12">
-	<div class="mb-6 flex items-center space-x-4">
-		<a
-			href="/abayiza-secure-admin-7k9x2p/products"
-			class="rounded-md border border-gray-300 bg-white p-2 text-gray-500 shadow-sm hover:bg-gray-50"
-			aria-label="Back to products"
-		>
-			<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M10 19l-7-7m0 0l7-7m-7 7h18"
-				/>
-			</svg>
-		</a>
-		<h1 class="text-2xl font-bold text-[#000]">Add Product</h1>
-	</div>
+	<PageHeader title="Add Product" subtitle="Create a new product in your catalog." backHref="/abayiza-secure-admin-7k9x2p/products" />
 
 	{#if form?.error}
-		<div class="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+		<div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
 			{form.error}
 		</div>
 	{/if}
@@ -83,205 +68,119 @@
 	<form method="POST" action="?/create" enctype="multipart/form-data">
 		<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 			<div class="space-y-6 lg:col-span-2">
-				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+				<Card title="Details">
 					<div class="space-y-5">
-						<div>
-							<label for="name" class="mb-1 block text-sm font-medium text-gray-700">Title</label>
-							<input
-								id="name"
-								name="name"
-								type="text"
-								required
-								placeholder="e.g. Ayla Nida Abaya"
-								class="block w-full rounded-md border border-gray-300 p-2.5 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
-							/>
-						</div>
-						<div>
-							<label for="slug" class="mb-1 block text-sm font-medium text-gray-700">Slug</label>
-							<input
-								id="slug"
-								name="slug"
-								type="text"
-								placeholder="auto-generated if empty"
-								class="block w-full rounded-md border border-gray-300 p-2.5 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
-							/>
-						</div>
-						<div>
-							<label for="description" class="mb-1 block text-sm font-medium text-gray-700"
-								>Description</label
-							>
-							<textarea
-								id="description"
-								name="description"
-								rows="5"
-								class="block w-full rounded-md border border-gray-300 p-3 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
-								placeholder="Describe fabric, silhouette, and care details..."
-							></textarea>
-						</div>
+						<TextInput label="Title" name="name" placeholder="e.g. Ayla Nida Abaya" required />
+						<TextInput label="Slug" name="slug" placeholder="auto-generated if empty" help="URL-friendly identifier. Leave blank to auto-generate from the title." />
+						<Textarea label="Description" name="description" rows={5} placeholder="Describe fabric, silhouette, and care details…" />
 					</div>
-				</div>
+				</Card>
 
-				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-					<h3 class="mb-4 text-base font-medium text-[#000]">Media</h3>
+				<Card title="Media">
 					<ImageFileQueue inputId="new-product-image-picker" label="Add Image" />
-				</div>
+				</Card>
 
-				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-					<h3 class="mb-4 text-base font-medium text-[#000]">Pricing</h3>
+				<Card title="Pricing">
 					<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-						<div>
-							<label for="price" class="mb-1 block text-sm font-medium text-gray-700">Price</label>
-							<div class="relative rounded-md shadow-sm">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-									<span class="text-sm text-gray-500">Rs.</span>
-								</div>
-								<input
-									id="price"
-									name="price"
-									type="number"
-									step="0.01"
-									required
-									class="block w-full rounded-md border border-gray-300 py-2 pr-3 pl-7 text-sm focus:border-[#000] focus:ring-[#000]"
-									placeholder="0.00"
-								/>
-							</div>
-						</div>
-						<div>
-							<label for="salePrice" class="mb-1 block text-sm font-medium text-gray-700"
-								>Discount Price</label
-							>
-							<div class="relative rounded-md shadow-sm">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-									<span class="text-sm text-gray-500">Rs.</span>
-								</div>
-								<input
-									id="salePrice"
-									name="salePrice"
-									type="number"
-									step="0.01"
-									class="block w-full rounded-md border border-gray-300 py-2 pr-3 pl-7 text-sm focus:border-[#000] focus:ring-[#000]"
-									placeholder="0.00"
-								/>
-							</div>
-						</div>
+						<TextInput label="Price" name="price" type="number" step="0.01" prefix="Rs." placeholder="0.00" required />
+						<TextInput label="Discount Price" name="salePrice" type="number" step="0.01" prefix="Rs." placeholder="0.00" help="Optional — sale price shown instead of the regular price." />
 					</div>
-				</div>
+				</Card>
 
-				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-					<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
-						<h3 class="text-base font-medium text-[#000]">Variants</h3>
+				<Card title="Variants">
+					{#snippet header()}
 						<div class="flex flex-wrap gap-2">
-							<button
-								type="button"
-								class="rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
-								onclick={() => addVariant('size')}
-							>
-								Add Size Variant
-							</button>
-							<button
-								type="button"
-								class="rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-100"
-								onclick={() => addVariant('color')}
-							>
-								Add Colour Variant
-							</button>
+							<Button type="button" variant="secondary" size="sm" onclick={() => addVariant('size')}>
+								Add Size
+							</Button>
+							<Button type="button" variant="secondary" size="sm" onclick={() => addVariant('color')}>
+								Add Colour
+							</Button>
 						</div>
-					</div>
+					{/snippet}
 
-					<div class="space-y-4">
+					<div class="space-y-3">
 						{#each variants as variant, index (variant.id)}
-							<div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+							<div class="rounded-xl border border-admin-border bg-gray-50/60 p-4">
 								<div class="grid gap-3 md:grid-cols-[9rem_1fr_7rem_1fr_auto] md:items-end">
-									<div>
-										<label
-											for={`variant-type-${variant.id}`}
-											class="mb-1 block text-xs font-medium text-gray-600">Variant Type</label
-										>
-										<select
-											id={`variant-type-${variant.id}`}
-											name="variantType"
-											bind:value={variant.type}
-											class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
-										>
-											<option value="size">Size</option>
-											<option value="color">Colour</option>
-										</select>
-									</div>
+									<Field label="Type" class="text-xs">
+										{#snippet children()}
+											<select
+												name="variantType"
+												bind:value={variant.type}
+												class="block w-full rounded-lg border border-admin-border bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-admin-primary focus:ring-2 focus:ring-admin-primary/20 focus:outline-none"
+											>
+												<option value="size">Size</option>
+												<option value="color">Colour</option>
+											</select>
+										{/snippet}
+									</Field>
 
 									{#if variant.type === 'size'}
-										<div>
-											<label
-												for={`variant-size-${variant.id}`}
-												class="mb-1 block text-xs font-medium text-gray-600">Size</label
-											>
-											<select
-												id={`variant-size-${variant.id}`}
-												name="variantSize"
-												bind:value={variant.size}
-												class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
-											>
-												{#each sizes as size}
-													<option value={size}>{size}</option>
-												{/each}
-											</select>
-											<input type="hidden" name="variantColor" value="Default" />
-										</div>
+										<Field label="Size" class="text-xs">
+											{#snippet children()}
+												<select
+													name="variantSize"
+													bind:value={variant.size}
+													class="block w-full rounded-lg border border-admin-border bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-admin-primary focus:ring-2 focus:ring-admin-primary/20 focus:outline-none"
+												>
+													{#each sizes as size}
+														<option value={size}>{size}</option>
+													{/each}
+												</select>
+												<input type="hidden" name="variantColor" value="Default" />
+											{/snippet}
+										</Field>
 									{:else}
-										<div>
-											<label
-												for={`variant-color-${variant.id}`}
-												class="mb-1 block text-xs font-medium text-gray-600">Colour</label
-											>
-											<select
-												id={`variant-color-${variant.id}`}
-												name="variantColor"
-												bind:value={variant.color}
-												class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
-											>
-												{#each colors as color}
-													<option value={color.name}>{color.name}</option>
-												{/each}
-											</select>
-											<input type="hidden" name="variantSize" value="One Size" />
-										</div>
+										<Field label="Colour" class="text-xs">
+											{#snippet children()}
+												<select
+													name="variantColor"
+													bind:value={variant.color}
+													class="block w-full rounded-lg border border-admin-border bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-admin-primary focus:ring-2 focus:ring-admin-primary/20 focus:outline-none"
+												>
+													{#each colors as color}
+														<option value={color.name}>{color.name}</option>
+													{/each}
+												</select>
+												<input type="hidden" name="variantSize" value="One Size" />
+											{/snippet}
+										</Field>
 									{/if}
 
-									<div>
-										<label
-											for={`variant-stock-${variant.id}`}
-											class="mb-1 block text-xs font-medium text-gray-600">Stock</label
-										>
-										<input
-											id={`variant-stock-${variant.id}`}
-											name="variantStock"
-											type="number"
-											min="0"
-											bind:value={variant.stockCount}
-											class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
-										/>
-									</div>
-									<div>
-										<label
-											for={`variant-sku-${variant.id}`}
-											class="mb-1 block text-xs font-medium text-gray-600">SKU</label
-										>
-										<input
-											id={`variant-sku-${variant.id}`}
-											name="variantSku"
-											type="text"
-											bind:value={variant.sku}
-											placeholder={`Auto SKU ${index + 1}`}
-											class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#000] focus:ring-[#000]"
-										/>
-									</div>
-									<button
+									<Field label="Stock" class="text-xs">
+										{#snippet children()}
+											<input
+												name="variantStock"
+												type="number"
+												min="0"
+												bind:value={variant.stockCount}
+												class="block w-full rounded-lg border border-admin-border bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-admin-primary focus:ring-2 focus:ring-admin-primary/20 focus:outline-none"
+											/>
+										{/snippet}
+									</Field>
+
+									<Field label="SKU" class="text-xs">
+										{#snippet children()}
+											<input
+												name="variantSku"
+												type="text"
+												bind:value={variant.sku}
+												placeholder={`Auto SKU ${index + 1}`}
+												class="block w-full rounded-lg border border-admin-border bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-admin-primary focus:ring-2 focus:ring-admin-primary/20 focus:outline-none"
+											/>
+										{/snippet}
+									</Field>
+
+									<Button
 										type="button"
-										class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-40"
+										variant="danger"
+										size="sm"
 										disabled={variants.length === 1}
 										onclick={() => removeVariant(variant.id)}
 									>
 										Remove
-									</button>
+									</Button>
 								</div>
 
 								{#if variant.type === 'color'}
@@ -289,9 +188,9 @@
 										{#each colors as color}
 											<button
 												type="button"
-												class="h-6 w-6 rounded-full border border-gray-300 ring-offset-2 transition {variant.color ===
+												class="h-6 w-6 rounded-full border border-admin-border ring-offset-2 transition {variant.color ===
 												color.name
-													? 'ring-2 ring-[#000]'
+													? 'ring-2 ring-admin-primary'
 													: ''}"
 												style={`background-color: ${color.hex}`}
 												aria-label={`Select ${color.name}`}
@@ -303,60 +202,47 @@
 							</div>
 						{/each}
 					</div>
-				</div>
+				</Card>
 			</div>
 
 			<div class="space-y-6">
-				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-					<h3 class="mb-4 text-base font-medium text-[#000]">Product Status</h3>
-					<select
-						name="productStatus"
-						class="mb-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-[#000] focus:ring-[#000]"
-					>
+				<Card title="Status">
+					<Select name="productStatus" label="Visibility" help="Draft stays hidden. Out of Stock stays visible but disables cart and checkout.">
 						<option value="ACTIVE">Active</option>
 						<option value="OUT_OF_STOCK">Out of Stock</option>
 						<option value="DRAFT">Draft</option>
-					</select>
-					<p class="text-xs leading-5 text-gray-500">
-						Draft stays hidden. Out of Stock stays visible but disables cart and checkout.
-					</p>
-				</div>
+					</Select>
+				</Card>
 
-				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-					<h3 class="mb-4 text-base font-medium text-[#000]">Categories</h3>
-					<div class="space-y-2">
-						{#each collections as collection}
-							<label
-								class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 text-sm transition-colors hover:bg-yellow-50"
-							>
-								<span class="font-medium text-gray-700">{collection.name}</span>
-								<input
-									type="checkbox"
-									name="collectionIds"
-									value={collection.id}
-									class="h-4 w-4 rounded border-gray-300 text-[#000] focus:ring-[#000]"
-								/>
-							</label>
-						{/each}
-						{#if collections.length === 0}
-							<p class="text-sm text-gray-500">Add categories first from Admin Categories.</p>
-						{/if}
-					</div>
-				</div>
+				<Card title="Categories">
+					{#if collections.length}
+						<div class="space-y-2">
+							{#each collections as collection}
+								<label
+									class="flex cursor-pointer items-center justify-between rounded-lg border border-admin-border px-3 py-2 text-sm transition-colors hover:bg-gray-50"
+								>
+									<span class="font-medium text-gray-700">{collection.name}</span>
+									<input
+										type="checkbox"
+										name="collectionIds"
+										value={collection.id}
+										class="h-4 w-4 rounded border-gray-300 text-admin-primary focus:ring-admin-primary/30"
+									/>
+								</label>
+							{/each}
+						</div>
+					{:else}
+						<p class="text-sm text-gray-400">Add categories first from the Categories page.</p>
+					{/if}
+				</Card>
 
-				<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-					<button
-						type="submit"
-						class="w-full rounded-md bg-[#000] px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800"
-					>
-						Save Product
-					</button>
-					<a
-						href="/abayiza-secure-admin-7k9x2p/products"
-						class="mt-3 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
-					>
-						Discard
-					</a>
+				<div class="sticky bottom-6">
+					<Card>
+						<Button type="submit" class="w-full">Save Product</Button>
+						<Button href="/abayiza-secure-admin-7k9x2p/products" variant="secondary" class="mt-3 w-full">
+							Discard
+						</Button>
+					</Card>
 				</div>
 			</div>
 		</div>

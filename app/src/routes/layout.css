@@ -33,6 +33,14 @@
 
 	--font-serif: 'Playfair Display', serif;
 	--font-sans: 'Inter', sans-serif;
+
+	/* Admin surface tokens — clean modern (light) */
+	--color-admin-primary: #354238;
+	--color-admin-primary-hover: #24302a;
+	--color-admin-surface: #ffffff;
+	--color-admin-canvas: #f7f8f7;
+	--color-admin-border: #e5e9e7;
+	--color-admin-muted: #6b7670;
 }
 
 @layer base {
