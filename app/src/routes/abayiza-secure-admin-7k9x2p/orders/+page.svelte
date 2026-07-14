@@ -11,7 +11,16 @@
 
 	let { data } = $props();
 	let orders = $derived(data.orders || []);
-	let filters = $derived(data.filters || {});
+	let filters = $derived(
+		(data.filters || { date: '', email: '', phone: '', name: '', city: '' }) as {
+			date: string;
+			email: string;
+			phone: string;
+			name: string;
+			city: string;
+		}
+	);
+	const filterFields = ['email', 'phone', 'name', 'city'] as const;
 </script>
 
 <div class="mx-auto max-w-7xl">
@@ -36,7 +45,7 @@
 					value={filters.date || ''}
 					class="rounded-lg border border-admin-border bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-admin-primary focus:ring-2 focus:ring-admin-primary/20 focus:outline-none"
 				/>
-				{#each ['email', 'phone', 'name', 'city'] as field}
+				{#each filterFields as field}
 					<input
 						name={field}
 						type="search"
