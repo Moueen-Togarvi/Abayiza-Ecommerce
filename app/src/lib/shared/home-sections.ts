@@ -9,7 +9,7 @@ export const HOME_SECTION_CONFIGS = [
 		title: 'Signature Collections',
 		description:
 			'Refined edits for the pieces you reach for most: daily essentials, occasion layers, and timeless black abayas.',
-		homepageLimit: 3
+		homepageLimit: 4
 	},
 	{
 		key: 'new-arrivals',

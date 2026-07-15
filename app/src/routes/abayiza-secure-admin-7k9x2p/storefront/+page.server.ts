@@ -196,6 +196,26 @@ export const actions: Actions = {
 		throw redirect(303, '/abayiza-secure-admin-7k9x2p/storefront');
 	},
 
+	saveHero: async ({ request, cookies }) => {
+		const data = await request.formData();
+		const rawPhrases = String(data.get('hero_headline_phrases') ?? '');
+		const phrases = toLines(rawPhrases);
+
+		if (!phrases.length) {
+			return fail(400, {
+				error: 'Hero typewriter needs at least one phrase.',
+				hero_headline_phrases: rawPhrases
+			});
+		}
+
+		await saveSettings({
+			hero_headline_phrases: phrases.join('\n')
+		});
+
+		setAdminFlash(cookies, 'Hero typewriter phrases updated successfully.');
+		throw redirect(303, '/abayiza-secure-admin-7k9x2p/storefront');
+	},
+
 	saveSection: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const sectionKey = String(data.get('sectionKey') ?? '');

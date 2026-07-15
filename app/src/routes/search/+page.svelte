@@ -112,9 +112,9 @@
 								/>
 								{#if isOutOfStock(product)}
 									<span
-										class="absolute top-3 right-3 rounded-full bg-red-600 px-3 py-1 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
+										class="absolute top-2 right-2 rounded-full bg-red-600 px-1.5 py-0.5 text-[0.5rem] font-black tracking-[0.08em] text-white uppercase sm:top-3 sm:right-3 sm:px-2 sm:py-1 sm:text-[0.58rem]"
 									>
-										Out of Stock
+										Sold Out
 									</span>
 								{/if}
 							</a>
@@ -128,12 +128,21 @@
 							</h3>
 							<p class="text-sm font-medium">{formatMoney(product.salePrice || product.price)}</p>
 						</a>
-						<a
-							href={`/shop/${product.slug}`}
-							class="mt-2 inline-flex min-h-8 w-full items-center justify-center rounded-full bg-[#14352d] px-3 text-xs font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
-						>
-							Buy Now
-						</a>
+						{#if isOutOfStock(product)}
+							<button
+								disabled
+								class="mt-2 inline-flex min-h-8 w-full items-center justify-center rounded-full bg-gray-200 px-3 text-xs font-bold text-gray-500 cursor-not-allowed"
+							>
+								Sold Out
+							</button>
+						{:else}
+							<a
+								href={`/shop/${product.slug}`}
+								class="mt-2 inline-flex min-h-8 w-full items-center justify-center rounded-full bg-[#14352d] px-3 text-xs font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
+							>
+								Buy Now
+							</a>
+						{/if}
 					</div>
 				{/each}
 			</div>

@@ -5,6 +5,9 @@
 	let products = $derived((data.products || []) as Array<any>);
 	let sections = $derived((data.sections || []) as Array<any>);
 	let saleTapeItems = $derived((form?.saleTapeItems ?? data.saleTapeItems ?? '') as string);
+	let heroHeadlinePhrases = $derived(
+		(form?.hero_headline_phrases ?? storefrontSettings.hero_headline_phrases ?? '') as string
+	);
 	let storefrontSettings = $derived(data.storefrontSettings || {});
 	let saleTapePreview = $derived(
 		saleTapeItems
@@ -139,6 +142,66 @@
 	{/if}
 
 	<div class="space-y-6">
+		<!-- Hero Typewriter Phrases Form -->
+		<form
+			method="POST"
+			action="?/saveHero"
+			class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
+		>
+			<div
+				class="flex flex-col gap-4 border-b border-gray-200 bg-gray-50 px-5 py-4 lg:flex-row lg:items-center lg:justify-between"
+			>
+				<div>
+					<p class="text-xs font-black tracking-[0.18em] text-blue-600 uppercase">
+						Homepage Hero
+					</p>
+					<h2 class="mt-1 text-xl font-black text-gray-950">Typewriter Phrases</h2>
+					<p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+						Edit the rotating typewriter words in the main hero headline. Add one phrase per line.
+					</p>
+				</div>
+				<button
+					type="submit"
+					class="inline-flex min-h-10 items-center justify-center rounded-md bg-black px-5 text-sm font-bold text-white shadow-sm hover:bg-gray-800"
+				>
+					Save Typewriter Phrases
+				</button>
+			</div>
+
+			<div class="grid gap-5 p-5 lg:grid-cols-[1fr_24rem]">
+				<div>
+					<label
+						for="heroHeadlinePhrases"
+						class="mb-2 block text-sm font-black tracking-[0.12em] text-gray-900 uppercase"
+					>
+						Phrases (one per line)
+					</label>
+					<textarea
+						id="heroHeadlinePhrases"
+						name="hero_headline_phrases"
+						rows="5"
+						class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
+						>{heroHeadlinePhrases}</textarea
+					>
+				</div>
+
+				<div class="rounded-xl border border-gray-200 bg-[#f7f4ec] p-4">
+					<p class="mb-3 text-xs font-black tracking-[0.14em] text-gray-700 uppercase">
+						Current Phrases
+					</p>
+					<div class="flex flex-wrap gap-2">
+						{#each heroHeadlinePhrases.split(/\r?\n/).map(item => item.trim()).filter(Boolean) as phrase}
+							<span
+								class="rounded-full bg-[#14352d] px-3 py-1.5 text-xs font-black tracking-[0.12em] text-[#e4b43d] uppercase"
+							>
+								{phrase}
+							</span>
+						{/each}
+					</div>
+				</div>
+			</div>
+		</form>
+
 		<form
 			method="POST"
 			action="?/saveSaleTape"

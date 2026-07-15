@@ -24,14 +24,20 @@
 	let heroSlideDirection = $state<'next' | 'previous'>('next');
 	let previousHeroSlideTimer: ReturnType<typeof setTimeout> | undefined;
 
-	const heroHeadlinePhrases = [
-		'Premium\nAbayas',
-		'Luxury\nAbayas',
-		'Nida\nEssentials',
-		'Modest\nLayers',
-		'Eid Sale\nAbayiza'
-	];
-	let heroHeadlineText = $state(heroHeadlinePhrases[0]);
+	let heroHeadlinePhrases = $derived(
+		(storefrontSettings.heroHeadlinePhrases?.length
+			? storefrontSettings.heroHeadlinePhrases
+			: [
+					'Premium\nAbayas',
+					'Luxury\nAbayas',
+					'Nida\nEssentials',
+					'Modest\nLayers',
+					'Eid Sale\nAbayiza'
+				]) as string[]
+	);
+	let heroHeadlineText = $state(
+		storefrontSettings.heroHeadlinePhrases?.[0] || 'Premium\nAbayas'
+	);
 
 	const heroSlides = [
 		{
@@ -92,7 +98,7 @@
 	let newArrivalsSection = $derived(homeSection('new-arrivals', 4));
 	let mostLovedSection = $derived(homeSection('most-loved', 8));
 	let curatedEdits = $derived(
-		(signatureCollectionsSection.products?.length >= 4
+		(!signatureCollectionsSection.usesFallback
 			? signatureCollectionsSection.products
 			: products.slice(0, 4)
 		).slice(0, 4) as Array<any>
@@ -196,6 +202,13 @@
 		heroHeadlineText = '';
 
 		const typeHeadline = () => {
+			if (!heroHeadlinePhrases.length) {
+				typewriterTimer = setTimeout(typeHeadline, 1000);
+				return;
+			}
+			if (phraseIndex >= heroHeadlinePhrases.length) {
+				phraseIndex = 0;
+			}
 			const phrase = heroHeadlinePhrases[phraseIndex];
 			let delay = isDeleting ? 85 : 130;
 
@@ -497,9 +510,9 @@
 						/>
 						{#if isOutOfStock(edit)}
 							<span
-								class="absolute top-2 right-2 inline-flex min-h-6 items-center justify-center rounded-full bg-red-600 px-2 text-[0.5rem] font-black tracking-[0.12em] text-white uppercase sm:top-3 sm:right-3 sm:min-h-7 sm:px-3 sm:text-[0.62rem]"
+								class="absolute top-2 right-2 inline-flex min-h-[1.25rem] items-center justify-center rounded-full bg-red-600 px-1.5 text-[0.5rem] font-black tracking-[0.08em] text-white uppercase sm:top-3 sm:right-3 sm:min-h-[1.5rem] sm:px-2 sm:text-[0.58rem]"
 							>
-								Out of Stock
+								Sold Out
 							</span>
 						{/if}
 					</a>
@@ -573,12 +586,21 @@
 									>Free delivery</span
 								>
 							</span>
-							<a
-								href={productHref(edit)}
-								class="inline-flex min-h-7 w-full items-center justify-center gap-1.5 rounded-full bg-[#14352d] px-3 text-[0.6rem] font-black whitespace-nowrap text-white shadow-[0_8px_20px_rgba(20,53,45,0.22)] transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:min-h-9 sm:w-auto sm:px-4 sm:text-[0.7rem]"
-							>
-								Buy Now
-							</a>
+							{#if isOutOfStock(edit)}
+								<button
+									disabled
+									class="inline-flex min-h-7 w-full items-center justify-center gap-1.5 rounded-full bg-gray-200 px-3 text-[0.6rem] font-black whitespace-nowrap text-gray-500 cursor-not-allowed sm:min-h-9 sm:w-auto sm:px-4 sm:text-[0.7rem]"
+								>
+									Sold Out
+								</button>
+							{:else}
+								<a
+									href={productHref(edit)}
+									class="inline-flex min-h-7 w-full items-center justify-center gap-1.5 rounded-full bg-[#14352d] px-3 text-[0.6rem] font-black whitespace-nowrap text-white shadow-[0_8px_20px_rgba(20,53,45,0.22)] transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d] sm:min-h-9 sm:w-auto sm:px-4 sm:text-[0.7rem]"
+								>
+									Buy Now
+								</a>
+							{/if}
 						</span>
 					</span>
 				</div>
@@ -630,9 +652,9 @@
 						/>
 						{#if isOutOfStock(item)}
 							<span
-								class="absolute top-3 left-3 inline-flex min-h-7 items-center justify-center rounded-full bg-red-600 px-3 text-[0.62rem] font-black tracking-[0.12em] text-white uppercase"
+								class="absolute top-2 left-2 inline-flex min-h-[1.25rem] items-center justify-center rounded-full bg-red-600 px-1.5 text-[0.5rem] font-black tracking-[0.08em] text-white uppercase sm:top-3 sm:left-3 sm:min-h-[1.5rem] sm:px-2 sm:text-[0.58rem]"
 							>
-								Out of Stock
+								Sold Out
 							</span>
 						{/if}
 					</a>
@@ -706,12 +728,21 @@
 										</span>
 									{/if}
 								</span>
-								<a
-									href={productHref(item)}
-									class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
-								>
-									Buy Now
-								</a>
+								{#if isOutOfStock(item)}
+									<button
+										disabled
+										class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-gray-200 px-3 text-[0.62rem] font-black whitespace-nowrap text-gray-500 cursor-not-allowed sm:min-h-9 sm:px-4 sm:text-xs"
+									>
+										Sold Out
+									</button>
+								{:else}
+									<a
+										href={productHref(item)}
+										class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
+									>
+										Buy Now
+									</a>
+								{/if}
 							</span>
 						</span>
 					</span>
@@ -784,9 +815,9 @@
 										/>
 										{#if isOutOfStock(item)}
 											<span
-												class="absolute top-2 right-2 inline-flex min-h-6 items-center justify-center rounded-full bg-red-600 px-2 text-[0.5rem] font-black tracking-[0.1em] text-white uppercase shadow-[0_10px_20px_rgba(20,53,45,0.10)] sm:top-3 sm:right-3 sm:min-h-8 sm:px-3 sm:text-[0.62rem] sm:tracking-[0.12em]"
+												class="absolute top-2 right-2 inline-flex min-h-[1.25rem] items-center justify-center rounded-full bg-red-600 px-1.5 text-[0.5rem] font-black tracking-[0.08em] text-white uppercase shadow-[0_10px_20px_rgba(20,53,45,0.10)] sm:top-3 sm:right-3 sm:min-h-[1.5rem] sm:px-2 sm:text-[0.58rem]"
 											>
-												Out of Stock
+												Sold Out
 											</span>
 										{/if}
 									</a>
@@ -832,12 +863,21 @@
 												</span>
 											{/if}
 										</div>
-										<a
-											href={productHref(item)}
-											class="inline-flex min-h-7 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.6rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-8 sm:px-4 sm:text-[0.65rem]"
-										>
-											Buy Now
-										</a>
+										{#if isOutOfStock(item)}
+											<button
+												disabled
+												class="inline-flex min-h-7 shrink-0 items-center justify-center rounded-full bg-gray-200 px-3 text-[0.6rem] font-black whitespace-nowrap text-gray-500 cursor-not-allowed sm:min-h-8 sm:px-4 sm:text-[0.65rem]"
+											>
+												Sold Out
+											</button>
+										{:else}
+											<a
+												href={productHref(item)}
+												class="inline-flex min-h-7 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.6rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-8 sm:px-4 sm:text-[0.65rem]"
+											>
+												Buy Now
+											</a>
+										{/if}
 									</div>
 								</div>
 							</div>

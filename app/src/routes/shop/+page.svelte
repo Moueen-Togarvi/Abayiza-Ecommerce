@@ -432,9 +432,9 @@
 									{/if}
 									{#if isOutOfStock(item)}
 										<span
-											class="absolute top-3 right-3 z-10 rounded-full bg-red-600 px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-white uppercase"
+											class="absolute top-2 right-2 z-10 rounded-full bg-red-600 px-1.5 py-0.5 text-[0.5rem] font-black tracking-[0.08em] text-white uppercase sm:top-3 sm:right-3 sm:px-2 sm:py-1 sm:text-[0.58rem]"
 										>
-											Out of Stock
+											Sold Out
 										</span>
 									{/if}
 									<img
@@ -514,12 +514,21 @@
 												</p>
 											{/if}
 										</div>
-										<a
-											href={`/shop/${item.slug}`}
-											class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
-										>
-											Buy Now
-										</a>
+										{#if isOutOfStock(item)}
+											<button
+												disabled
+												class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-gray-200 px-3 text-[0.62rem] font-black whitespace-nowrap text-gray-500 cursor-not-allowed sm:min-h-9 sm:px-4 sm:text-xs"
+											>
+												Sold Out
+											</button>
+										{:else}
+											<a
+												href={`/shop/${item.slug}`}
+												class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
+											>
+												Buy Now
+											</a>
+										{/if}
 									</div>
 								</div>
 							</article>
