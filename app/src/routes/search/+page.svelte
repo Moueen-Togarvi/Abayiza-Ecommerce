@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { formatMoney } from '$lib/shared/money';
+	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	let { data } = $props();
 	let query = $derived((data.query || '') as string);
@@ -98,52 +99,7 @@
 			</p>
 			<div class="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4">
 				{#each results as product}
-					<div class="group">
-						<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
-							<a
-								href={`/shop/${product.slug}`}
-								class="block h-full"
-								aria-label={`View ${product.name}`}
-							>
-								<img
-									src={productImage(product)}
-									alt={product.name}
-									class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-								/>
-								{#if isOutOfStock(product)}
-									<span
-										class="absolute top-2 right-2 rounded-full bg-red-600 px-1.5 py-0.5 text-[0.5rem] font-black tracking-[0.08em] text-white uppercase sm:top-3 sm:right-3 sm:px-2 sm:py-1 sm:text-[0.58rem]"
-									>
-										Sold Out
-									</span>
-								{/if}
-							</a>
-						</div>
-						<p class="mb-1 text-xs font-light tracking-widest text-gray-400 uppercase">
-							{product.collections?.[0]?.name || 'Abayiza'}
-						</p>
-						<a href={`/shop/${product.slug}`} class="block">
-							<h3 class="mb-1 font-serif text-sm leading-snug transition-colors hover:text-gold">
-								{product.name}
-							</h3>
-							<p class="text-sm font-medium">{formatMoney(product.salePrice || product.price)}</p>
-						</a>
-						{#if isOutOfStock(product)}
-							<button
-								disabled
-								class="mt-2 inline-flex min-h-8 w-full items-center justify-center rounded-full bg-gray-200 px-3 text-xs font-bold text-gray-500 cursor-not-allowed"
-							>
-								Sold Out
-							</button>
-						{:else}
-							<a
-								href={`/shop/${product.slug}`}
-								class="mt-2 inline-flex min-h-8 w-full items-center justify-center rounded-full bg-[#14352d] px-3 text-xs font-bold text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d]"
-							>
-								Buy Now
-							</a>
-						{/if}
-					</div>
+					<ProductCard {product} aspectRatio="aspect-[5/6]" />
 				{/each}
 			</div>
 		</div>

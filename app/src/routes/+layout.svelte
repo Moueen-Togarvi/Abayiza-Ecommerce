@@ -335,21 +335,6 @@
 		</header>
 	{/if}
 
-	{#if isNavigating}
-		<div
-			class="pointer-events-none fixed inset-0 z-[80] flex items-center justify-center bg-[#14352d]/22 text-white backdrop-blur-[2px]"
-			role="status"
-			aria-live="polite"
-			aria-label="Loading page"
-		>
-			<div
-				class="flex h-20 w-20 items-center justify-center rounded-full bg-[#14352d]/42 shadow-[0_18px_48px_rgba(20,53,45,0.18)] backdrop-blur-md"
-			>
-				<AbayizaLoader class="route-loading-pill h-16 w-16" />
-			</div>
-			<span class="sr-only">Loading</span>
-		</div>
-	{/if}
 
 	<!-- Main Content -->
 	<main class="flex-grow">

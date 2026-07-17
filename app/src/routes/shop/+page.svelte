@@ -2,6 +2,7 @@
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
 	import { SITE_NAME } from '$lib/shared/seo';
+	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	type Pagination = {
 		page: number;
@@ -411,127 +412,7 @@
 							: 'grid-cols-1 gap-6'}"
 					>
 						{#each products as item}
-							<article
-								class="group flex h-full overflow-hidden rounded-md border border-[#14352d]/10 bg-white shadow-[0_16px_38px_rgba(20,53,45,0.08)] transition-transform duration-300 hover:-translate-y-1 {isGridView
-									? 'flex-col'
-									: 'flex-col sm:flex-row'}"
-							>
-								<a
-									href={`/shop/${item.slug}`}
-									class="relative block aspect-[3/4] overflow-hidden bg-[#e4eee9] {isGridView
-										? ''
-										: 'sm:w-64 sm:shrink-0'}"
-									aria-label={`View ${item.name}`}
-								>
-									{#if item.salePrice}
-										<span
-											class="absolute top-3 left-3 z-10 rounded-full bg-[#e4b43d] px-3 py-1 text-[0.65rem] font-black tracking-[0.12em] text-[#14352d] uppercase"
-										>
-											Sale
-										</span>
-									{/if}
-									{#if isOutOfStock(item)}
-										<span
-											class="absolute top-2 right-2 z-10 rounded-full bg-red-600 px-1.5 py-0.5 text-[0.5rem] font-black tracking-[0.08em] text-white uppercase sm:top-3 sm:right-3 sm:px-2 sm:py-1 sm:text-[0.58rem]"
-										>
-											Sold Out
-										</span>
-									{/if}
-									<img
-										src={productImage(item)}
-										alt={item.name}
-										width="1200"
-										height="900"
-										class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
-									/>
-								</a>
-
-								<div class="relative flex flex-1 flex-col p-3 sm:p-4">
-									<!-- Cart icon at top-right of text area -->
-									<button
-										type="button"
-										disabled={isOutOfStock(item)}
-										onclick={() => addProductToCart(item)}
-										class="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-[0_4px_12px_rgba(196,152,63,0.30)] transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 sm:h-9 sm:w-9"
-										aria-label="Add to cart"
-									>
-										<svg
-											class="h-4 w-4 sm:h-4 sm:w-4"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M3 3h2l2.4 12.2a2 2 0 002 1.6h7.4a2 2 0 001.9-1.4L21 7H6"
-											/>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M10 21h.01M18 21h.01"
-											/>
-										</svg>
-									</button>
-
-									<div class="pr-10">
-										<a
-											href={`/shop/${item.slug}`}
-											class="line-clamp-2 block font-serif text-[0.82rem] leading-tight font-semibold text-[#14352d] transition-colors hover:text-[#b58b2b] sm:text-sm"
-										>
-											{item.name}
-										</a>
-										<p
-											class="mt-1 text-[0.58rem] font-bold tracking-[0.08em] text-[#596c62] uppercase sm:text-[0.65rem] sm:tracking-[0.1em]"
-										>
-											{primaryVariant(item)?.color &&
-											primaryVariant(item)?.color?.toLowerCase() !== 'default'
-												? primaryVariant(item)?.color
-												: 'Signature edit'}
-										</p>
-									</div>
-
-									{#if !isGridView}
-										<p class="mt-3 mb-4 max-w-2xl text-sm leading-6 font-medium text-[#596c62]">
-											{item.description}
-										</p>
-									{/if}
-
-									<div class="mt-auto flex items-center justify-between gap-2 pt-3 sm:pt-4">
-										<div class="min-w-0">
-											<p
-												class="text-sm font-black whitespace-nowrap text-[#14352d] sm:text-[0.95rem]"
-											>
-												{formatMoney(item.salePrice || item.price)}
-											</p>
-											{#if item.salePrice}
-												<p
-													class="mt-0.5 text-[0.62rem] font-bold whitespace-nowrap text-red-600 line-through sm:text-xs"
-												>
-													{formatMoney(item.price)}
-												</p>
-											{/if}
-										</div>
-										{#if isOutOfStock(item)}
-											<button
-												disabled
-												class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-gray-200 px-3 text-[0.62rem] font-black whitespace-nowrap text-gray-500 cursor-not-allowed sm:min-h-9 sm:px-4 sm:text-xs"
-											>
-												Sold Out
-											</button>
-										{:else}
-											<a
-												href={`/shop/${item.slug}`}
-												class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full bg-[#14352d] px-3 text-[0.62rem] font-black whitespace-nowrap text-white transition-colors hover:bg-[#e4b43d] hover:text-[#14352d] sm:min-h-9 sm:px-4 sm:text-xs"
-											>
-												Buy Now
-											</a>
-										{/if}
-									</div>
-								</div>
-							</article>
+							<ProductCard product={item} layout={isGridView ? 'grid' : 'list'} aspectRatio="aspect-[5/6]" />
 						{/each}
 					</div>
 				{:else}
