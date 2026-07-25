@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 	import { navigating, page } from '$app/state';
 	import { env } from '$env/dynamic/public';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import './layout.css';
 	import AbayizaLoader from '$lib/components/AbayizaLoader.svelte';
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
@@ -23,6 +24,8 @@
 	let mobileMenuOpen = $state(false);
 	let whatsAppMenuOpen = $state(false);
 	let scrollY = $state(0);
+
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	const primaryNavItems = [
 		{ href: '/', label: 'Home' },
