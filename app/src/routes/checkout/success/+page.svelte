@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
+	import { trackPurchase } from '$lib/client/pixels';
 	import { formatMoney } from '$lib/shared/money';
 	import { onMount } from 'svelte';
 
@@ -17,7 +18,22 @@
 		});
 
 	onMount(() => {
-		if (order) cart.clear();
+		if (!order) return;
+
+		trackPurchase({
+			content_type: 'product',
+			content_ids: order.items.map((item: any) => item.productId),
+			contents: order.items.map((item: any) => ({
+				content_id: item.productId,
+				content_name: item.productName,
+				quantity: item.quantity,
+				price: Number(item.priceAtPurchase || item.lineTotal / Math.max(item.quantity, 1))
+			})),
+			value: Number(order.totalAmount || 0),
+			currency: String(order.currency || 'PKR'),
+			order_id: order.id
+		});
+		cart.clear();
 	});
 </script>
 

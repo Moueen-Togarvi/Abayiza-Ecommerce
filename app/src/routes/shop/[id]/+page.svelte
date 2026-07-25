@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 	import { cart } from '$lib/client/cart.svelte';
+	import { trackAddToCart, trackProductView } from '$lib/client/pixels';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import { formatMoney } from '$lib/shared/money';
 	import { SITE_NAME, absoluteUrl, jsonLdScript, metaDescription } from '$lib/shared/seo';
@@ -144,6 +146,22 @@
 	function addToCart() {
 		if (selectedVariantOutOfStock) return;
 
+		const trackingPayload = {
+			content_name: product.name,
+			content_type: 'product',
+			content_ids: [product.id],
+			contents: [
+				{
+					content_id: product.id,
+					content_name: product.name,
+					quantity,
+					price: Number(product.salePrice || product.price)
+				}
+			],
+			value: Number(product.salePrice || product.price) * quantity,
+			currency: 'PKR'
+		};
+
 		cart.addItem({
 			id: selectedVariant?.id || product.id,
 			productId: product.id,
@@ -155,6 +173,8 @@
 			color: selectedColor,
 			size: selectedSize
 		});
+
+		trackAddToCart(trackingPayload);
 	}
 
 	function buyNow() {
@@ -163,6 +183,24 @@
 		addToCart();
 		goto('/checkout');
 	}
+
+	onMount(() => {
+		trackProductView({
+			content_name: product.name,
+			content_type: 'product',
+			content_ids: [product.id],
+			contents: [
+				{
+					content_id: product.id,
+					content_name: product.name,
+					quantity: 1,
+					price: Number(product.salePrice || product.price)
+				}
+			],
+			value: Number(product.salePrice || product.price),
+			currency: 'PKR'
+		});
+	});
 </script>
 
 <svelte:head>

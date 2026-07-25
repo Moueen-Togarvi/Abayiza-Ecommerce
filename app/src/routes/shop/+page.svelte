@@ -1,7 +1,14 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
-	import { SITE_NAME } from '$lib/shared/seo';
+	import {
+		SITE_IMAGE,
+		SITE_NAME,
+		absoluteUrl,
+		jsonLdScript,
+		metaDescription
+	} from '$lib/shared/seo';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	type Pagination = {
@@ -48,8 +55,39 @@
 	let selectedCategory = $state('');
 	let selectedColor = $state('');
 	let selectedSize = $state('');
-	const shopDescription =
-		'Shop Abayiza premium abayas, soft nida essentials, black abayas, Eid edits, and occasion modestwear pieces.';
+	let shopTitle = $derived(
+		filters.category
+			? `${collections.find((collection) => collection.slug === filters.category)?.name || 'Collection'} | ${SITE_NAME}`
+			: `Shop All | ${SITE_NAME}`
+	);
+	let shopDescription = $derived(
+		metaDescription(
+			filters.category
+				? `Browse ${collections.find((collection) => collection.slug === filters.category)?.name || 'our collection'} at Abayiza with premium abayas, nida essentials, and modest occasion wear.`
+				: 'Shop Abayiza premium abayas, soft nida essentials, black abayas, Eid edits, and occasion modestwear pieces.'
+		)
+	);
+	let shopSocialImage = $derived(
+		absoluteUrl(products[0]?.images?.[0]?.url || SITE_IMAGE, page.url.origin)
+	);
+	let shopJsonLd = $derived(
+		jsonLdScript({
+			'@context': 'https://schema.org',
+			'@type': 'CollectionPage',
+			name: shopTitle,
+			description: shopDescription,
+			url: absoluteUrl(`/shop${page.url.search}`, page.url.origin),
+			mainEntity: {
+				'@type': 'ItemList',
+				itemListElement: products.map((item: any, index: number) => ({
+					'@type': 'ListItem',
+					position: index + 1,
+					url: absoluteUrl(`/shop/${item.slug}`, page.url.origin),
+					name: item.name
+				}))
+			}
+		})
+	);
 
 	$effect(() => {
 		searchQuery = filters.q || '';
@@ -142,17 +180,19 @@
 </script>
 
 <svelte:head>
-	<title>Shop All | Abayiza</title>
+	<title>{shopTitle}</title>
 	<meta name="description" content={shopDescription} />
 	<meta
 		name="keywords"
-		content="shop abayas, nida abaya, premium abaya, black abaya, modest dresses"
+		content="shop abayas, premium abaya Pakistan, nida abaya, black abaya, modest dresses, online abaya shopping"
 	/>
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content={`Shop All | ${SITE_NAME}`} />
+	<meta property="og:title" content={shopTitle} />
 	<meta property="og:description" content={shopDescription} />
-	<meta name="twitter:title" content={`Shop All | ${SITE_NAME}`} />
+	<meta property="og:image" content={shopSocialImage} />
+	<meta name="twitter:title" content={shopTitle} />
 	<meta name="twitter:description" content={shopDescription} />
+	{@html shopJsonLd}
 </svelte:head>
 
 <section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">

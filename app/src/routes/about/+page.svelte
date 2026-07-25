@@ -1,9 +1,36 @@
 <script lang="ts">
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
-	import { SITE_NAME } from '$lib/shared/seo';
+	import { page } from '$app/state';
+	import { SITE_NAME, absoluteUrl, jsonLdScript } from '$lib/shared/seo';
 
 	const aboutDescription =
 		'The story of Abayiza, started by university friends Chand Baloch and Mubahsir Ali after their first abaya ad video went viral.';
+	const aboutJsonLd = $derived(
+		jsonLdScript([
+			{
+				'@context': 'https://schema.org',
+				'@type': 'AboutPage',
+				name: `About ${SITE_NAME} | Our Story`,
+				description: aboutDescription,
+				url: absoluteUrl('/about', page.url.origin)
+			},
+			{
+				'@context': 'https://schema.org',
+				'@type': 'Organization',
+				name: SITE_NAME,
+				founder: [
+					{
+						'@type': 'Person',
+						name: 'Chand Baloch'
+					},
+					{
+						'@type': 'Person',
+						name: 'Mubahsir Ali'
+					}
+				]
+			}
+		])
+	);
 </script>
 
 <svelte:head>
@@ -14,6 +41,7 @@
 	<meta property="og:description" content={aboutDescription} />
 	<meta name="twitter:title" content={`About ${SITE_NAME} | Our Story`} />
 	<meta name="twitter:description" content={aboutDescription} />
+	{@html aboutJsonLd}
 </svelte:head>
 
 <section

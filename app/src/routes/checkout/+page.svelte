@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
+	import { trackInitiateCheckout } from '$lib/client/pixels';
 	import { formatMoney } from '$lib/shared/money';
+	import { onMount } from 'svelte';
 
 	type PaymentMethod = 'COD';
 	type ShippingMethod = 'STANDARD' | 'EXPRESS';
@@ -63,6 +65,24 @@
 			event.preventDefault();
 		}
 	};
+
+	onMount(() => {
+		if (!cart.items.length) return;
+
+		trackInitiateCheckout({
+			content_type: 'product',
+			content_ids: cart.items.map((item) => item.productId),
+			contents: cart.items.map((item) => ({
+				content_id: item.productId,
+				content_name: item.name,
+				quantity: item.quantity,
+				price: item.price
+			})),
+			num_items: cart.totalItems,
+			value: orderTotal,
+			currency: 'PKR'
+		});
+	});
 </script>
 
 <svelte:head>

@@ -10,7 +10,14 @@
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	import { formatMoney } from '$lib/shared/money';
-	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, absoluteUrl } from '$lib/shared/seo';
+	import {
+		SITE_DESCRIPTION,
+		SITE_IMAGE,
+		SITE_NAME,
+		absoluteUrl,
+		jsonLdScript,
+		metaDescription
+	} from '$lib/shared/seo';
 
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
@@ -122,6 +129,34 @@
 	let saleTapeLoop = $derived(Array.from({ length: 8 }, () => saleTapeItems).flat());
 	let saleTapeEnabled = $derived(storefrontSettings.saleTapeEnabled !== false);
 	let homeSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let homeDescription = $derived(
+		metaDescription(
+			storefrontSettings.homeMetaDescription ||
+				'Shop Abayiza for premium abayas, nida essentials, occasion edits, and refined modest fashion in Pakistan.'
+		)
+	);
+	let homeJsonLd = $derived(
+		jsonLdScript([
+			{
+				'@context': 'https://schema.org',
+				'@type': 'WebPage',
+				name: `${SITE_NAME} | Premium Modest Fashion`,
+				description: homeDescription,
+				url: absoluteUrl('/', page.url.origin)
+			},
+			{
+				'@context': 'https://schema.org',
+				'@type': 'ItemList',
+				name: 'Featured Abayiza Products',
+				itemListElement: products.slice(0, 8).map((item: any, index: number) => ({
+					'@type': 'ListItem',
+					position: index + 1,
+					name: item.name,
+					url: absoluteUrl(`/shop/${item.slug}`, page.url.origin)
+				}))
+			}
+		])
+	);
 	const brandPattern = /^(Abayiza|ABAYIZA)$/;
 
 	function textWithBrand(value: string) {
@@ -307,17 +342,18 @@
 
 <svelte:head>
 	<title>Abayiza | Premium Modest Fashion</title>
-	<meta name="description" content={SITE_DESCRIPTION} />
+	<meta name="description" content={homeDescription} />
 	<meta
 		name="keywords"
-		content="premium abayas, nida abaya, modest fashion, eid abaya, black abaya"
+		content="premium abayas Pakistan, nida abaya, modest fashion, Eid abaya, black abaya, online abaya store"
 	/>
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={`${SITE_NAME} | Premium Modest Fashion`} />
-	<meta property="og:description" content={SITE_DESCRIPTION} />
+	<meta property="og:description" content={homeDescription} />
 	<meta property="og:image" content={homeSocialImage} />
 	<meta name="twitter:title" content={`${SITE_NAME} | Premium Modest Fashion`} />
-	<meta name="twitter:description" content={SITE_DESCRIPTION} />
+	<meta name="twitter:description" content={homeDescription} />
+	{@html homeJsonLd}
 </svelte:head>
 
 <section

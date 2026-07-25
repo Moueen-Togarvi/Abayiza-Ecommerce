@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { navigating, page } from '$app/state';
+	import { env } from '$env/dynamic/public';
 	import './layout.css';
 	import AbayizaLoader from '$lib/components/AbayizaLoader.svelte';
 	import AbayizaWordmark from '$lib/components/AbayizaWordmark.svelte';
 	import { cart } from '$lib/client/cart.svelte';
+	import { pixelsEnabled, trackPageView } from '$lib/client/pixels';
 	import { wishlist } from '$lib/client/wishlist.svelte';
 	import {
 		PRIMARY_WHATSAPP_URL,
@@ -43,6 +46,11 @@
 		shouldNoindex(page.url) ? 'noindex,follow' : 'index,follow,max-image-preview:large'
 	);
 	let socialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let metaPixelId = $derived((env.PUBLIC_META_PIXEL_ID || '').trim());
+	let tikTokPixelId = $derived((env.PUBLIC_TIKTOK_PIXEL_ID || '').trim());
+	let pixelNoscriptUrl = $derived(
+		metaPixelId ? `https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1` : ''
+	);
 	let siteJsonLd = $derived(
 		jsonLdScript([
 			{
@@ -84,6 +92,7 @@
 			}
 		])
 	);
+	let lastTrackedPath = '';
 
 	function shouldNoindex(url: URL) {
 		const noindexPrefixes = [
@@ -114,24 +123,86 @@
 
 		return canonical.toString();
 	}
+
+	function inlineScript(code: string) {
+		return '<scr' + `ipt>${code.replace(/<\/script>/gi, '<\\/script>')}</scr` + 'ipt>';
+	}
+
+	let metaPixelScript = $derived(
+		metaPixelId
+			? inlineScript(`!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '${metaPixelId}');`)
+			: ''
+	);
+	let tikTokPixelScript = $derived(
+		tikTokPixelId
+			? inlineScript(`!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;
+  var ttq=w[t]=w[t]||[];
+  ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"];
+  ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
+  for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+  ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};
+  ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js";
+  ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=r;ttq._t=ttq._t||{};ttq._t[e]=+new Date;
+  ttq._o=ttq._o||{};ttq._o[e]=n||{};
+  n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src=r+"?sdkid="+e+"&lib="+t;
+  e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  ttq.load('${tikTokPixelId}');
+}(window, document, 'ttq');`)
+			: ''
+	);
+
+	$effect(() => {
+		if (!browser || !pixelsEnabled() || isAdminRoute) return;
+
+		const currentPath = `${page.url.pathname}${page.url.search}`;
+
+		if (lastTrackedPath === currentPath) return;
+		lastTrackedPath = currentPath;
+
+		trackPageView();
+	});
 </script>
 
 <svelte:window bind:scrollY />
 
 <svelte:head>
 	<meta name="robots" content={robotsMeta} />
+	<meta name="theme-color" content="#14352d" />
 	<link rel="canonical" href={canonicalHref} />
 	<meta property="og:site_name" content={SITE_NAME} />
+	<meta property="og:locale" content="en_PK" />
 	<meta property="og:url" content={canonicalHref} />
 	<meta property="og:image" content={socialImage} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content={socialImage} />
+	{@html metaPixelScript}
+	{@html tikTokPixelScript}
 	{@html siteJsonLd}
 </svelte:head>
 
 <div
 	class={`flex min-h-screen flex-col font-sans text-black ${isAdminRoute ? 'bg-white' : 'bg-cream'}`}
 >
+	{#if !isAdminRoute && pixelNoscriptUrl}
+		<noscript>
+			<img
+				height="1"
+				width="1"
+				style="display:none"
+				alt=""
+				src={pixelNoscriptUrl}
+			/>
+		</noscript>
+	{/if}
 	{#if !isAdminRoute}
 		<!-- Navbar -->
 		<header class="sticky top-0 z-50 px-3 pt-0 pb-3 sm:px-5">
