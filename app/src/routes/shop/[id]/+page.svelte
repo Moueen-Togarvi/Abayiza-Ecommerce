@@ -260,13 +260,13 @@
 						<img
 							src={image}
 							alt={`${product.name} ${index + 1}`}
-							class="h-full w-full object-cover object-top"
+							class="h-full w-full object-contain object-center"
 						/>
 					</button>
 				{/each}
 			</div>
 
-			<div class="relative aspect-[3/4] flex-grow overflow-hidden bg-gray-100 lg:aspect-[4/5]">
+			<div class="relative h-[380px] flex-grow overflow-hidden bg-gray-100 sm:h-[440px] lg:h-[480px]">
 				{#if product.salePrice}
 					<div
 						class="absolute top-4 left-4 z-10 bg-white/90 px-3 py-1.5 text-xs font-bold tracking-widest text-black uppercase backdrop-blur"
@@ -284,7 +284,7 @@
 				<img
 					src={images[activeImage] || productImage(product)}
 					alt={product.name}
-					class="h-full w-full object-cover object-top"
+					class="h-full w-full object-contain object-center"
 				/>
 			</div>
 		</div>
