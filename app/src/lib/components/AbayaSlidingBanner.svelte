@@ -13,7 +13,7 @@
 			description:
 				'Double-stitched durability and flowy silhouettes in authentic premium Nida fabric. Styled for standard modest daily wear.',
 			link: '/shop?category=nida-essentials',
-			image: '/abaya_banner_nida.png',
+			image: '/abaya_banner_nida.webp',
 			bgClass: 'bg-gradient-to-br from-[#0c221a] via-[#14352d] to-[#0a1c15]',
 			accentText: 'text-[#e4b43d]',
 			badge: 'Bestseller Edit',
@@ -30,7 +30,7 @@
 			description:
 				'Featuring intricate hand-stitched beadwork and premium drapes on soft premium flowy georgette edits.',
 			link: '/shop?category=occasion',
-			image: '/abaya_banner_nida.png',
+			image: '/abaya_banner_nida.webp',
 			bgClass: 'bg-gradient-to-br from-[#121110] via-[#23201a] to-[#0e0e0d]',
 			accentText: 'text-[#e4b43d]',
 			badge: 'New Season',
@@ -47,7 +47,7 @@
 			description:
 				'Sophisticated dark cuts with delicate gold-lace details, designed to leave a quiet, modest presence.',
 			link: '/shop?category=eid-edit',
-			image: '/ChatGPT%20Image%20May%2024,%202026,%2002_01_35%20AM.png',
+			image: '/hero-slide-6.webp',
 			bgClass: 'bg-gradient-to-br from-[#0d161a] via-[#122329] to-[#091013]',
 			accentText: 'text-[#e4b43d]',
 			badge: 'Eid Special',
@@ -98,7 +98,7 @@
 			if (!sliderHovered) {
 				activeSlide = (activeSlide + 1) % sliderItems.length;
 			}
-		}, 5500);
+		}, 9500);
 	}
 
 	function stopSlider() {
@@ -133,7 +133,7 @@
 			{#each sliderItems as item, index}
 				<!-- GPU Accelerated Horizontal sliding container -->
 				<div
-					class="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-2xl transition-transform duration-[800ms] ease-in-out sm:flex-row {item.bgClass}"
+					class="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-2xl transition-transform duration-[1400ms] ease-in-out sm:flex-row {item.bgClass}"
 					style="transform: translateX({(index - activeSlide) * 100}%);"
 				>
 					<!-- Spotlight Glow Effects -->

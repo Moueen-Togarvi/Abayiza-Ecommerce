@@ -5,7 +5,7 @@
 		'Explore the Abayiza lookbook for premium abaya styling, modest layers, nida essentials, and occasion outfit ideas.';
 
 	function productImage(product: any) {
-		return product.images?.[0]?.url || '/image.png';
+		return product.images?.[0]?.url || '/image.webp';
 	}
 </script>
 

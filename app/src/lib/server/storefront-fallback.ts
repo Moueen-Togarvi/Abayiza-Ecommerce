@@ -58,7 +58,7 @@ const fallbackCollectionSeed: StorefrontCollectionBase[] = [
 		name: 'Nida Essentials',
 		slug: 'nida-essentials',
 		description: null,
-		imageUrl: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+		imageUrl: '/hero-slide-1.webp',
 		isVisible: true,
 		displayOrder: 0
 	},
@@ -67,7 +67,7 @@ const fallbackCollectionSeed: StorefrontCollectionBase[] = [
 		name: 'Occasion',
 		slug: 'occasion',
 		description: null,
-		imageUrl: '/abaya22.png',
+		imageUrl: '/abaya22.webp',
 		isVisible: true,
 		displayOrder: 1
 	},
@@ -76,7 +76,7 @@ const fallbackCollectionSeed: StorefrontCollectionBase[] = [
 		name: 'Daily Wear',
 		slug: 'daily-wear',
 		description: null,
-		imageUrl: '/abaya11.png',
+		imageUrl: '/abaya11.webp',
 		isVisible: true,
 		displayOrder: 2
 	},
@@ -85,7 +85,7 @@ const fallbackCollectionSeed: StorefrontCollectionBase[] = [
 		name: 'Premium Nida',
 		slug: 'premium-nida',
 		description: null,
-		imageUrl: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+		imageUrl: '/hero-slide-1.webp',
 		isVisible: true,
 		displayOrder: 3
 	},
@@ -94,7 +94,7 @@ const fallbackCollectionSeed: StorefrontCollectionBase[] = [
 		name: 'Eid Edit',
 		slug: 'eid-edit',
 		description: null,
-		imageUrl: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png',
+		imageUrl: '/hero-slide-2.webp',
 		isVisible: true,
 		displayOrder: 4
 	}
@@ -134,13 +134,13 @@ const fallbackDemoNames = [
 ];
 
 const fallbackDemoImages = [
-	'/abaya11.png',
-	'/abaya22.png',
-	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
-	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png',
-	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png',
-	'/ChatGPT%20Image%20May%2025,%202026,%2006_07_28%20PM.png',
-	'/ChatGPT%20Image%20May%2025,%202026,%2006_25_25%20PM.png'
+	'/abaya11.webp',
+	'/abaya22.webp',
+	'/hero-slide-1.webp',
+	'/hero-slide-2.webp',
+	'/hero-slide-3.webp',
+	'/hero-slide-4.webp',
+	'/hero-slide-5.webp'
 ];
 
 const fallbackDemoColors = ['Black', 'Emerald', 'Sage', 'Ivory', 'Navy', 'Charcoal', 'Olive'];
@@ -216,7 +216,7 @@ const fallbackProductSeed: StorefrontProduct[] = [
 		images: [
 			{
 				id: 'fallback-image-haya-1',
-				url: '/abaya11.png',
+				url: '/abaya11.webp',
 				altText: 'Haya Everyday Abaya',
 				displayOrder: 0
 			}
@@ -254,7 +254,7 @@ const fallbackProductSeed: StorefrontProduct[] = [
 		images: [
 			{
 				id: 'fallback-image-emerald-1',
-				url: '/abaya22.png',
+				url: '/abaya22.webp',
 				altText: 'Emerald Layered Abaya',
 				displayOrder: 0
 			}
@@ -283,7 +283,7 @@ const fallbackProductSeed: StorefrontProduct[] = [
 const fallbackReviewPhotos = [
 	{
 		id: 'fallback-review-photo-1',
-		url: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_30%20PM.png'
+		url: '/hero-slide-5.webp'
 	}
 ];
 

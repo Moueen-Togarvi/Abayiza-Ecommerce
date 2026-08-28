@@ -4,7 +4,7 @@ export const SITE_DESCRIPTION =
 	'Shop premium Abayiza abayas for modest everyday wear, occasion styling, Eid edits, and soft nida essentials.';
 export const SITE_KEYWORDS =
 	'abayas, modest fashion, nida abaya, premium abayas, black abaya, eid abaya, Abayiza';
-export const SITE_IMAGE = '/image.png';
+export const SITE_IMAGE = '/image.webp';
 export const TIKTOK_URL = 'https://www.tiktok.com/@_abayiza_';
 export const PRIMARY_WHATSAPP_URL = 'https://wa.me/923116857822';
 export const SECONDARY_WHATSAPP_URL = 'https://wa.me/923346657779';

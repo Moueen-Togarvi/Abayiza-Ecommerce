@@ -48,7 +48,7 @@
 	class="relative isolate -mt-[4.25rem] overflow-hidden bg-[#14352d] text-white md:-mt-[4.75rem]"
 >
 	<img
-		src="/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png"
+		src="/hero-slide-2.webp"
 		alt="Abayiza abaya editorial"
 		width="1670"
 		height="941"

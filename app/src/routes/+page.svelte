@@ -47,23 +47,23 @@
 
 	const heroSlides = [
 		{
-			src: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
+			src: '/hero-slide-1.webp',
 			alt: 'Abayiza hero abaya editorial slide one'
 		},
 		{
-			src: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png',
+			src: '/hero-slide-2.webp',
 			alt: 'Abayiza hero abaya editorial slide two'
 		},
 		{
-			src: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png',
+			src: '/hero-slide-3.webp',
 			alt: 'Abayiza hero abaya editorial slide three'
 		},
 		{
-			src: '/ChatGPT%20Image%20May%2025,%202026,%2006_07_28%20PM.png',
+			src: '/hero-slide-4.webp',
 			alt: 'Abayiza hero abaya editorial slide four'
 		},
 		{
-			src: '/ChatGPT%20Image%20May%2025,%202026,%2006_25_25%20PM.png',
+			src: '/hero-slide-5.webp',
 			alt: 'Abayiza hero abaya editorial slide five'
 		}
 	];
@@ -168,7 +168,7 @@
 	}
 
 	function productImage(item: any) {
-		return item.images?.[0]?.url || collections[0]?.imageUrl || '/image.png';
+		return item.images?.[0]?.url || collections[0]?.imageUrl || '/image.webp';
 	}
 
 	function primaryVariant(item: any) {
@@ -372,6 +372,8 @@
 				width="1672"
 				height="941"
 				fetchpriority={index === 0 ? 'high' : 'auto'}
+				loading={index === 0 ? 'eager' : 'lazy'}
+				decoding="async"
 				aria-hidden={index !== heroSlideIndex}
 				class="hero-bg__slide h-full w-full bg-[#eadac8] object-cover object-center"
 				class:hero-bg__slide--active={index === heroSlideIndex}

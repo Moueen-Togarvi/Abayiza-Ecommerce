@@ -35,7 +35,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	hero_secondary_label: 'View Lookbook',
 	hero_secondary_href: '/lookbook',
 	hero_images:
-		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_07_28%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_25_25%20PM.png',
+		'/hero-slide-1.webp\n/hero-slide-2.webp\n/hero-slide-3.webp\n/hero-slide-4.webp\n/hero-slide-5.webp',
 	sale_tape_enabled: 'true',
 	sale_tape_items: 'EID SALE\n30% OFF\nABAYIZA',
 	sale_tape_speed: '18',
@@ -52,7 +52,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	slide1_description:
 		'Double-stitched durability and flowy silhouettes in authentic premium Nida fabric. Styled for standard modest daily wear.',
 	slide1_link: '/shop?category=nida-essentials',
-	slide1_image: '/abaya_banner_nida.png',
+	slide1_image: '/abaya_banner_nida.webp',
 	slide1_promo: '40% OFF',
 
 	// Slide 2
@@ -61,7 +61,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	slide2_description:
 		'Featuring intricate hand-stitched beadwork and premium drapes on soft premium flowy georgette edits.',
 	slide2_link: '/shop?category=occasion',
-	slide2_image: '/abaya_banner_occasion.png',
+	slide2_image: '/abaya_banner_occasion.webp',
 	slide2_promo: '50% OFF',
 
 	// Slide 3
@@ -70,7 +70,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	slide3_description:
 		'Sophisticated dark cuts with delicate gold-lace details, designed to leave a quiet, modest presence.',
 	slide3_link: '/shop?category=eid-edit',
-	slide3_image: '/abaya_banner_eid.png',
+	slide3_image: '/abaya_banner_eid.webp',
 	slide3_promo: '30% OFF',
 
 	// Flash Sale
@@ -78,7 +78,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	flash_sale_title: 'FLASH SALE',
 	flash_sale_subtitle: 'Ends Soon!',
 	flash_sale_description: 'UP TO 70% OFF SELECTED ITEMS',
-	flash_sale_image: '/abaya_banner_occasion.png',
+	flash_sale_image: '/abaya_banner_occasion.webp',
 	flash_sale_hours: '2',
 	flash_sale_minutes: '14',
 	flash_sale_seconds: '30',

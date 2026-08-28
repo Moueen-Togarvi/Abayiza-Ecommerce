@@ -27,20 +27,20 @@
 	);
 
 	const fallbackImages = [
-		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
-		'/abaya22.png',
-		'/abaya11.png',
-		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png',
-		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png',
-		'/ChatGPT%20Image%20May%2025,%202026,%2006_07_28%20PM.png'
+		'/hero-slide-1.webp',
+		'/abaya22.webp',
+		'/abaya11.webp',
+		'/hero-slide-2.webp',
+		'/hero-slide-3.webp',
+		'/hero-slide-4.webp'
 	];
 
 	const slugImages: Record<string, string> = {
-		'nida-essentials': '/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png',
-		occasion: '/abaya22.png',
-		'daily-wear': '/abaya11.png',
-		'premium-nida': '/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png',
-		'eid-edit': '/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png'
+		'nida-essentials': '/hero-slide-1.webp',
+		occasion: '/abaya22.webp',
+		'daily-wear': '/abaya11.webp',
+		'premium-nida': '/hero-slide-3.webp',
+		'eid-edit': '/hero-slide-2.webp'
 	};
 
 	let filteredCollections = $derived(

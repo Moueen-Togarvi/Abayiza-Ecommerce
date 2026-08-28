@@ -18,7 +18,7 @@
 	let href = $derived(`/shop/${product.slug}`);
 
 	let image = $derived(
-		product.images?.[0]?.url || '/image.png'
+		product.images?.[0]?.url || '/image.webp'
 	);
 
 	let isOutOfStock = $derived(
@@ -110,6 +110,8 @@
 			<img
 				src={image}
 				alt={product.name}
+				loading="lazy"
+				decoding="async"
 				class="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
 			/>
 		</a>

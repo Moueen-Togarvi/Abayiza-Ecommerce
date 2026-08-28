@@ -214,7 +214,7 @@ fbq('init', '${metaPixelId}');`)
 					<div class="flex h-14 items-center justify-between gap-2">
 						<a href="/" class="group inline-flex min-w-0 shrink-0 items-center gap-2.5">
 							<img
-								src="/image.png"
+								src="/image.webp"
 								alt="Abayiza"
 								width="640"
 								height="640"
@@ -567,7 +567,7 @@ fbq('init', '${metaPixelId}');`)
 						class="inline-flex items-center gap-2 text-sm font-black tracking-[0.16em] text-white uppercase transition-colors hover:text-[#c8ff46] sm:text-base"
 					>
 						<img
-							src="/final%20logo%20bhai%20shb.png"
+							src="/logo.webp"
 							alt=""
 							class="h-6 w-6 rounded-full object-cover ring-1 ring-white/20"
 							loading="lazy"

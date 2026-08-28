@@ -32,8 +32,10 @@
 								class="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center overflow-hidden rounded-full bg-[#f5f0e5] ring-1 ring-[#14352d]/10 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_8px_20px_rgba(20,53,45,0.15)] group-hover:ring-2 group-hover:ring-[#e4b43d] sm:h-[7.5rem] sm:w-[7.5rem]"
 							>
 								<img
-									src={category.imageUrl || '/image.png'}
+									src={category.imageUrl || '/image.webp'}
 									alt={category.name}
+									loading="lazy"
+									decoding="async"
 									class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
 								/>
 							</div>

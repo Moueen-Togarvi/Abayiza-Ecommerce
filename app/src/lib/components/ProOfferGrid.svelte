@@ -18,7 +18,7 @@
 				price: 7200,
 				salePrice: null,
 				description: 'Clean silhouette in deep midnight black, featuring a soft graceful fall.',
-				images: [{ url: '/abaya11.png' }]
+				images: [{ url: '/abaya11.webp' }]
 			}
 	);
 
@@ -149,8 +149,10 @@
 							class="relative z-10 h-[290px] w-[230px] overflow-hidden rounded-2xl border border-[#14352d]/6 shadow-[0_15px_35px_rgba(20,53,45,0.08)] transition-transform duration-700 group-hover:scale-[1.02] md:h-[380px] md:w-[300px]"
 						>
 							<img
-								src={spotlightProduct.images?.[0]?.url || '/abaya11.png'}
+								src={spotlightProduct.images?.[0]?.url || '/abaya11.webp'}
 								alt={spotlightProduct.name}
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover"
 							/>
 						</div>
@@ -186,8 +188,10 @@
 							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
 						>
 							<img
-								src="/ChatGPT Image May 25, 2026, 06_25_13 PM.png"
+								src="/hero-slide-3.webp"
 								alt="Premium Hijabs"
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -231,8 +235,10 @@
 							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
 						>
 							<img
-								src="/abaya11.png"
+								src="/abaya11.webp"
 								alt="Everyday wear"
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -276,8 +282,10 @@
 							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
 						>
 							<img
-								src="/abaya22.png"
+								src="/abaya22.webp"
 								alt="Luxe stonework"
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>

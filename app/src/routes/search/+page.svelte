@@ -9,7 +9,7 @@
 	let hasSearched = $derived(query.length > 0);
 
 	function productImage(product: any) {
-		return product.images?.[0]?.url || product.collections?.[0]?.imageUrl || '/image.png';
+		return product.images?.[0]?.url || product.collections?.[0]?.imageUrl || '/image.webp';
 	}
 
 	function isOutOfStock(product: any) {

@@ -32,7 +32,7 @@
 	});
 
 	function productImage(product: any) {
-		return product.images?.[0]?.url || '/image.png';
+		return product.images?.[0]?.url || '/image.webp';
 	}
 
 	function selectedIds(sectionKey: string) {
