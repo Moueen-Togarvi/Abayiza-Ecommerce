@@ -94,7 +94,7 @@
 							alt={item.title}
 							loading={index === 0 ? 'eager' : 'lazy'}
 							decoding="async"
-							class="h-full w-full object-contain object-center"
+							class="h-full w-full object-cover object-center"
 						/>
 					</a>
 				</div>
