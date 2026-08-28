@@ -80,7 +80,7 @@
 >
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div
-			class="relative my-6 aspect-[16/9] w-full overflow-hidden rounded-2xl border border-[#14352d]/10 shadow-[0_20px_50px_rgba(20,53,45,0.05)] sm:aspect-[1770/941]"
+			class="relative my-6 h-[440px] sm:h-[360px] md:h-[390px] w-full overflow-hidden rounded-2xl border border-[#14352d]/10 bg-[#f5f0e5] shadow-[0_20px_50px_rgba(20,53,45,0.05)]"
 		>
 			{#each sliderItems as item, index}
 				<!-- GPU Accelerated Horizontal sliding container -->
@@ -94,7 +94,7 @@
 							alt={item.title}
 							loading={index === 0 ? 'eager' : 'lazy'}
 							decoding="async"
-							class="h-full w-full object-cover object-center"
+							class="h-full w-full object-contain object-center"
 						/>
 					</a>
 				</div>
