@@ -80,7 +80,7 @@
 >
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div
-			class="relative my-6 h-[450px] sm:h-[370px] md:h-[400px] w-full overflow-hidden rounded-2xl border border-[#14352d]/10 shadow-[0_20px_50px_rgba(20,53,45,0.05)]"
+			class="relative my-6 h-[470px] sm:h-[390px] md:h-[420px] w-full overflow-hidden rounded-2xl border border-[#14352d]/10 shadow-[0_20px_50px_rgba(20,53,45,0.05)]"
 		>
 			{#each sliderItems as item, index}
 				<!-- GPU Accelerated Horizontal sliding container -->
