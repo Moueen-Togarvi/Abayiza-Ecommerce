@@ -296,303 +296,88 @@
 					<h3
 						class="border-gray-150 mb-4 border-b pb-2 text-sm font-black tracking-[0.14em] text-gray-900 uppercase"
 					>
-						Homepage Hero Sliding Banners (Nida, Occasion, Eid Signature)
+						Homepage Hero Sliding Banners
 					</h3>
+					<p class="mb-4 -mt-2 text-xs text-gray-500">
+						These slides display full banner images (text, pricing, and CTA are already part of
+						the image). Upload a banner image and set where it links to.
+					</p>
 
 					<div class="grid gap-6 md:grid-cols-3">
-						<!-- Slide 1 -->
-						<div class="space-y-3 rounded-xl border border-gray-200 bg-gray-50/50 p-4">
-							<span
-								class="inline-flex items-center rounded-md bg-[#14352d]/10 px-2 py-1 text-xs font-bold text-[#14352d]"
-							>
-								Slide 1: Nida Essentials
-							</span>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Title</label>
-								<input
-									type="text"
-									name="slide1_title"
-									value={storefrontSettings.slide1_title || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Tagline</label>
-								<input
-									type="text"
-									name="slide1_tagline"
-									value={storefrontSettings.slide1_tagline || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
-									>Description</label
+						{#each [1, 2, 3] as slideNum}
+							{@const imageKey = `slide${slideNum}_image`}
+							{@const linkKey = `slide${slideNum}_link`}
+							<div class="space-y-3 rounded-xl border border-gray-200 bg-gray-50/50 p-4">
+								<span
+									class="inline-flex items-center rounded-md bg-[#14352d]/10 px-2 py-1 text-xs font-bold text-[#14352d]"
 								>
-								<textarea
-									name="slide1_description"
-									rows="3"
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-									>{storefrontSettings.slide1_description || ''}</textarea
-								>
-							</div>
+									Slide {slideNum}
+								</span>
 
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Promo Tag</label
-								>
-								<input
-									type="text"
-									name="slide1_promo"
-									value={storefrontSettings.slide1_promo || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Link URL</label>
-								<input
-									type="text"
-									name="slide1_link"
-									value={storefrontSettings.slide1_link || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div class="space-y-2">
-								<label class="block text-xs font-bold text-gray-700 uppercase">Slide Image</label>
-								{#if storefrontSettings.slide1_image}
-									<div
-										class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
+								<div>
+									<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Link URL</label
 									>
-										<img
-											src={storefrontSettings.slide1_image}
-											alt="Slide 1 Preview"
-											class="h-full w-full object-contain"
-										/>
-									</div>
-									<label
-										class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
-									>
-										<input
-											name="remove_slide1_image"
-											type="checkbox"
-											class="h-3.5 w-3.5 rounded border-red-300 text-red-600 focus:ring-red-500"
-										/>
-										<span class="font-medium text-red-700">Remove current image</span>
-									</label>
-								{/if}
-								<input
-									type="hidden"
-									name="slide1_image"
-									value={storefrontSettings.slide1_image || ''}
-								/>
-								<input
-									type="file"
-									name="slide1_image_file"
-									accept="image/*"
-									class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-								/>
+									<input
+										type="text"
+										name={linkKey}
+										value={storefrontSettings[linkKey] || ''}
+										class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
+									/>
+								</div>
+
+								<div class="space-y-2">
+									<label class="block text-xs font-bold text-gray-700 uppercase">Banner Image</label>
+									{#if storefrontSettings[imageKey]}
+										<div
+											class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
+										>
+											<img
+												src={storefrontSettings[imageKey]}
+												alt={`Slide ${slideNum} Preview`}
+												class="h-full w-full object-cover"
+											/>
+										</div>
+										<label
+											class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
+										>
+											<input
+												name={`remove_slide${slideNum}_image`}
+												type="checkbox"
+												class="h-3.5 w-3.5 rounded border-red-300 text-red-600 focus:ring-red-500"
+											/>
+											<span class="font-medium text-red-700">Remove current image</span>
+										</label>
+									{/if}
+									<input type="hidden" name={imageKey} value={storefrontSettings[imageKey] || ''} />
+									<input
+										type="hidden"
+										name={`slide${slideNum}_title`}
+										value={storefrontSettings[`slide${slideNum}_title`] || ''}
+									/>
+									<input
+										type="hidden"
+										name={`slide${slideNum}_tagline`}
+										value={storefrontSettings[`slide${slideNum}_tagline`] || ''}
+									/>
+									<input
+										type="hidden"
+										name={`slide${slideNum}_description`}
+										value={storefrontSettings[`slide${slideNum}_description`] || ''}
+									/>
+									<input
+										type="hidden"
+										name={`slide${slideNum}_promo`}
+										value={storefrontSettings[`slide${slideNum}_promo`] || ''}
+									/>
+									<input
+										type="file"
+										name={`slide${slideNum}_image_file`}
+										accept="image/*"
+										class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+									/>
+								</div>
 							</div>
-						</div>
-
-						<!-- Slide 2 -->
-						<div class="space-y-3 rounded-xl border border-gray-200 bg-gray-50/50 p-4">
-							<span
-								class="inline-flex items-center rounded-md bg-[#e4b43d]/15 px-2 py-1 text-xs font-bold text-[#b58b2b]"
-							>
-								Slide 2: Occasion Wear
-							</span>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Title</label>
-								<input
-									type="text"
-									name="slide2_title"
-									value={storefrontSettings.slide2_title || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Tagline</label>
-								<input
-									type="text"
-									name="slide2_tagline"
-									value={storefrontSettings.slide2_tagline || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
-									>Description</label
-								>
-								<textarea
-									name="slide2_description"
-									rows="3"
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-									>{storefrontSettings.slide2_description || ''}</textarea
-								>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Promo Tag</label
-								>
-								<input
-									type="text"
-									name="slide2_promo"
-									value={storefrontSettings.slide2_promo || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Link URL</label>
-								<input
-									type="text"
-									name="slide2_link"
-									value={storefrontSettings.slide2_link || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div class="space-y-2">
-								<label class="block text-xs font-bold text-gray-700 uppercase">Slide Image</label>
-								{#if storefrontSettings.slide2_image}
-									<div
-										class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
-									>
-										<img
-											src={storefrontSettings.slide2_image}
-											alt="Slide 2 Preview"
-											class="h-full w-full object-contain"
-										/>
-									</div>
-									<label
-										class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
-									>
-										<input
-											name="remove_slide2_image"
-											type="checkbox"
-											class="h-3.5 w-3.5 rounded border-red-300 text-red-600 focus:ring-red-500"
-										/>
-										<span class="font-medium text-red-700">Remove current image</span>
-									</label>
-								{/if}
-								<input
-									type="hidden"
-									name="slide2_image"
-									value={storefrontSettings.slide2_image || ''}
-								/>
-								<input
-									type="file"
-									name="slide2_image_file"
-									accept="image/*"
-									class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-								/>
-							</div>
-						</div>
-
-						<!-- Slide 3 -->
-						<div class="space-y-3 rounded-xl border border-gray-200 bg-gray-50/50 p-4">
-							<span
-								class="inline-flex items-center rounded-md bg-[#14352d]/10 px-2 py-1 text-xs font-bold text-[#14352d]"
-							>
-								Slide 3: Eid Signature
-							</span>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Title</label>
-								<input
-									type="text"
-									name="slide3_title"
-									value={storefrontSettings.slide3_title || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Tagline</label>
-								<input
-									type="text"
-									name="slide3_tagline"
-									value={storefrontSettings.slide3_tagline || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase"
-									>Description</label
-								>
-								<textarea
-									name="slide3_description"
-									rows="3"
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-									>{storefrontSettings.slide3_description || ''}</textarea
-								>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Promo Tag</label
-								>
-								<input
-									type="text"
-									name="slide3_promo"
-									value={storefrontSettings.slide3_promo || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div>
-								<label class="mb-1 block text-xs font-bold text-gray-700 uppercase">Link URL</label>
-								<input
-									type="text"
-									name="slide3_link"
-									value={storefrontSettings.slide3_link || ''}
-									class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
-								/>
-							</div>
-
-							<div class="space-y-2">
-								<label class="block text-xs font-bold text-gray-700 uppercase">Slide Image</label>
-								{#if storefrontSettings.slide3_image}
-									<div
-										class="relative mb-1 h-24 w-full overflow-hidden rounded-md border border-gray-200 bg-gray-100"
-									>
-										<img
-											src={storefrontSettings.slide3_image}
-											alt="Slide 3 Preview"
-											class="h-full w-full object-contain"
-										/>
-									</div>
-									<label
-										class="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs"
-									>
-										<input
-											name="remove_slide3_image"
-											type="checkbox"
-											class="h-3.5 w-3.5 rounded border-red-300 text-red-600 focus:ring-red-500"
-										/>
-										<span class="font-medium text-red-700">Remove current image</span>
-									</label>
-								{/if}
-								<input
-									type="hidden"
-									name="slide3_image"
-									value={storefrontSettings.slide3_image || ''}
-								/>
-								<input
-									type="file"
-									name="slide3_image_file"
-									accept="image/*"
-									class="w-full text-xs text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
-								/>
-							</div>
-						</div>
+						{/each}
 					</div>
 				</div>
 

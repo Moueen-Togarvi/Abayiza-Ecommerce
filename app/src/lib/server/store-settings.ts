@@ -52,7 +52,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	slide1_description:
 		'Double-stitched durability and flowy silhouettes in authentic premium Nida fabric. Styled for standard modest daily wear.',
 	slide1_link: '/shop?category=nida-essentials',
-	slide1_image: '/abaya_banner_nida.webp',
+	slide1_image: '/banner-andalusia-1.webp',
 	slide1_promo: '40% OFF',
 
 	// Slide 2
@@ -61,7 +61,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	slide2_description:
 		'Featuring intricate hand-stitched beadwork and premium drapes on soft premium flowy georgette edits.',
 	slide2_link: '/shop?category=occasion',
-	slide2_image: '/abaya_banner_occasion.webp',
+	slide2_image: '/banner-andalusia-2.webp',
 	slide2_promo: '50% OFF',
 
 	// Slide 3
@@ -70,7 +70,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	slide3_description:
 		'Sophisticated dark cuts with delicate gold-lace details, designed to leave a quiet, modest presence.',
 	slide3_link: '/shop?category=eid-edit',
-	slide3_image: '/abaya_banner_eid.webp',
+	slide3_image: '/banner-midnight-bloom.webp',
 	slide3_promo: '30% OFF',
 
 	// Flash Sale
