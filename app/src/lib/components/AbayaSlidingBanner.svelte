@@ -50,7 +50,7 @@
 			if (!sliderHovered) {
 				activeSlide = (activeSlide + 1) % sliderItems.length;
 			}
-		}, 9500);
+		}, 3000);
 	}
 
 	function stopSlider() {
@@ -80,12 +80,12 @@
 >
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div
-			class="relative my-6 h-[440px] sm:h-[360px] md:h-[390px] w-full overflow-hidden rounded-2xl border border-[#14352d]/10 shadow-[0_20px_50px_rgba(20,53,45,0.05)]"
+			class="relative my-6 aspect-[16/9] w-full overflow-hidden rounded-2xl border border-[#14352d]/10 shadow-[0_20px_50px_rgba(20,53,45,0.05)] sm:aspect-[1770/941]"
 		>
 			{#each sliderItems as item, index}
 				<!-- GPU Accelerated Horizontal sliding container -->
 				<div
-					class="absolute inset-0 overflow-hidden rounded-2xl transition-transform duration-[1400ms] ease-in-out"
+					class="absolute inset-0 overflow-hidden rounded-2xl transition-transform duration-700 ease-in-out"
 					style="transform: translateX({(index - activeSlide) * 100}%);"
 				>
 					<a href={item.link} class="block h-full w-full" aria-label={item.title}>
